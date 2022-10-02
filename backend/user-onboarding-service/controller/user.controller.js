@@ -83,27 +83,25 @@ const loginUser = async function (req, res) {
     try {
         let { user_name, password, role} = req.body;
 
-        let hash = await userService.loginUser(req);
+        let hash = await userService.loginUser(req.body);
 
         let resObj = {};
         // Load hash from your password DB.
 
-        bcrypt.compare(password, hash, function(err, res) {
+        bcrypt.compare(password, hash.e_pass).then((response) => {
             // res === true
-            if(err) {
-                console.log("Error Decrypting password -> ");
-            }
 
-            if (res === true) {
+            if (response === true) {
                 resObj["status"] = true;
                 resObj["data"] = {user_name: user_name, role: role};
-                return successResponse(res, resObj);;
+                return successResponse(res, resObj);
             }
 
             resObj["status"] = false;
             resObj["data"] = {user_name: user_name, role: role};
             return errorResponse(res, 400, resObj);
         });
+
 
     } catch (e) {
         return errorResponse(res, 400, e.message);

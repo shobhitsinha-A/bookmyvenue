@@ -34,10 +34,10 @@ const loginUser = async function(credDto) {
 
     // check for role , if role is not satisfied then
     let hash = await db('users')
+        .select('e_pass')
         .where({
             user_name: user_name
-        })
-        .select('e_pass');
+        });
 
     return hash[0];
 
