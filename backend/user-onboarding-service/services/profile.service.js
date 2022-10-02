@@ -21,5 +21,18 @@ const createProfile = async function(userDto) {
   }
 };
 
+const getDetailsByUserName = async function (user_name) {
+    // const details = await db('profiles')
+    //     .where(user_name)
+    //     .select('user_name', 'email', 'first_name', 'last_name', 'phone_no');
+    // return details;
 
-module.exports = { createProfile };
+    const details = await db('profiles')
+        .where({
+            user_name: user_name
+        })
+        .select('user_name', 'email', 'first_name', 'last_name', 'phone_no')
+    return details
+};
+
+module.exports = { createProfile , getDetailsByUserName };

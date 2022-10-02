@@ -8,10 +8,10 @@ const userController = require('../controller/user.controller');
 router.post('/register', userController.registerUser);
 
 //login
-router.get('/login', userController.loginUser);
+router.post('/login', userController.loginUser);
 
 // get details
-// router.get('/profile/details', tokenService.authenticateToken, userController.getUserDetails);
+router.get('/profile/details/:user_name', userController.getUserDetails);
 
 
 

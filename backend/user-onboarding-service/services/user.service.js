@@ -8,7 +8,7 @@ const registerUser = async function(userDto) {
   const roles = await rolesService.getRoles();
 
   let rolesObj = {};
-  for( rol of roles) {
+  for( let rol of roles) {
       rolesObj[rol.role_name] = rol.role_id;
   }
 
@@ -29,4 +29,18 @@ const registerUser = async function(userDto) {
 
 };
 
-module.exports = { registerUser };
+const loginUser = async function(credDto) {
+    const { user_name, password, role } = credDto;
+
+    // check for role , if role is not satisfied then
+    let hash = await db('users')
+        .where({
+            user_name: user_name
+        })
+        .select('e_pass');
+
+    return hash[0];
+
+}
+
+module.exports = { registerUser, loginUser };
