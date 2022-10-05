@@ -1,0 +1,15 @@
+{
+  "name": "mysql-migrations",
+  "version": "1.0.0",
+  "description": "all migrations related to migrations",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Surendra Reddy",
+  "license": "ISC",
+  "dependencies": {
+    "knex": "^2.3.0",
+    "mysql2": "^2.3.3"
+  }
+}
