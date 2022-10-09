@@ -24,7 +24,7 @@ export default () => {
               <LogoText>BookMyVenue</LogoText>
             </LogoContainer>
             <LinksContainer>
-              <Link href="#">Home</Link>
+              <Link href="/">Home</Link>
               <Link href="#">About</Link>
               <Link href="#">Contact Us</Link>
             </LinksContainer>

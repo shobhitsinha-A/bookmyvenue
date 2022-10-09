@@ -6,7 +6,8 @@ const { successResponse, errorResponse } = require('../commons/response.util');
 
 const registerUser = async function(req, res) {
 
-        let { first_name, last_name, email, phone_no, user_name, password, role } = req.body;
+        let reqBody = JSON.parse(req.body);
+        let { first_name, last_name, email, phone_no, user_name, password, role } = reqBody;
           // TO DO baseline checks
           // validate if role is proper or not ?
           // for the fields
@@ -16,16 +17,16 @@ const registerUser = async function(req, res) {
         bcrypt.genSalt(10, (err, salt) => {
             bcrypt.hash(password, salt, (err, hash) => {
                 if (err) throw err;
-                console.log('pass ->' + password);
-                console.log('hash -> ' + hash);
-                req.body.password = hash;
+                // console.log('pass ->' + password);
+                // console.log('hash -> ' + hash);
+                reqBody.password = hash;
                 try {
 
-                    userService.registerUser(req.body)
+                    userService.registerUser(reqBody)
                         .then(response => {
                             let registered_user_name = response;
 
-                            profileService.createProfile(req.body)
+                            profileService.createProfile(reqBody)
                                 .then(response => {
 
                                     let profile_username = response;
@@ -81,9 +82,9 @@ const getUserDetails = async function (req, res) {
 
 const loginUser = async function (req, res) {
     try {
-        let { user_name, password, role} = req.body;
-
-        let hash = await userService.loginUser(req.body);
+        let reqBody = JSON.parse(req.body);
+        let { user_name, password, role} = reqBody;
+        let hash = await userService.loginUser(reqBody);
 
         let resObj = {};
         // Load hash from your password DB.
