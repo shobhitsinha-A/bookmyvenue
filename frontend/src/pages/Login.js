@@ -4,7 +4,6 @@ import {Container as ContainerBase} from "../components/layouts/Layouts";
 import tw from "twin.macro";
 import styled from "styled-components";
 import ReCAPTCHA from "react-google-recaptcha";
-import appleIconImageSrc from "../images/apple-icon.png";
 import googleIconImageSrc from "../images/google-icon.png";
 import loginpageBg from "../images/login-bg.png";
 import {ReactComponent as LoginIcon} from "feather-icons/dist/icons/log-in.svg";
@@ -76,12 +75,6 @@ export default ({
                   loginPageBgSrc = loginpageBg,
                   socialButtons = [
                     {
-                      iconImageSrc: appleIconImageSrc,
-                      text: "Sign In With Apple",
-                      url: "https://apple.com"
-
-                    },
-                    {
                       iconImageSrc: googleIconImageSrc,
                       text: "Sign In With Google",
                       url: "https://google.com"
@@ -89,7 +82,7 @@ export default ({
                   ],
                   submitButtonText = "Sign In",
                   SubmitButtonIcon = LoginIcon,
-                  forgotPasswordUrl = "#",
+                  forgotPasswordUrl = "/forgotpassword",
                   signupUrl = "/signup",
 
                 }) => (
