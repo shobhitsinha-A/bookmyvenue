@@ -3,7 +3,6 @@ import AnimatedContainer from "../helpers/AnimatedContainer.js";
 import {Container as ContainerBase} from "../components/layouts/Layouts";
 import tw from "twin.macro";
 import styled from "styled-components";
-import appleIconImageSrc from "../images/apple-icon.png"
 import googleIconImageSrc from "../images/google-icon.png";
 import signupPageBg from "../images/signup-bg.png";
 import {ReactComponent as SignUpIcon} from "feather-icons/dist/icons/user-plus.svg";
@@ -96,12 +95,6 @@ export default ({
                   headingText = "Sign Up",
                   signupPageBgSrc = signupPageBg,
                   socialButtons = [
-                    {
-                      iconImageSrc: appleIconImageSrc,
-                      text: "Sign Up With Apple",
-                      url: "https://apple.com"
-
-                    },
                     {
                       iconImageSrc: googleIconImageSrc,
                       text: "Sign Up With Google",
