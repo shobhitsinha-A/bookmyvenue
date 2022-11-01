@@ -1,8 +1,17 @@
 const userService = require('../services/user.service');
 const profileService = require('../services/profile.service');
+const forgotPasswordService = require('../services/forgotpassword.service');
 const bcrypt = require('bcryptjs');
+const { Client } = require('@duosecurity/duo_universal');
 
 const { successResponse, errorResponse } = require('../commons/response.util');
+
+const duoClient = new Client({
+    clientId: 'DIJG5KQ4EXKE1K9LJGR1',
+    clientSecret: '0mR1NrzwVt5Apwrd2xYsfRYM7lLyUeDRc8182KCw',
+    apiHost: 'api-65f53927.duosecurity.com',
+    redirectUrl: 'http://localhost:3000/profile',
+});
 
 const registerUser = async function(req, res) {
 
@@ -11,7 +20,7 @@ const registerUser = async function(req, res) {
           // TO DO baseline checks
           // validate if role is proper or not ?
           // for the fields
-          // encrpyt the password
+          // encrypt the password
           // username uniqueness check - need to decide based on the design
 
         bcrypt.genSalt(10, (err, salt) => {
@@ -68,7 +77,6 @@ const registerUser = async function(req, res) {
         });
 };
 const getUserDetails = async function (req, res) {
-    console.log("details request...")
 
     let user_name = req.url.substring(req.url.lastIndexOf('/')+1);
 
@@ -85,24 +93,25 @@ const loginUser = async function (req, res) {
         let reqBody = JSON.parse(req.body);
         let { user_name, password, role} = reqBody;
         let hash = await userService.loginUser(reqBody);
-
+        await duoClient.healthCheck();
         let resObj = {};
         // Load hash from your password DB.
 
         bcrypt.compare(password, hash.e_pass).then((response) => {
-            // res === true
-
             if (response === true) {
-                resObj["status"] = true;
-                resObj["data"] = {user_name: user_name, role: role};
-                return successResponse(res, resObj);
+                try {
+                    const state = duoClient.generateState();
+                    const url = duoClient.createAuthUrl(user_name, state);
+                    resObj["status"] = true;
+                    resObj["data"] = {"user_name": user_name, "role": role, "url": url};
+                    return successResponse(res, resObj);
+                } catch (err) {
+                    console.error(err);
+                }
+            } else {
+                return errorResponse(res, 400, "Error");
             }
-
-            resObj["status"] = false;
-            resObj["data"] = {user_name: user_name, role: role};
-            return errorResponse(res, 400, resObj);
         });
-
 
     } catch (e) {
         return errorResponse(res, 400, e.message);
@@ -118,5 +127,17 @@ const deleteUser = async function (req, res) {
     }
 };
 
+const forgotPassword = async function (req, res) {
+    let reqBody = JSON.parse(req.body);
+    try {
+        let result = await forgotPasswordService.updatePassword(
+            reqBody.user_name,
+            reqBody.password
+        );
+        return successResponse(res, result);
+    } catch (e) {
+        return errorResponse(res, 400, e.message);
+    }
+};
 
-module.exports = { registerUser, loginUser, getUserDetails, deleteUser};
+module.exports = { registerUser, loginUser, getUserDetails, deleteUser, forgotPassword };
