@@ -9,5 +9,6 @@ router.post('/venues', venueController.createVenue);
 
 router.post('/venues/:venue_id/images',venueController.uploadImages, venueController.createVenueImages);
 
+router.get('/venues/:venue_id/images', venueController.getVenueImages);
 module.exports = router;
 

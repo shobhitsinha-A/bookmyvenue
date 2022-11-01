@@ -35,16 +35,6 @@ const createVenue = async function(req, res) {
 
 };
 
-// const storage = multer.diskStorage({
-//     destination: function (req, file, cb) {
-//         cb(null, './uploads');
-//     },
-//     filename: function (req, file, cb) {
-//         cb(null, file.originalname);
-//     }
-// });
-
-// const uploadImg = multer({storage: storage}).single('image');
 // https://stackoverflow.com/questions/41429355/multer-dynamic-destination-path
 const uploadImages =
       imageUpload = multer({
@@ -68,12 +58,22 @@ const uploadImages =
             }
             cb(null, true);
         }
-    }).array('image'); // TODO: change to array
+    }).array('image');
 
 const createVenueImages = async function(req, res) {
 
-    console.log('req.params.venue_id -> ' + req.params.venue_id);
-    return successResponse(res, null);
+    // console.log('req.params.venue_id -> ' + req.params.venue_id);
+    // console.log('req.files -> ' + req.files);
+    const info = await venueService.createVenueImages(req.params.venue_id, req.files);
+    console.log('venue images inserted info ->' , info);
+    return successResponse(res, 'venue images created successfully');
 
 };
-module.exports = { createVenue,  uploadImages, createVenueImages };
+
+const getVenueImages = async function(req, res) {
+
+        const info = await venueService.getVenueImages(req.params.venue_id);
+        // console.log('venue images fetched info ->' , info);
+        return successResponse(res, info);
+};
+module.exports = { createVenue,  uploadImages, createVenueImages, getVenueImages };

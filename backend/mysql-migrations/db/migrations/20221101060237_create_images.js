@@ -5,7 +5,7 @@
 exports.up = function(knex) {
     return knex.schema.createTable('venue_images', (table) => {
         table.increments('id').primary();
-        table.string('venue_id').notNullable();
+        table.integer('venue_id').unsigned().notNullable();
         table.string('image_name').nullable();
         table.foreign('venue_id').references('id').inTable('venues');
         table.timestamps(true, true);
