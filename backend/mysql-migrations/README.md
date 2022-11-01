@@ -15,3 +15,6 @@ npx knex migrate:down 20220927191837_create_users.js --knexfile ./db/knexfile.js
 
 npx knex migrate:up 20220927192929_create_profiles.js --knexfile ./db/knexfile.js
 npx knex migrate:down 20220927192929_create_profiles.js --knexfile ./db/knexfile.js
+
+npx knex migrate:up 20221101040159_create_venues.js --knexfile ./db/knexfile.js
+npx knex migrate:down 20221101040159_create_venues.js --knexfile ./db/knexfile.js
