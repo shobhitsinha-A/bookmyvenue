@@ -84,7 +84,7 @@ export default ({
                                 price: "Contact for pricing",
                                 rating: "5.0",
                                 reviews: "470",
-                                url: "#"
+                                url: "/venue"
                             },
                             {
                                 imageSrc:
@@ -94,18 +94,6 @@ export default ({
                                 price: "Contact for pricing",
                                 rating: "4.7",
                                 reviews: "120",
-                                url: "#"
-                            }
-                        ],
-                        Sports: [
-                            {
-                                imageSrc:
-                                    "https://assets.simpleviewinc.com/simpleview/image/upload/c_fill,g_xy_center,h_365,q_60,w_573,x_2016,y_2163/v1/clients/bloomington/Eagle_Pointe_58__69448111-0ed2-4811-bf57-1c39008b903c.jpg",
-                                title: "The Golf Club at Eagle Pointe",
-                                content: "Bloomington, IN",
-                                price: "Contact for pricing",
-                                rating: "4.8",
-                                reviews: "76",
                                 url: "#"
                             }
                         ],
