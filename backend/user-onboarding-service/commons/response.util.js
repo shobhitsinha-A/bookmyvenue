@@ -1,4 +1,4 @@
-const successResponse = function(res, result, code=200) {
+const successResponse = function(res, result, code= 200) {
   return res.status(code).json({ status: true, data: result });
 }
 

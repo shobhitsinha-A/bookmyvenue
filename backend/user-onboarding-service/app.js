@@ -1,8 +1,13 @@
 const express = require('express');
 const app = express();
+const session = require('express-session');
+const { urlencoded } = require('body-parser');
 
 //middle ware
 app.use(express.text());
+app.use(urlencoded({ extended: false }));
+app.use(session({ secret: 'secret-phrase', resave: false, saveUninitialized: true, cookie: {secure: false} }));
+app.use(express.static('public', { index: false }));
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
