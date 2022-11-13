@@ -13,7 +13,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [16.x]
+        node-version: [18.x]
 
     steps:
     - uses: actions/checkout@v3
@@ -22,4 +22,6 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - run: cd backend && npm run start
+    - run: cd backend/user-onboarding-service
+    - run: npm install
+    - run: npm run start
