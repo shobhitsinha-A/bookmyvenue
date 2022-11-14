@@ -1,4 +1,4 @@
-name: Backend CI
+name: Frontend CI
 
 on:
   push:
@@ -22,4 +22,4 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - run: npm run start-backend
+    - run: npm run build-frontend

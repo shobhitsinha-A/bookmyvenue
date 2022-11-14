@@ -1,4 +1,9 @@
 {
   "name": "book-my-venue",
-  "version": "1.0.0"
+  "version": "1.0.0",
+  "scripts": {
+    "start-backend": "cd backend/user-onboarding-service && node app.js",
+    "start-frontend": "cd frontend && react-scripts start",
+    "build-frontend": "cd frontend && react-scripts build"
+  }
 }
