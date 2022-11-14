@@ -13,8 +13,8 @@ exports.up = function(knex) {
     return knex.schema.createTable('venues', (table) => {
         table.increments('id').primary();
         table.string('name').notNullable();
-        table.string('price');
-        table.string('capacity').notNullable();
+        table.integer('price');
+        table.integer('capacity').notNullable();
         table.string('address').notNullable();
         table.string('city');
         table.string('state');
@@ -22,7 +22,7 @@ exports.up = function(knex) {
         table.string('phone_number');
         table.string('description');
         table.string('category');
-        table.string('rating');
+        table.integer('rating');
 
         //table.foreign('role_id').references('role_id').inTable('roles');
         table.timestamps(true, true);
