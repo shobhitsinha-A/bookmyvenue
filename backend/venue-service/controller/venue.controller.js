@@ -76,4 +76,31 @@ const getVenueImages = async function(req, res) {
         // console.log('venue images fetched info ->' , info);
         return successResponse(res, info);
 };
-module.exports = { createVenue,  uploadImages, createVenueImages, getVenueImages };
+
+const getVenuesBySearch = async function(req, res) {
+
+        let reqBody = JSON.parse(req.body);
+        let venues = await venueService.getVenuesBySearch(reqBody);
+
+        let resObj = {
+                    message: 'venues fetched successfully',
+                    details: venues
+        };
+
+        return successResponse(res, resObj);
+}
+
+const getVenuesMetadata = async function(req, res) {
+
+            let venues = await venueService.getVenuesMetadata();
+
+            let resObj = {
+                        message: 'venues metadata fetched successfully',
+                        details: venues
+            };
+
+            return successResponse(res, resObj);
+}
+
+module.exports = { createVenue,  uploadImages, createVenueImages, getVenueImages,
+                    getVenuesBySearch, getVenuesMetadata };
