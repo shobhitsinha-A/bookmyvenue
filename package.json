@@ -2,8 +2,7 @@
   "name": "book-my-venue",
   "version": "1.0.0",
   "scripts": {
-    "start-backend": "cd backend/user-onboarding-service && npm install && node app.js",
-    "start-frontend": "cd frontend && npm install && react-scripts start",
-    "build-frontend": "cd frontend && npm install && react-scripts build"
+    "backend": "cd backend/user-onboarding-service && npm install",
+    "frontend": "cd frontend && npm install --force"
   }
 }

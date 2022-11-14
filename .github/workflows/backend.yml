@@ -2,9 +2,14 @@ name: Backend CI
 
 on:
   push:
-    branches: [ build-and-deploy ]
+    branches:
+    - build-and-deploy
+    - nmaliset
+    - reddyve
+    - schennoj
+    - shosinha
   pull_request:
-    branches: [ build-and-deploy ]
+    branches: [ main ]
 
 jobs:
   build:
@@ -22,4 +27,4 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - run: npm run start-backend
+    - run: npm run backend
