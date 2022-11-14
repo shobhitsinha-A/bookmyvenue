@@ -10,7 +10,7 @@ on:
       - shosinha
   pull_request:
     branches:
-      - ${{ github.event.pull_request.base.ref }}
+      - main
 
 jobs:
   build:
