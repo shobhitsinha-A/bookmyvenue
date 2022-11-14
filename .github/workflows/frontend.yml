@@ -1,15 +1,13 @@
 name: Frontend CI
 
 on:
-  push:
-    branches:
-    - build-and-deploy
-    - nmaliset
-    - reddyve
-    - schennoj
-    - shosinha
   pull_request:
-    branches: [ main ]
+    branches:
+      - build-and-deploy
+      - nmaliset
+      - reddyve
+      - schennoj
+      - shosinha
 
 jobs:
   build:
