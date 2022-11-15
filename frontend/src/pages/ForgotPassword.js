@@ -46,7 +46,7 @@ let checkIfUserExists = async (e) => {
             let userDetails = jsonResponse.data.user[0];
             if (userDetails.email === email) {
                 sessionStorage.setItem("user_name", userDetails.user_name);
-                window.location.href = "http://localhost:3000/newpassword";
+                window.location.href = "/newpassword";
             } else {
                 alert("E-mail address doesn't match. Please try again");
             }

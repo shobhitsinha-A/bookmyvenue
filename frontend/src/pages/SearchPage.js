@@ -5,10 +5,11 @@ import tw from "twin.macro";
 import styled from "styled-components";
 import { css } from "styled-components/macro"; //eslint-disable-line
 import { motion } from "framer-motion";
-import { Container, ContentWithPaddingXl } from "../components/layouts/Layouts";
+import {Container, ContentWithPadding} from "../components/layouts/Layouts";
 import { SectionHeading } from "../components/content/Headings";
 import { PrimaryButton as PrimaryButtonBase } from "../components/content/Buttons";
 import { ReactComponent as StarIcon } from "../images/star-icon.svg";
+import Filter from "../components/filter/Filter";
 
 const HeaderRow = tw.div`flex justify-between items-center flex-col xl:flex-row`;
 const Header = tw(SectionHeading)``;
@@ -107,7 +108,10 @@ export default ({
     return (
         <AnimatedContainer>
             <Container>
-                <ContentWithPaddingXl>
+                <Filter/>
+            </Container>
+            <Container>
+                <ContentWithPadding>
                     <HeaderRow>
                         <Header>{heading}</Header>
                         <TabsControl>
@@ -175,7 +179,7 @@ export default ({
                             ))}
                         </TabContent>
                     ))}
-                </ContentWithPaddingXl>
+                </ContentWithPadding>
             </Container>
             <Footer />
         </AnimatedContainer>
