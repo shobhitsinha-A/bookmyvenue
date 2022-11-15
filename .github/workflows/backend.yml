@@ -1,0 +1,24 @@
+name: Backend CI
+
+on:
+  push:
+    branches:
+      - build-and-deploy
+      - nmaliset
+      - reddyve
+      - schennoj
+      - shosinha
+
+jobs:
+  build:
+    runs-on: [ self-hosted ]
+    strategy:
+      matrix:
+        node-version: [ 18 ]
+    steps:
+    - uses: actions/checkout@v3
+    - name: Using Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+    - run: npm run backend

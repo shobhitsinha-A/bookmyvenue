@@ -12,6 +12,7 @@ import OAuthSignUp from "./pages/OAuthSignUp";
 import AddVenue from "./pages/AddVenue";
 import MyVenues from "./pages/MyVenues";
 import FavoriteVenues from "./pages/FavoriteVenues";
+import VenueReservation from "./pages/VenueReservation";
 
 export default () => (
     <Router>
@@ -28,6 +29,7 @@ export default () => (
             <Route path="/addvenue" element={<AddVenue />} />
             <Route path="/myvenues" element={<MyVenues />} />
             <Route path="/favorites" element={<FavoriteVenues />} />
+            <Route path="/reserve" element={<VenueReservation />} />
         </Routes>
     </Router>
 )

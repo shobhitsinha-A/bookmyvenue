@@ -1,0 +1,9 @@
+{
+  "name": "book-my-venue",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "backend": "cd backend/user-onboarding-service && npm cache clean --force && npm install",
+    "frontend": "cd frontend && npm cache clean --force && npm install --force"
+  }
+}
