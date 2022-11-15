@@ -48,7 +48,7 @@ let checkIfUserExists = async (e) => {
         let jsonResponse = await response.json();
         if (jsonResponse.status) {
             alert("Password has been successfully reset. Redirecting you to login page...");
-            window.location.href = "http://localhost:3000/login";
+            window.location.href = "/login";
         } else {
             alert("There was a problem setting your new password. Please try again");
         }

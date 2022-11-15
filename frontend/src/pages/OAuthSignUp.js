@@ -65,7 +65,7 @@ let validateAndRegister = async (e) => {
         let jsonResponse = await response.json();
         if (jsonResponse.status) {
             alert("User registered successfully");
-            window.location.href = "http://localhost:3000/login";
+            window.location.href = "/login";
         } else {
             alert("There was an error when creating your account");
         }

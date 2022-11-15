@@ -72,7 +72,7 @@ let validateAndRegister = async (e) => {
     let jsonResponse = await response.json();
     if (jsonResponse.status) {
       alert("User registered successfully");
-      window.location.href = "http://localhost:3000/login";
+      window.location.href = "/login";
     } else {
       alert("There was an error when creating your account");
     }
@@ -127,9 +127,10 @@ export default () => {
                         buttonText="Sign up with Google"
                         onSuccess={onSuccess}
                         onFailure={onFailure}
-                        cookiePolicy={"single_host_origin"}
+                        cookiePolicy="single_host_origin"
                         style={{textAlign: 'center'}}
                         class="btn btn-primary"
+                        theme="dark"
                     />
                   </SocialButtonsContainer>
                   <Form onSubmit={validateAndRegister}>
