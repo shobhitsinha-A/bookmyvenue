@@ -14,6 +14,7 @@ app.use(function(req, res, next) {
 app.use('/', require('./routes/venue.route'));
 app.use('/email', require('./routes/email.route'));
 app.use('/chats', require('./routes/chat.route'));
+app.use('/reservations', require('./routes/reservation.route'));
 
 app.listen(6969, () => {
   console.log(`Server running on port 6969... `);

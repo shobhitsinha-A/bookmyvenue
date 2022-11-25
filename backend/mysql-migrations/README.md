@@ -23,3 +23,6 @@ npx knex migrate:down 20221101060237_create_images.js --knexfile ./db/knexfile.j
 
 npx knex migrate:up 20221123201738_create_chats.js --knexfile ./db/knexfile.js
 npx knex migrate:down 20221123201738_create_chats.js --knexfile ./db/knexfile.js
+
+npx knex migrate:up 20221124193316_create_reservations.js --knexfile ./db/knexfile.js
+npx knex migrate:down 20221124193316_create_reservations.js --knexfile ./db/knexfile.js
