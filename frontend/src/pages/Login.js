@@ -37,7 +37,7 @@ let checkIfUserIsLoggedIn = async (e) => {
   e.preventDefault();
   let u_name = document.getElementById("u_name").value;
   let password = document.getElementById("password").value;
-  let response = await fetch('http://localhost:5000/user/login', {
+  let response = await fetch('http://bookmyvenue.live:5000/user/login', {
     method: 'POST',
     body: JSON.stringify({
       "user_name" : u_name,

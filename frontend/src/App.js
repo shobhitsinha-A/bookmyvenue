@@ -13,6 +13,7 @@ import AddVenue from "./pages/AddVenue";
 import MyVenues from "./pages/MyVenues";
 import FavoriteVenues from "./pages/FavoriteVenues";
 import VenueReservation from "./pages/VenueReservation";
+import ReservationHistory from "./pages/ReservationHistory";
 
 export default () => (
     <Router>
@@ -30,6 +31,7 @@ export default () => (
             <Route path="/myvenues" element={<MyVenues />} />
             <Route path="/favorites" element={<FavoriteVenues />} />
             <Route path="/reserve" element={<VenueReservation />} />
+            <Route path="/reservations" element={<ReservationHistory />} />
         </Routes>
     </Router>
 )

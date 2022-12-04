@@ -105,6 +105,17 @@ export default (props) => {
                                         Favorites
                                     </Link>
                                 </li>
+                                <li className="items-center">
+                                    <Link
+                                        className={"text-xs uppercase py-3 font-bold block text-blueGray-700 hover:text-lightBlue-600"}
+                                        to="/reservations"
+                                    >
+                                        <i
+                                            className={"fas fa-hotel mr-2 text-sm opacity-75"}
+                                        ></i>{" "}
+                                        Reservations
+                                    </Link>
+                                </li>
                             </ul>
                         </div>
                     </div>
