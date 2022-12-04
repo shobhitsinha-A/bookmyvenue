@@ -82,9 +82,19 @@ const getVenuesBySearch = async function(req, res) {
         let reqBody = JSON.parse(req.body);
         let venues = await venueService.getVenuesBySearch(reqBody);
 
+        let responseObj = {
+            "wedding" : [],
+            "celebrations": [],
+            "meetings": []
+        }
+
+        for (let venue of venues) {
+            responseObj[venue.category].push(venue);
+        }
+
         let resObj = {
                     message: 'venues fetched successfully',
-                    details: venues
+                    details: responseObj
         };
 
         return successResponse(res, resObj);
