@@ -85,7 +85,7 @@ const getVenuesBySearch = async function(searchDto) {
         }
 
         const info = await query;
-        console.log('venues ->' , info);
+        // console.log('venues ->' , info);
         return info;
     } catch (e) {
         return e.message;
