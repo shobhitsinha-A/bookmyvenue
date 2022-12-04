@@ -82,6 +82,12 @@ const getVenuesBySearch = async function(req, res) {
         let reqBody = JSON.parse(req.body);
         let venues = await venueService.getVenuesBySearch(reqBody);
 
+        // add images to each venue
+        for (let i = 0; i < venues.length; i++) {
+            let venue_images = await venueService.getVenueImages(venues[i].id);
+            venues[i].venue_images = venue_images;
+        }
+
         let responseObj = {
             "wedding" : [],
             "celebrations": [],

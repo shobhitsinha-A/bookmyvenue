@@ -52,7 +52,7 @@ const getVenueImages = async function(venue_id) {
     const info = await db('venue_images')
         .select('image_name')
         .where('venue_id', venue_id);
-    console.log('venue images ->' , info);
+    // console.log('venue images ->' , info);
     return info;
   } catch (e) {
       return e.message;
