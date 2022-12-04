@@ -125,5 +125,16 @@ const getVenuesMetadata = async function(filterDto) {
     }
 }
 
+const getVenueById = async function(venue_id) {
+    try {
+        const info = await db('venues')
+            .select('id', 'name', 'price', 'capacity', 'address', 'city', 'state', 'zipcode', 'phone_number', 'description', 'category', 'rating')
+            .where('id', venue_id);
+        // console.log('venue ->' , info);
+        return info;
+    } catch (e) {
+        return e.message;
+    }
+}
 module.exports = { createVenue , createVenueImages, getVenueImages
-    , getVenuesBySearch, getVenuesMetadata};
+    , getVenuesBySearch, getVenuesMetadata, getVenueById };

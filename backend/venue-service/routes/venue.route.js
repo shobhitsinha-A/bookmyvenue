@@ -14,5 +14,7 @@ router.post('/venues/search', venueController.getVenuesBySearch);
 
 router.get('/venues/filter', venueController.getVenuesMetadata);
 
+router.get('/venues/:venue_id', venueController.getVenueById);
+
 module.exports = router;
 

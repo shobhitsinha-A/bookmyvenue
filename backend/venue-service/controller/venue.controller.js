@@ -118,5 +118,21 @@ const getVenuesMetadata = async function(req, res) {
             return successResponse(res, resObj);
 }
 
+const getVenueById = async function(req, res) {
+
+            let venue = await venueService.getVenueById(req.params.venue_id);
+
+            // add images to venue
+            let venue_images = await venueService.getVenueImages(venue[0].id);
+            venue[0].venue_images = venue_images;
+
+            let resObj = {
+                        message: 'venue fetched successfully',
+                        details: venue
+            };
+
+            return successResponse(res, resObj);
+}
+
 module.exports = { createVenue,  uploadImages, createVenueImages, getVenueImages,
-                    getVenuesBySearch, getVenuesMetadata };
+                    getVenuesBySearch, getVenuesMetadata, getVenueById };
