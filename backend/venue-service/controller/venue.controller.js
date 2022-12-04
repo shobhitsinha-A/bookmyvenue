@@ -89,7 +89,7 @@ const getVenuesBySearch = async function(req, res) {
         }
 
         let responseObj = {
-            "wedding" : [],
+            "weddings" : [],
             "celebrations": [],
             "meetings": []
         }
