@@ -136,5 +136,34 @@ const getVenueById = async function(venue_id) {
         return e.message;
     }
 }
+
+const createBookmarks = async function(bookmarkDto) {
+    let { user_id, venue_id } = bookmarkDto;
+    try {
+        const info = await db('bookmarks')
+            .insert({
+                user_id: user_id,
+                venue_id: venue_id
+            });
+        const id = info[0];
+        console.log('bookmark inserted  ->' , id);
+        return id;
+    } catch (e) {
+        return e.message;
+    }
+};
+
+const getBookmarks = async function(user_id) {
+    try {
+        const info = await db('bookmarks')
+            .select('venue_id')
+            .where('user_id', user_id);
+        console.log('bookmarks ->' , info);
+        return info;
+    } catch (e) {
+        return e.message;
+    }
+}
+
 module.exports = { createVenue , createVenueImages, getVenueImages
-    , getVenuesBySearch, getVenuesMetadata, getVenueById };
+    , getVenuesBySearch, getVenuesMetadata, getVenueById, createBookmarks, getBookmarks };
