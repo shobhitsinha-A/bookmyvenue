@@ -35,4 +35,18 @@ const getDetailsByUserName = async function (user_name) {
     return details
 };
 
-module.exports = { createProfile , getDetailsByUserName };
+const updateUserDetails = async function (userDto) {
+    const { user_name, email, first_name, last_name, phone_no } = userDto;
+    const details = await db('profiles')
+        .where({
+            user_name: user_name
+        })
+        .update({
+            email: email,
+            first_name: first_name,
+            last_name: last_name,
+            phone_no: phone_no
+        });
+    return details;
+}
+module.exports = { createProfile , getDetailsByUserName, updateUserDetails };
