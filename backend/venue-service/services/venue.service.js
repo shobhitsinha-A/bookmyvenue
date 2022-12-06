@@ -2,7 +2,7 @@ const db = require('../db/db');
 
 const createVenue = async function(venueDto) {
 
-    let { name, price, capacity, address, city, state,
+    let { name, price, capacity, address, created_by, city, state,
         zipcode, phone_number, description, category, rating } = venueDto;
 
 
@@ -13,6 +13,7 @@ const createVenue = async function(venueDto) {
                 price : price,
                 capacity: capacity,
                 address: address,
+                created_by: created_by,
                 city: city,
                 state: state,
                 zipcode: zipcode,
@@ -137,6 +138,17 @@ const getVenueById = async function(venue_id) {
     }
 }
 
+const getVenuesByUserId = async function(user_id) {
+    try {
+        const info = await db('venues')
+            .select('id', 'name', 'price', 'capacity', 'address', 'city', 'state', 'zipcode', 'phone_number', 'description', 'category', 'rating')
+            .where('created_by', user_id);
+        // console.log('venue ->' , info);
+        return info;
+    } catch (e) {
+        return e.message;
+    }
+}
 const createBookmarks = async function(bookmarkDto) {
     let { user_id, venue_id } = bookmarkDto;
     try {
@@ -166,4 +178,4 @@ const getBookmarks = async function(user_id) {
 }
 
 module.exports = { createVenue , createVenueImages, getVenueImages
-    , getVenuesBySearch, getVenuesMetadata, getVenueById, createBookmarks, getBookmarks };
+    , getVenuesBySearch, getVenuesMetadata, getVenueById, getVenuesByUserId, createBookmarks, getBookmarks };

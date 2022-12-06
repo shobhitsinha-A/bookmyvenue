@@ -9,7 +9,7 @@ const createVenue = async function(req, res) {
 
         let reqBody = JSON.parse(req.body);
 
-    let { name, price, capacity, address, city, state,
+    let { name, price, capacity, address, created_by, city, state,
         zipcode, phone_number, description, category, rating } = reqBody;
 
         let venueId = await venueService.createVenue(reqBody);
@@ -22,6 +22,7 @@ const createVenue = async function(req, res) {
                         price,
                         capacity,
                         address,
+                        created_by,
                         city,
                         state,
                         zipcode,
@@ -134,6 +135,17 @@ const getVenueById = async function(req, res) {
     return successResponse(res, resObj);
 };
 
+const getVenuesByUserId = async function(req, res) {
+
+        let venues = await venueService.getVenuesByUserId(req.params.user_id);
+
+        let resObj = {
+                    message: 'venues fetched successfully',
+                    details: venues
+        };
+
+        return successResponse(res, resObj);
+}
 const createBookmarks = async function(req, res) {
 
     let reqBody = JSON.parse(req.body);
@@ -176,4 +188,5 @@ const getBookmarks = async function(req, res) {
 }
 
 module.exports = { createVenue,  uploadImages, createVenueImages, getVenueImages,
-                    getVenuesBySearch, getVenuesMetadata, getVenueById, createBookmarks, getBookmarks };
+                    getVenuesBySearch, getVenuesMetadata, getVenueById, getVenuesByUserId,
+                    createBookmarks, getBookmarks };

@@ -16,6 +16,7 @@ exports.up = function(knex) {
         table.integer('price');
         table.integer('capacity').notNullable();
         table.string('address').notNullable();
+        table.string('created_by').notNullable();
         table.string('city');
         table.string('state');
         table.string('zipcode');
@@ -23,6 +24,7 @@ exports.up = function(knex) {
         table.string('description');
         table.string('category');
         table.integer('rating');
+        table.foreign('created_by').references('user_name').inTable('users');
 
         //table.foreign('role_id').references('role_id').inTable('roles');
         table.timestamps(true, true);
