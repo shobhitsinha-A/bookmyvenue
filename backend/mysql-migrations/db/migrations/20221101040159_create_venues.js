@@ -24,6 +24,7 @@ exports.up = function(knex) {
         table.string('description');
         table.string('category');
         table.integer('rating');
+        table.boolean('is_available').defaultTo(true);
         table.foreign('created_by').references('user_name').inTable('users');
 
         //table.foreign('role_id').references('role_id').inTable('roles');

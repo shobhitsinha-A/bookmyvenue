@@ -6,6 +6,8 @@ const venueController = require('../controller/venue.controller');
 //venue routes
 router.post('/venues', venueController.createVenue);
 
+router.put('/venues', venueController.updateVenue);
+
 router.post('/venues/:venue_id/images',venueController.uploadImages, venueController.createVenueImages);
 
 router.get('/venues/:venue_id/images', venueController.getVenueImages);

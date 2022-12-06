@@ -3,7 +3,7 @@ const db = require('../db/db');
 const createVenue = async function(venueDto) {
 
     let { name, price, capacity, address, created_by, city, state,
-        zipcode, phone_number, description, category, rating } = venueDto;
+        zipcode, phone_number, description, category, rating, is_available } = venueDto;
 
 
     try {
@@ -20,7 +20,8 @@ const createVenue = async function(venueDto) {
                 phone_number: phone_number,
                 description: description,
                 category: category,
-                rating: rating
+                rating: rating,
+                is_available: is_available
             });
         const id = info[0];
         console.log('venue inserted  ->' , id);
@@ -31,6 +32,33 @@ const createVenue = async function(venueDto) {
 
 };
 
+const updateVenue = async function(venueDto) {
+    let { id, name, price, capacity, address, city, state,
+        zipcode, phone_number, description, category, rating, is_available } = venueDto;
+    try {
+        const info = await db('venues')
+            .where('id', id)
+            .update({
+                name: name,
+                price : price,
+                capacity: capacity,
+                address: address,
+                city: city,
+                state: state,
+                zipcode: zipcode,
+                phone_number: phone_number,
+                description: description,
+                category: category,
+                rating: rating,
+                is_available: is_available
+            });
+
+        console.log('venue updated  ->' , info);
+        return info;
+    } catch (e) {
+        return e.message;
+    }
+}
 const createVenueImages = async function(venue_id, files) {
 
     let venue_images = []
@@ -177,5 +205,5 @@ const getBookmarks = async function(user_id) {
     }
 }
 
-module.exports = { createVenue , createVenueImages, getVenueImages
+module.exports = { createVenue , updateVenue, createVenueImages, getVenueImages
     , getVenuesBySearch, getVenuesMetadata, getVenueById, getVenuesByUserId, createBookmarks, getBookmarks };

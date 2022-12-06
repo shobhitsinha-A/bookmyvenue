@@ -10,7 +10,7 @@ const createVenue = async function(req, res) {
         let reqBody = JSON.parse(req.body);
 
     let { name, price, capacity, address, created_by, city, state,
-        zipcode, phone_number, description, category, rating } = reqBody;
+        zipcode, phone_number, description, category, rating, is_available } = reqBody;
 
         let venueId = await venueService.createVenue(reqBody);
 
@@ -29,13 +29,45 @@ const createVenue = async function(req, res) {
                         phone_number,
                         description,
                         category,
-                        rating
+                        rating,
+                        is_available
                     }
         };
     return successResponse(res, resObj);
 
 };
 
+const updateVenue = async function(req, res) {
+
+        let reqBody = JSON.parse(req.body);
+
+        let { name, price, capacity, address, created_by, city, state,
+            zipcode, phone_number, description, category, rating, is_available } = reqBody;
+
+        let venueId = await venueService.updateVenue(reqBody);
+
+        let resObj = {
+                    message: 'venue ' + name + ' updated successfully',
+                    details: {
+                        venue_id: venueId,
+                        name,
+                        price,
+                        capacity,
+                        address,
+                        created_by,
+                        city,
+                        state,
+                        zipcode,
+                        phone_number,
+                        description,
+                        category,
+                        rating,
+                        is_available
+                    }
+        };
+        return successResponse(res, resObj);
+
+}
 // https://stackoverflow.com/questions/41429355/multer-dynamic-destination-path
 const uploadImages =
       imageUpload = multer({
@@ -202,6 +234,6 @@ const getBookmarks = async function(req, res) {
     return successResponse(res, resObj);
 }
 
-module.exports = { createVenue,  uploadImages, createVenueImages, getVenueImages,
+module.exports = { createVenue, updateVenue,  uploadImages, createVenueImages, getVenueImages,
                     getVenuesBySearch, getVenuesMetadata, getVenueById, getVenuesByUserId,
                     createBookmarks, getBookmarks };
