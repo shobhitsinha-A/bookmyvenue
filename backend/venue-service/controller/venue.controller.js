@@ -137,11 +137,26 @@ const getVenueById = async function(req, res) {
 
 const getVenuesByUserId = async function(req, res) {
 
-        let venues = await venueService.getVenuesByUserId(req.params.user_id);
+    let venues = await venueService.getVenuesByUserId(req.params.user_id);
 
+    // add images to each venue
+    for (let i = 0; i < venues.length; i++) {
+        let venue_images = await venueService.getVenueImages(venues[i].id);
+        venues[i].venue_images = venue_images;
+    }
+
+    let responseObj = {
+        "weddings" : [],
+        "celebrations": [],
+        "meetings": []
+    }
+
+    for (let venue of venues) {
+        responseObj[venue.category].push(venue);
+    }
         let resObj = {
                     message: 'venues fetched successfully',
-                    details: venues
+                    details: responseObj
         };
 
         return successResponse(res, resObj);
