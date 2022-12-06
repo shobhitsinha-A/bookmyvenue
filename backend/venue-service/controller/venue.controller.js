@@ -246,6 +246,18 @@ const getBookmarks = async function(req, res) {
     return successResponse(res, resObj);
 }
 
+const deleteBookmark = async function(req, res) {
+
+        let bookmark = await venueService.deleteBookmark(req.params.user_id, req.params.venue_id);
+
+        let resObj = {
+                    message: 'bookmark deleted successfully',
+                    details: bookmark
+        };
+
+        return successResponse(res, resObj);
+}
+
 module.exports = { createVenue, updateVenue, deleteVenue,  uploadImages, createVenueImages, getVenueImages,
                     getVenuesBySearch, getVenuesMetadata, getVenueById, getVenuesByUserId,
-                    createBookmarks, getBookmarks };
+                    createBookmarks, getBookmarks, deleteBookmark };

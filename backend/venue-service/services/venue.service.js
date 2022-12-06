@@ -217,6 +217,18 @@ const getBookmarks = async function(user_id) {
     }
 }
 
+const deleteBookmark = async function(user_id, venue_id) {
+    try {
+        const info = await db('bookmarks')
+            .where({'user_id': user_id, 'venue_id': venue_id})
+            .del();
+        console.log('bookmark ->' , info);
+        return info;
+    } catch (e) {
+        return e.message;
+    }
+}
+
 module.exports = { createVenue , updateVenue, deleteVenue
-    , createVenueImages, getVenueImages
-    , getVenuesBySearch, getVenuesMetadata, getVenueById, getVenuesByUserId, createBookmarks, getBookmarks };
+    , createVenueImages, getVenueImages, getVenuesBySearch, getVenuesMetadata,
+    getVenueById, getVenuesByUserId, createBookmarks, getBookmarks, deleteBookmark };

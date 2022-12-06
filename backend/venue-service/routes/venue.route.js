@@ -26,5 +26,7 @@ router.post('/venues/bookmarks', venueController.createBookmarks);
 
 router.get('/venues/bookmarks/:user_id', venueController.getBookmarks);
 
+router.delete('/venues/bookmarks/:user_id/:venue_id', venueController.deleteBookmark);
+
 module.exports = router;
 
