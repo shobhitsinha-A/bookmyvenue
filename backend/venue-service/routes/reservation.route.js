@@ -10,5 +10,8 @@ router.get('/availability/:venue_id', reservationController.getReservationsByVen
 
 router.get('/user/:user_id', reservationController.getReservationsByUser);
 
+router.put('/', reservationController.updateReservation);
+
+router.delete('/:reservation_id', reservationController.deleteReservation);
 
 module.exports = router;
