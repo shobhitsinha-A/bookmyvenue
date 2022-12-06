@@ -2,7 +2,7 @@ const db = require('../db/db');
 
 const createVenue = async function(venueDto) {
 
-    let { name, price, capacity, address, city, state,
+    let { name, price, capacity, address, created_by, city, state,
         zipcode, phone_number, description, category, rating } = venueDto;
 
 
@@ -13,6 +13,7 @@ const createVenue = async function(venueDto) {
                 price : price,
                 capacity: capacity,
                 address: address,
+                created_by: created_by,
                 city: city,
                 state: state,
                 zipcode: zipcode,
@@ -136,5 +137,45 @@ const getVenueById = async function(venue_id) {
         return e.message;
     }
 }
+
+const getVenuesByUserId = async function(user_id) {
+    try {
+        const info = await db('venues')
+            .select('id', 'name', 'price', 'capacity', 'address', 'city', 'state', 'zipcode', 'phone_number', 'description', 'category', 'rating')
+            .where('created_by', user_id);
+        // console.log('venue ->' , info);
+        return info;
+    } catch (e) {
+        return e.message;
+    }
+}
+const createBookmarks = async function(bookmarkDto) {
+    let { user_id, venue_id } = bookmarkDto;
+    try {
+        const info = await db('bookmarks')
+            .insert({
+                user_id: user_id,
+                venue_id: venue_id
+            });
+        const id = info[0];
+        console.log('bookmark inserted  ->' , id);
+        return id;
+    } catch (e) {
+        return e.message;
+    }
+};
+
+const getBookmarks = async function(user_id) {
+    try {
+        const info = await db('bookmarks')
+            .select('venue_id')
+            .where('user_id', user_id);
+        console.log('bookmarks ->' , info);
+        return info;
+    } catch (e) {
+        return e.message;
+    }
+}
+
 module.exports = { createVenue , createVenueImages, getVenueImages
-    , getVenuesBySearch, getVenuesMetadata, getVenueById };
+    , getVenuesBySearch, getVenuesMetadata, getVenueById, getVenuesByUserId, createBookmarks, getBookmarks };

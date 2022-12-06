@@ -16,5 +16,11 @@ router.get('/venues/filter', venueController.getVenuesMetadata);
 
 router.get('/venues/:venue_id', venueController.getVenueById);
 
+router.get('/venues/created_by/:user_id', venueController.getVenuesByUserId);
+
+router.post('/venues/bookmarks', venueController.createBookmarks);
+
+router.get('/venues/bookmarks/:user_id', venueController.getBookmarks);
+
 module.exports = router;
 

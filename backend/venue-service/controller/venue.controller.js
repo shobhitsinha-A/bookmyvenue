@@ -9,7 +9,7 @@ const createVenue = async function(req, res) {
 
         let reqBody = JSON.parse(req.body);
 
-    let { name, price, capacity, address, city, state,
+    let { name, price, capacity, address, created_by, city, state,
         zipcode, phone_number, description, category, rating } = reqBody;
 
         let venueId = await venueService.createVenue(reqBody);
@@ -22,6 +22,7 @@ const createVenue = async function(req, res) {
                         price,
                         capacity,
                         address,
+                        created_by,
                         city,
                         state,
                         zipcode,
@@ -72,67 +73,120 @@ const createVenueImages = async function(req, res) {
 
 const getVenueImages = async function(req, res) {
 
-        const info = await venueService.getVenueImages(req.params.venue_id);
-        // console.log('venue images fetched info ->' , info);
-        return successResponse(res, info);
+    const info = await venueService.getVenueImages(req.params.venue_id);
+    // console.log('venue images fetched info ->' , info);
+    return successResponse(res, info);
 };
 
 const getVenuesBySearch = async function(req, res) {
 
-        let reqBody = JSON.parse(req.body);
-        let venues = await venueService.getVenuesBySearch(reqBody);
+    let reqBody = JSON.parse(req.body);
+    let venues = await venueService.getVenuesBySearch(reqBody);
 
-        // add images to each venue
-        for (let i = 0; i < venues.length; i++) {
-            let venue_images = await venueService.getVenueImages(venues[i].id);
-            venues[i].venue_images = venue_images;
-        }
+    // add images to each venue
+    for (let i = 0; i < venues.length; i++) {
+        let venue_images = await venueService.getVenueImages(venues[i].id);
+        venues[i].venue_images = venue_images;
+    }
 
-        let responseObj = {
-            "weddings" : [],
-            "celebrations": [],
-            "meetings": []
-        }
+    let responseObj = {
+        "weddings" : [],
+        "celebrations": [],
+        "meetings": []
+    }
 
-        for (let venue of venues) {
-            responseObj[venue.category].push(venue);
-        }
+    for (let venue of venues) {
+        responseObj[venue.category].push(venue);
+    }
 
-        let resObj = {
-                    message: 'venues fetched successfully',
-                    details: responseObj
-        };
+    let resObj = {
+                message: 'venues fetched successfully',
+                details: responseObj
+    };
 
-        return successResponse(res, resObj);
-}
+    return successResponse(res, resObj);
+};
 
 const getVenuesMetadata = async function(req, res) {
 
-            let venues = await venueService.getVenuesMetadata();
+    let venues = await venueService.getVenuesMetadata();
 
-            let resObj = {
-                        message: 'venues metadata fetched successfully',
-                        details: venues
-            };
+    let resObj = {
+                message: 'venues metadata fetched successfully',
+                details: venues
+    };
 
-            return successResponse(res, resObj);
+    return successResponse(res, resObj);
 }
 
 const getVenueById = async function(req, res) {
 
-            let venue = await venueService.getVenueById(req.params.venue_id);
+    let venue = await venueService.getVenueById(req.params.venue_id);
 
-            // add images to venue
-            let venue_images = await venueService.getVenueImages(venue[0].id);
-            venue[0].venue_images = venue_images;
+    // add images to venue
+    let venue_images = await venueService.getVenueImages(venue[0].id);
+    venue[0].venue_images = venue_images;
 
-            let resObj = {
-                        message: 'venue fetched successfully',
-                        details: venue
-            };
+    let resObj = {
+                message: 'venue fetched successfully',
+                details: venue
+    };
 
-            return successResponse(res, resObj);
+    return successResponse(res, resObj);
+};
+
+const getVenuesByUserId = async function(req, res) {
+
+        let venues = await venueService.getVenuesByUserId(req.params.user_id);
+
+        let resObj = {
+                    message: 'venues fetched successfully',
+                    details: venues
+        };
+
+        return successResponse(res, resObj);
+}
+const createBookmarks = async function(req, res) {
+
+    let reqBody = JSON.parse(req.body);
+
+    let { user_id, venue_id } = reqBody;
+
+    let bookmarkId = await venueService.createBookmarks(reqBody);
+
+    let resObj = {
+                message: 'bookmark created successfully',
+                details: {
+                    bookmark_id: bookmarkId,
+                    user_id,
+                    venue_id
+                }
+    };
+
+    return successResponse(res, resObj);
+};
+
+const getBookmarks = async function(req, res) {
+
+    let bookmarks = await venueService.getBookmarks(req.params.user_id);
+
+    let bookmarked_venues = [];
+    for (let bookmark of bookmarks) {
+        let venue = await venueService.getVenueById(bookmark.venue_id);
+        let venue_images = await venueService.getVenueImages(bookmark.venue_id);
+        venue[0].venue_images = venue_images;
+
+        bookmarked_venues.push(venue[0]);
+    }
+
+    let resObj = {
+                message: 'bookmarks fetched successfully',
+                details: bookmarked_venues
+    };
+
+    return successResponse(res, resObj);
 }
 
 module.exports = { createVenue,  uploadImages, createVenueImages, getVenueImages,
-                    getVenuesBySearch, getVenuesMetadata, getVenueById };
+                    getVenuesBySearch, getVenuesMetadata, getVenueById, getVenuesByUserId,
+                    createBookmarks, getBookmarks };
