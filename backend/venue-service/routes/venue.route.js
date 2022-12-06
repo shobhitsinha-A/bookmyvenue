@@ -8,6 +8,8 @@ router.post('/venues', venueController.createVenue);
 
 router.put('/venues', venueController.updateVenue);
 
+router.delete('/venues/:venue_id', venueController.deleteVenue);
+
 router.post('/venues/:venue_id/images',venueController.uploadImages, venueController.createVenueImages);
 
 router.get('/venues/:venue_id/images', venueController.getVenueImages);

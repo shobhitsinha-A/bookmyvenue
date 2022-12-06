@@ -193,6 +193,18 @@ const getVenuesByUserId = async function(req, res) {
 
         return successResponse(res, resObj);
 }
+
+const deleteVenue = async function(req, res) {
+
+        let venue = await venueService.deleteVenue(req.params.venue_id);
+
+        let resObj = {
+                    message: 'venue deleted successfully',
+                    details: venue
+        };
+
+        return successResponse(res, resObj);
+}
 const createBookmarks = async function(req, res) {
 
     let reqBody = JSON.parse(req.body);
@@ -234,6 +246,6 @@ const getBookmarks = async function(req, res) {
     return successResponse(res, resObj);
 }
 
-module.exports = { createVenue, updateVenue,  uploadImages, createVenueImages, getVenueImages,
+module.exports = { createVenue, updateVenue, deleteVenue,  uploadImages, createVenueImages, getVenueImages,
                     getVenuesBySearch, getVenuesMetadata, getVenueById, getVenuesByUserId,
                     createBookmarks, getBookmarks };

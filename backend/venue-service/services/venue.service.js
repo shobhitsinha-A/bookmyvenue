@@ -59,6 +59,18 @@ const updateVenue = async function(venueDto) {
         return e.message;
     }
 }
+
+const deleteVenue = async function(venue_id) {
+    try {
+        const info = await db('venues')
+            .where('id', venue_id)
+            .del();
+        // console.log('venue ->' , info);
+        return info;
+    } catch (e) {
+        return e.message;
+    }
+}
 const createVenueImages = async function(venue_id, files) {
 
     let venue_images = []
@@ -205,5 +217,6 @@ const getBookmarks = async function(user_id) {
     }
 }
 
-module.exports = { createVenue , updateVenue, createVenueImages, getVenueImages
+module.exports = { createVenue , updateVenue, deleteVenue
+    , createVenueImages, getVenueImages
     , getVenuesBySearch, getVenuesMetadata, getVenueById, getVenuesByUserId, createBookmarks, getBookmarks };
