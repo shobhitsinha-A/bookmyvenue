@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import AnimatedContainer from "../helpers/AnimatedContainer";
 import Footer from "../components/footers/Footer";
 import tw from "twin.macro";
@@ -44,66 +44,42 @@ const CardHoverOverlay = styled(motion.div)`
 `;
 const CardButton = tw(PrimaryButtonBase)`text-sm`;
 
-const CardReview = tw.div`font-medium text-xs text-gray-600`;
-
 const CardText = tw.div`p-4 text-gray-900`;
 const CardTitle = tw.h5`text-lg font-semibold group-hover:text-primary-500`;
 const CardContent = tw.p`mt-1 text-sm font-medium text-gray-600`;
 const CardPrice = tw.p`mt-4 text-xl font-bold`;
 
+function getImageFromResults(id, images) {
+    if (images.length > 0) {
+        return 'http://bookmyvenue.live:6969/images/' + id + '/' + images[0]['image_name'];
+    }
+    else return '';
+}
+
 export default ({
-                    heading = "Search Results",
-                    tabs = {
-                        Weddings: [
-                            {
-                                imageSrc:
-                                    "https://cdn0.weddingwire.com/vendor/005959/original/960/jpg/1514743289-434172d9012c01a0-1507470329026-image2.webp",
-                                title: "Whippoorwill Hill",
-                                content: "Bloomington, IN",
-                                price: "$3,000/100 guests",
-                                rating: "5.0",
-                                reviews: "80",
-                                url: "#"
-                            },
-                            {
-                                imageSrc:
-                                    "https://cdn0.weddingwire.com/vendor/466506/original/960/jpg/1480766089-a5d8a8db471d01ac-SycamoreFarm2016-002__1_.webp",
-                                title: "Sycamore Farm",
-                                content: "Bloomington, IN",
-                                price: "Contact for pricing",
-                                rating: "4.9",
-                                reviews: "53",
-                                url: "#"
-                            }
-                        ],
-                        Meetings: [
-                            {
-                                imageSrc:
-                                    "https://assets.simpleviewinc.com/simpleview/image/upload/crm/bloomington/image0020-d0cfbf5f5056a36_d0cfc0b1-5056-a36a-0678b1f75686158a.jpg",
-                                title: "Indiana Memorial Union - Biddle Hotel & Conference Center",
-                                content: "Bloomington, IN",
-                                price: "Contact for pricing",
-                                rating: "5.0",
-                                reviews: "470",
-                                url: "/venue"
-                            },
-                            {
-                                imageSrc:
-                                    "https://assets.simpleviewinc.com/simpleview/image/upload/crm/bloomington/MonroeConventionCenter_450aea8e-5056-a36a-06de22f8c1c0ee90.jpg",
-                                title: "Monroe Convention Center",
-                                content: "Bloomington, IN",
-                                price: "Contact for pricing",
-                                rating: "4.7",
-                                reviews: "120",
-                                url: "#"
-                            }
-                        ],
-                        Celebrations: []
-                    }
+                    heading = "Search Results"
                 }) => {
 
-    const tabsKeys = Object.keys(tabs);
+    const [results, setResults] = useState({});
+    const tabsKeys = Object.keys(results);
     const [activeTab, setActiveTab] = useState(tabsKeys[0]);
+
+
+    useEffect(() => {
+        async function getSearchResults() {
+            let response = await fetch('http://bookmyvenue.live:6969/venues/search', {
+                method: 'POST',
+                body: JSON.stringify({})
+            });
+            let jsonResponse = await response.json();
+            if (jsonResponse.status) {
+                setResults(jsonResponse.data.details);
+            }
+        }
+        getSearchResults().catch(console.error);
+    }, []);
+
+
 
     return (
         <AnimatedContainer>
@@ -115,7 +91,7 @@ export default ({
                     <HeaderRow>
                         <Header>{heading}</Header>
                         <TabsControl>
-                            {Object.keys(tabs).map((tabName, index) => (
+                            {Object.keys(results).map((tabName, index) => (
                                 <TabControl key={index} active={activeTab === tabName} onClick={() => setActiveTab(tabName)}>
                                     {tabName}
                                 </TabControl>
@@ -142,16 +118,15 @@ export default ({
                             initial={activeTab === tabKey ? "current" : "hidden"}
                             animate={activeTab === tabKey ? "current" : "hidden"}
                         >
-                            {tabs[tabKey].map((card, index) => (
+                            {results[tabKey].map((card, index) => (
                                 <CardContainer key={index}>
-                                    <Card className="group" href={card.url} initial="rest" whileHover="hover" animate="rest">
-                                        <CardImageContainer imageSrc={card.imageSrc}>
+                                    <Card className="group" href="/venue" initial="rest" whileHover="hover" animate="rest">
+                                        <CardImageContainer imageSrc={getImageFromResults(card.id, card.venue_images)}>
                                             <CardRatingContainer>
                                                 <CardRating>
                                                     <StarIcon />
                                                     {card.rating}
                                                 </CardRating>
-                                                <CardReview>({card.reviews})</CardReview>
                                             </CardRatingContainer>
                                             <CardHoverOverlay
                                                 variants={{
@@ -166,12 +141,12 @@ export default ({
                                                 }}
                                                 transition={{ duration: 0.3 }}
                                             >
-                                                <CardButton>Reserve Now</CardButton>
+                                                <CardButton onClick={() => sessionStorage.setItem('venueId', card.id)}>Reserve Now</CardButton>
                                             </CardHoverOverlay>
                                         </CardImageContainer>
                                         <CardText>
-                                            <CardTitle>{card.title}</CardTitle>
-                                            <CardContent>{card.content}</CardContent>
+                                            <CardTitle>{card.name}</CardTitle>
+                                            <CardContent>{card.city + ', ' + card.state}</CardContent>
                                             <CardPrice>{card.price}</CardPrice>
                                         </CardText>
                                     </Card>

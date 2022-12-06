@@ -1,8 +1,21 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import Footer from "../components/footers/Footer";
 import Map from "../components/map/Map";
 
 export default () => {
+    const [venue, setVenue] = useState({});
+    useEffect(() => {
+        async function getVenueDetails() {
+            let response = await fetch('http://bookmyvenue.live:6969/venues/'.concat(sessionStorage.getItem('venueId')), {
+                method: 'GET'
+            });
+            let jsonResponse = await response.json();
+            if (jsonResponse.status) {
+                setVenue(jsonResponse.data.details[0]);
+            }
+        }
+        getVenueDetails().catch(console.error);
+    }, []);
     return (
         <div>
             <main className="profile-page">
@@ -104,24 +117,22 @@ export default () => {
                                 </div>
                                 <div className="text-center mt-12">
                                     <h3 className="text-4xl font-semibold leading-normal mb-2 text-blueGray-700 mb-2">
-                                        Indiana Memorial Union - Biddle Hotel & Conference Center
+                                        {venue.name}
                                     </h3>
                                     <div className="text-sm leading-normal mt-0 mb-2 text-blueGray-400 font-bold uppercase">
                                         <i className="fas fa-map-marker-alt mr-2 text-lg text-blueGray-400"></i>{" "}
-                                        Bloomington, Indiana
+                                        {venue.city + ', ' + venue.state}
                                     </div>
                                     <div className="mb-2 text-blueGray-600 mt-10">
                                         <i className="fas fa-dollar-sign mr-2 text-lg text-blueGray-400"></i>
-                                        Contact for pricing
+                                        {venue.price}
                                     </div>
                                 </div>
                                 <div className="mt-10 py-10 border-t border-blueGray-200 text-center">
                                     <div className="flex flex-wrap justify-center">
                                         <div className="w-full lg:w-9/12 px-4">
                                             <p className="mb-4 text-lg leading-relaxed text-blueGray-700">
-                                                The Indiana Memorial Union is a student union building at Indiana University
-                                                in Bloomington, Indiana, United States. It is located at 900 E 7th Street,
-                                                facing the Campus River and the Dunn Meadow.
+                                                {venue.description}
                                             </p>
                                         </div>
                                     </div>
@@ -140,6 +151,5 @@ export default () => {
             </main>
             <Footer />
         </div>
-
     );
 }

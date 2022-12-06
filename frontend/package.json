@@ -35,7 +35,8 @@
     "@fontsource/roboto": "^4.5.8",
     "@mui/icons-material": "^5.10.14",
     "@mui/x-date-pickers": "^5.0.8",
-    "moment": "^2.29.4"
+    "moment": "^2.29.4",
+    "mdb-react-ui-kit": "^5.0.0"
   },
   "scripts": {
     "start": "react-scripts start",

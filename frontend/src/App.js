@@ -14,6 +14,7 @@ import MyVenues from "./pages/MyVenues";
 import FavoriteVenues from "./pages/FavoriteVenues";
 import VenueReservation from "./pages/VenueReservation";
 import ReservationHistory from "./pages/ReservationHistory";
+import Chat from "./components/chat/Chat";
 
 export default () => (
     <Router>
@@ -32,6 +33,7 @@ export default () => (
             <Route path="/favorites" element={<FavoriteVenues />} />
             <Route path="/reserve" element={<VenueReservation />} />
             <Route path="/reservations" element={<ReservationHistory />} />
+            <Route path="/chat" element={<Chat />} />
         </Routes>
     </Router>
 )
