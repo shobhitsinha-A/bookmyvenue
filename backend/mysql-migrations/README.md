@@ -29,3 +29,6 @@ npx knex migrate:down 20221124193316_create_reservations.js --knexfile ./db/knex
 
 npx knex migrate:up 20221205204836_create_bookmarks.js --knexfile ./db/knexfile.js
 npx knex migrate:down 20221205204836_create_bookmarks.js --knexfile ./db/knexfile.js
+
+npx knex migrate:up 20221207081702_create_ratings.js --knexfile ./db/knexfile.js
+npx knex migrate:down 20221207081702_create_ratings.js --knexfile ./db/knexfile.js

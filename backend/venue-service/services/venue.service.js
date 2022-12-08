@@ -229,6 +229,74 @@ const deleteBookmark = async function(user_id, venue_id) {
     }
 }
 
+const createRating = async function(ratingDto) {
+    let { user_id, venue_id, rating } = ratingDto;
+    try {
+        const info = await db('ratings')
+            .insert({
+                user_id: user_id,
+                venue_id: venue_id,
+                rating: rating
+            });
+        const id = info[0];
+        console.log('rating inserted  ->' , id);
+        return id;
+    } catch (e) {
+        return e.message;
+    }
+}
+
+const getRatingsByUserId = async function(user_id) {
+    try {
+        const info = await db('ratings')
+            .select('venue_id', 'rating')
+            .where('user_id', user_id);
+        console.log('ratings ->' , info);
+        return info;
+    } catch (e) {
+        return e.message;
+    }
+}
+
+const getPastReservedVenuesByUserId = async function(user_id) {
+    try {
+        const info = await db('reservations')
+            .select('venue_id')
+            .where({'user_id': user_id})
+            .andWhere('date', '<', new Date());
+        console.log('past reserved venues ->' , info);
+        return info;
+    } catch (e) {
+        return e.message;
+    }
+}
+
+const getRatingsByUserIdAndVenueId = async function(user_id, venue_id) {
+    try {
+        const info = await db('ratings')
+            .select('rating')
+            .where({'user_id': user_id, 'venue_id': venue_id});
+        console.log('rating ->' , info);
+        return info;
+    } catch (e) {
+        return e.message;
+    }
+}
+
+const getUpcomingReservedVenuesByUserId = async function(user_id) {
+    try {
+        const info = await db('reservations')
+            .select('venue_id')
+            .where({'user_id': user_id})
+            .andWhere('date', '>', new Date());
+        console.log('upcoming reserved venues ->' , info);
+        return info;
+    } catch (e) {
+        return e.message;
+    }
+}
 module.exports = { createVenue , updateVenue, deleteVenue
     , createVenueImages, getVenueImages, getVenuesBySearch, getVenuesMetadata,
-    getVenueById, getVenuesByUserId, createBookmarks, getBookmarks, deleteBookmark };
+    getVenueById, getVenuesByUserId, createBookmarks, getBookmarks, deleteBookmark,
+    createRating, getRatingsByUserId, getPastReservedVenuesByUserId, getRatingsByUserIdAndVenueId,
+    getUpcomingReservedVenuesByUserId };

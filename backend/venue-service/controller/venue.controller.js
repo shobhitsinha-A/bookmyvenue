@@ -258,6 +258,91 @@ const deleteBookmark = async function(req, res) {
         return successResponse(res, resObj);
 }
 
+const createRating = async function(req, res) {
+
+        let reqBody = JSON.parse(req.body);
+
+        let { user_id, venue_id, rating } = reqBody;
+
+        let ratingId = await venueService.createRating(reqBody);
+
+        let resObj = {
+                    message: 'rating created successfully',
+                    details: {
+                        rating_id: ratingId,
+                        user_id,
+                        venue_id,
+                        rating
+                    }
+        };
+
+        return successResponse(res, resObj);
+}
+
+const getRatingsByUserId = async function(req, res) {
+
+        let ratings = await venueService.getRatingsByUserId(req.params.user_id);
+
+        // ratings -> [ { venue_id: 1, rating: 4 }, { venue_id: 2, rating: 3 } ]
+
+        let rated_venues = [];
+        for (let rating of ratings) {
+            let venue = await venueService.getVenueById(rating.venue_id);
+            console.log('venue -> ', venue);
+            venue[0].rating = rating.rating;
+
+            rated_venues.push(venue[0]);
+        }
+        let resObj = {
+                    message: 'ratings fetched successfully',
+                    details: rated_venues
+        };
+
+        return successResponse(res, resObj);
+}
+
+const getPastReservedVenuesByUserId = async function(req, res) {
+
+        let reservations = await venueService.getPastReservedVenuesByUserId(req.params.user_id);
+
+        let reserved_venues = [];
+        for (let reservation of reservations) {
+            let venue = await venueService.getVenueById(reservation.venue_id);
+            let ratings = await venueService.getRatingsByUserIdAndVenueId(req.params.user_id, venue[0].id);
+            venue[0].rating = ratings[0].rating;
+            reserved_venues.push(venue[0]);
+        }
+
+
+        let resObj = {
+                    message: 'past reserved venues fetched successfully',
+                    details: reserved_venues
+        };
+
+        return successResponse(res, resObj);
+}
+
+const getUpcomingReservedVenuesByUserId = async function(req, res) {
+
+        let reservations = await venueService.getUpcomingReservedVenuesByUserId(req.params.user_id);
+
+        let reserved_venues = [];
+
+        for (let reservation of reservations) {
+            let venue = await venueService.getVenueById(reservation.venue_id);
+            let ratings = await venueService.getRatingsByUserIdAndVenueId(req.params.user_id, venue[0].id);
+            venue[0].rating = ratings[0].rating;
+            reserved_venues.push(venue[0]);
+        }
+
+        let resObj = {
+            message: 'upcoming reserved venues fetched successfully',
+            details: reserved_venues
+        };
+
+        return successResponse(res, resObj);
+}
 module.exports = { createVenue, updateVenue, deleteVenue,  uploadImages, createVenueImages, getVenueImages,
                     getVenuesBySearch, getVenuesMetadata, getVenueById, getVenuesByUserId,
-                    createBookmarks, getBookmarks, deleteBookmark };
+                    createBookmarks, getBookmarks, deleteBookmark, createRating, getRatingsByUserId,
+                    getPastReservedVenuesByUserId , getUpcomingReservedVenuesByUserId  };

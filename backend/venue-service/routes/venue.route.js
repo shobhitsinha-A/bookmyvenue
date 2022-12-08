@@ -28,5 +28,13 @@ router.get('/venues/bookmarks/:user_id', venueController.getBookmarks);
 
 router.delete('/venues/bookmarks/:user_id/:venue_id', venueController.deleteBookmark);
 
+router.post('/venues/ratings', venueController.createRating);
+
+router.get('/venues/ratings/:user_id', venueController.getRatingsByUserId);
+
+router.get('/venues/past/reserved/:user_id', venueController.getPastReservedVenuesByUserId);
+
+// upcoming reserved venues
+router.get('/venues/upcoming/reserved/:user_id', venueController.getUpcomingReservedVenuesByUserId);
 module.exports = router;
 
