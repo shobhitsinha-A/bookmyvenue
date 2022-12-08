@@ -36,5 +36,8 @@ router.get('/venues/past/reserved/:user_id', venueController.getPastReservedVenu
 
 // upcoming reserved venues
 router.get('/venues/upcoming/reserved/:user_id', venueController.getUpcomingReservedVenuesByUserId);
+
+router.get('/venues/avg/rating', venueController.getAvgRating);
+
 module.exports = router;
 

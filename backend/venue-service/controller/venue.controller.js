@@ -342,7 +342,19 @@ const getUpcomingReservedVenuesByUserId = async function(req, res) {
 
         return successResponse(res, resObj);
 }
+
+const getAvgRating = async function(req, res) {
+
+            let avgRating = await venueService.getAvgRating();
+
+            let resObj = {
+                        message: 'avg rating fetched successfully',
+                        details: avgRating
+            };
+
+            return successResponse(res, resObj);
+}
 module.exports = { createVenue, updateVenue, deleteVenue,  uploadImages, createVenueImages, getVenueImages,
                     getVenuesBySearch, getVenuesMetadata, getVenueById, getVenuesByUserId,
                     createBookmarks, getBookmarks, deleteBookmark, createRating, getRatingsByUserId,
-                    getPastReservedVenuesByUserId , getUpcomingReservedVenuesByUserId  };
+                    getPastReservedVenuesByUserId , getUpcomingReservedVenuesByUserId, getAvgRating };

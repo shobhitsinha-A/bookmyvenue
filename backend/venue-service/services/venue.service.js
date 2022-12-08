@@ -65,7 +65,7 @@ const deleteVenue = async function(venue_id) {
         const info = await db('venues')
             .where('id', venue_id)
             .del();
-        // console.log('venue ->' , info);
+        console.log('venue ->' , info);
         return info;
     } catch (e) {
         return e.message;
@@ -93,7 +93,7 @@ const getVenueImages = async function(venue_id) {
     const info = await db('venue_images')
         .select('image_name')
         .where('venue_id', venue_id);
-    // console.log('venue images ->' , info);
+    console.log('venue images ->' , info);
     return info;
   } catch (e) {
       return e.message;
@@ -126,7 +126,7 @@ const getVenuesBySearch = async function(searchDto) {
         }
 
         const info = await query;
-        // console.log('venues ->' , info);
+        console.log('venues ->' , info);
         return info;
     } catch (e) {
         return e.message;
@@ -171,7 +171,7 @@ const getVenueById = async function(venue_id) {
         const info = await db('venues')
             .select('id', 'name', 'price', 'capacity', 'address', 'created_by', 'city', 'state', 'zipcode', 'phone_number', 'description', 'category', 'rating', 'is_available')
             .where('id', venue_id);
-        // console.log('venue ->' , info);
+        console.log('venue ->' , info);
         return info;
     } catch (e) {
         return e.message;
@@ -183,7 +183,7 @@ const getVenuesByUserId = async function(user_id) {
         const info = await db('venues')
             .select('id', 'name', 'price', 'capacity', 'address', 'city', 'state', 'zipcode', 'phone_number', 'description', 'category', 'rating')
             .where('created_by', user_id);
-        // console.log('venue ->' , info);
+        console.log('venue ->' , info);
         return info;
     } catch (e) {
         return e.message;
@@ -295,8 +295,21 @@ const getUpcomingReservedVenuesByUserId = async function(user_id) {
         return e.message;
     }
 }
+
+const getAvgRating = async function() {
+    try {
+        const info = await db('ratings')
+            .select('venue_id')
+            .avg('rating as avg_rating')
+            .groupBy('venue_id');
+        console.log('avg rating ->' , info);
+        return info;
+    } catch (e) {
+        return e.message;
+    }
+}
 module.exports = { createVenue , updateVenue, deleteVenue
     , createVenueImages, getVenueImages, getVenuesBySearch, getVenuesMetadata,
     getVenueById, getVenuesByUserId, createBookmarks, getBookmarks, deleteBookmark,
     createRating, getRatingsByUserId, getPastReservedVenuesByUserId, getRatingsByUserIdAndVenueId,
-    getUpcomingReservedVenuesByUserId };
+    getUpcomingReservedVenuesByUserId, getAvgRating };
