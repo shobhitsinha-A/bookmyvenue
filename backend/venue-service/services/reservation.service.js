@@ -52,4 +52,41 @@ const getReservationsByUser = async function(user_id) {
     }
 }
 
-module.exports = { createReservation, getReservationsByVenue, getReservationsByUser };
+const updateReservation = async function(reservationDto) {
+    let { reservation_id, venue_id, user_id, event_name, expected_no_of_people
+        , description, date, start_time, end_time } = reservationDto;
+
+    try {
+        const info = await db('reservations')
+            .where('id', reservation_id)
+            .update({
+                venue_id: venue_id,
+                user_id: user_id,
+                event_name: event_name,
+                expected_no_of_people: expected_no_of_people,
+                description: description,
+                date: date,
+                start_time: start_time,
+                end_time: end_time
+            });
+        console.log('reservation updated ->' , info);
+        return info;
+    } catch (e) {
+        return e.message;
+    }
+}
+
+const deleteReservation = async function(reservation_id) {
+    try {
+        const info = await db('reservations')
+            .where('id', reservation_id)
+            .del();
+        console.log('reservation deleted ->' , info);
+        return info;
+    } catch (e) {
+        return e.message;
+    }
+}
+
+module.exports = { createReservation, getReservationsByVenue, getReservationsByUser,
+                    updateReservation , deleteReservation};

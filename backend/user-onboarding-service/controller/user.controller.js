@@ -76,6 +76,16 @@ const registerUser = async function(req, res) {
             });
         });
 };
+
+const updateUserDetails = async function (req, res) {
+    let reqBody = JSON.parse(req.body);
+    try {
+        let result = await profileService.updateUserDetails(reqBody);
+        return successResponse(res, result);
+    } catch (e) {
+        return errorResponse(res, 400, e.message);
+    }
+}
 const getUserDetails = async function (req, res) {
 
     let user_name = req.url.substring(req.url.lastIndexOf('/')+1);
@@ -140,4 +150,5 @@ const forgotPassword = async function (req, res) {
     }
 };
 
-module.exports = { registerUser, loginUser, getUserDetails, deleteUser, forgotPassword };
+module.exports = { registerUser, loginUser, getUserDetails,
+                    updateUserDetails, deleteUser, forgotPassword };

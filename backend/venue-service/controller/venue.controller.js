@@ -10,7 +10,7 @@ const createVenue = async function(req, res) {
         let reqBody = JSON.parse(req.body);
 
     let { name, price, capacity, address, created_by, city, state,
-        zipcode, phone_number, description, category, rating } = reqBody;
+        zipcode, phone_number, description, category, rating, is_available } = reqBody;
 
         let venueId = await venueService.createVenue(reqBody);
 
@@ -29,13 +29,45 @@ const createVenue = async function(req, res) {
                         phone_number,
                         description,
                         category,
-                        rating
+                        rating,
+                        is_available
                     }
         };
     return successResponse(res, resObj);
 
 };
 
+const updateVenue = async function(req, res) {
+
+        let reqBody = JSON.parse(req.body);
+
+        let { name, price, capacity, address, created_by, city, state,
+            zipcode, phone_number, description, category, rating, is_available } = reqBody;
+
+        let venueId = await venueService.updateVenue(reqBody);
+
+        let resObj = {
+                    message: 'venue ' + name + ' updated successfully',
+                    details: {
+                        venue_id: venueId,
+                        name,
+                        price,
+                        capacity,
+                        address,
+                        created_by,
+                        city,
+                        state,
+                        zipcode,
+                        phone_number,
+                        description,
+                        category,
+                        rating,
+                        is_available
+                    }
+        };
+        return successResponse(res, resObj);
+
+}
 // https://stackoverflow.com/questions/41429355/multer-dynamic-destination-path
 const uploadImages =
       imageUpload = multer({
@@ -137,11 +169,38 @@ const getVenueById = async function(req, res) {
 
 const getVenuesByUserId = async function(req, res) {
 
-        let venues = await venueService.getVenuesByUserId(req.params.user_id);
+    let venues = await venueService.getVenuesByUserId(req.params.user_id);
 
+    // add images to each venue
+    for (let i = 0; i < venues.length; i++) {
+        let venue_images = await venueService.getVenueImages(venues[i].id);
+        venues[i].venue_images = venue_images;
+    }
+
+    let responseObj = {
+        "weddings" : [],
+        "celebrations": [],
+        "meetings": []
+    }
+
+    for (let venue of venues) {
+        responseObj[venue.category].push(venue);
+    }
         let resObj = {
                     message: 'venues fetched successfully',
-                    details: venues
+                    details: responseObj
+        };
+
+        return successResponse(res, resObj);
+}
+
+const deleteVenue = async function(req, res) {
+
+        let venue = await venueService.deleteVenue(req.params.venue_id);
+
+        let resObj = {
+                    message: 'venue deleted successfully',
+                    details: venue
         };
 
         return successResponse(res, resObj);
@@ -187,6 +246,115 @@ const getBookmarks = async function(req, res) {
     return successResponse(res, resObj);
 }
 
-module.exports = { createVenue,  uploadImages, createVenueImages, getVenueImages,
+const deleteBookmark = async function(req, res) {
+
+        let bookmark = await venueService.deleteBookmark(req.params.user_id, req.params.venue_id);
+
+        let resObj = {
+                    message: 'bookmark deleted successfully',
+                    details: bookmark
+        };
+
+        return successResponse(res, resObj);
+}
+
+const createRating = async function(req, res) {
+
+        let reqBody = JSON.parse(req.body);
+
+        let { user_id, venue_id, rating } = reqBody;
+
+        let ratingId = await venueService.createRating(reqBody);
+
+        let resObj = {
+                    message: 'rating created successfully',
+                    details: {
+                        rating_id: ratingId,
+                        user_id,
+                        venue_id,
+                        rating
+                    }
+        };
+
+        return successResponse(res, resObj);
+}
+
+const getRatingsByUserId = async function(req, res) {
+
+        let ratings = await venueService.getRatingsByUserId(req.params.user_id);
+
+        // ratings -> [ { venue_id: 1, rating: 4 }, { venue_id: 2, rating: 3 } ]
+
+        let rated_venues = [];
+        for (let rating of ratings) {
+            let venue = await venueService.getVenueById(rating.venue_id);
+            console.log('venue -> ', venue);
+            venue[0].rating = rating.rating;
+
+            rated_venues.push(venue[0]);
+        }
+        let resObj = {
+                    message: 'ratings fetched successfully',
+                    details: rated_venues
+        };
+
+        return successResponse(res, resObj);
+}
+
+const getPastReservedVenuesByUserId = async function(req, res) {
+
+        let reservations = await venueService.getPastReservedVenuesByUserId(req.params.user_id);
+
+        let reserved_venues = [];
+        for (let reservation of reservations) {
+            let venue = await venueService.getVenueById(reservation.venue_id);
+            let ratings = await venueService.getRatingsByUserIdAndVenueId(req.params.user_id, venue[0].id);
+            venue[0].rating = ratings[0].rating;
+            reserved_venues.push(venue[0]);
+        }
+
+
+        let resObj = {
+                    message: 'past reserved venues fetched successfully',
+                    details: reserved_venues
+        };
+
+        return successResponse(res, resObj);
+}
+
+const getUpcomingReservedVenuesByUserId = async function(req, res) {
+
+        let reservations = await venueService.getUpcomingReservedVenuesByUserId(req.params.user_id);
+
+        let reserved_venues = [];
+
+        for (let reservation of reservations) {
+            let venue = await venueService.getVenueById(reservation.venue_id);
+            let ratings = await venueService.getRatingsByUserIdAndVenueId(req.params.user_id, venue[0].id);
+            venue[0].rating = ratings[0].rating;
+            reserved_venues.push(venue[0]);
+        }
+
+        let resObj = {
+            message: 'upcoming reserved venues fetched successfully',
+            details: reserved_venues
+        };
+
+        return successResponse(res, resObj);
+}
+
+const getAvgRating = async function(req, res) {
+
+            let avgRating = await venueService.getAvgRating();
+
+            let resObj = {
+                        message: 'avg rating fetched successfully',
+                        details: avgRating
+            };
+
+            return successResponse(res, resObj);
+}
+module.exports = { createVenue, updateVenue, deleteVenue,  uploadImages, createVenueImages, getVenueImages,
                     getVenuesBySearch, getVenuesMetadata, getVenueById, getVenuesByUserId,
-                    createBookmarks, getBookmarks };
+                    createBookmarks, getBookmarks, deleteBookmark, createRating, getRatingsByUserId,
+                    getPastReservedVenuesByUserId , getUpcomingReservedVenuesByUserId, getAvgRating };

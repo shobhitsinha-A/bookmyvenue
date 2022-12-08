@@ -12,6 +12,9 @@ router.post('/login', userController.loginUser);
 // get details
 router.get('/profile/details/:user_name', userController.getUserDetails);
 
+// update details
+router.put('/profile/details', userController.updateUserDetails);
+
 // forgot password
 router.post('/forgotpassword', userController.forgotPassword);
 

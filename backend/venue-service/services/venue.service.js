@@ -3,7 +3,7 @@ const db = require('../db/db');
 const createVenue = async function(venueDto) {
 
     let { name, price, capacity, address, created_by, city, state,
-        zipcode, phone_number, description, category, rating } = venueDto;
+        zipcode, phone_number, description, category, rating, is_available } = venueDto;
 
 
     try {
@@ -20,7 +20,8 @@ const createVenue = async function(venueDto) {
                 phone_number: phone_number,
                 description: description,
                 category: category,
-                rating: rating
+                rating: rating,
+                is_available: is_available
             });
         const id = info[0];
         console.log('venue inserted  ->' , id);
@@ -31,6 +32,45 @@ const createVenue = async function(venueDto) {
 
 };
 
+const updateVenue = async function(venueDto) {
+    let { id, name, price, capacity, address, city, state,
+        zipcode, phone_number, description, category, rating, is_available } = venueDto;
+    try {
+        const info = await db('venues')
+            .where('id', id)
+            .update({
+                name: name,
+                price : price,
+                capacity: capacity,
+                address: address,
+                city: city,
+                state: state,
+                zipcode: zipcode,
+                phone_number: phone_number,
+                description: description,
+                category: category,
+                rating: rating,
+                is_available: is_available
+            });
+
+        console.log('venue updated  ->' , info);
+        return info;
+    } catch (e) {
+        return e.message;
+    }
+}
+
+const deleteVenue = async function(venue_id) {
+    try {
+        const info = await db('venues')
+            .where('id', venue_id)
+            .del();
+        console.log('venue ->' , info);
+        return info;
+    } catch (e) {
+        return e.message;
+    }
+}
 const createVenueImages = async function(venue_id, files) {
 
     let venue_images = []
@@ -53,7 +93,7 @@ const getVenueImages = async function(venue_id) {
     const info = await db('venue_images')
         .select('image_name')
         .where('venue_id', venue_id);
-    // console.log('venue images ->' , info);
+    console.log('venue images ->' , info);
     return info;
   } catch (e) {
       return e.message;
@@ -86,7 +126,7 @@ const getVenuesBySearch = async function(searchDto) {
         }
 
         const info = await query;
-        // console.log('venues ->' , info);
+        console.log('venues ->' , info);
         return info;
     } catch (e) {
         return e.message;
@@ -129,9 +169,9 @@ const getVenuesMetadata = async function(filterDto) {
 const getVenueById = async function(venue_id) {
     try {
         const info = await db('venues')
-            .select('id', 'name', 'price', 'capacity', 'address', 'city', 'state', 'zipcode', 'phone_number', 'description', 'category', 'rating')
+            .select('id', 'name', 'price', 'capacity', 'address', 'created_by', 'city', 'state', 'zipcode', 'phone_number', 'description', 'category', 'rating', 'is_available')
             .where('id', venue_id);
-        // console.log('venue ->' , info);
+        console.log('venue ->' , info);
         return info;
     } catch (e) {
         return e.message;
@@ -143,7 +183,7 @@ const getVenuesByUserId = async function(user_id) {
         const info = await db('venues')
             .select('id', 'name', 'price', 'capacity', 'address', 'city', 'state', 'zipcode', 'phone_number', 'description', 'category', 'rating')
             .where('created_by', user_id);
-        // console.log('venue ->' , info);
+        console.log('venue ->' , info);
         return info;
     } catch (e) {
         return e.message;
@@ -177,5 +217,99 @@ const getBookmarks = async function(user_id) {
     }
 }
 
-module.exports = { createVenue , createVenueImages, getVenueImages
-    , getVenuesBySearch, getVenuesMetadata, getVenueById, getVenuesByUserId, createBookmarks, getBookmarks };
+const deleteBookmark = async function(user_id, venue_id) {
+    try {
+        const info = await db('bookmarks')
+            .where({'user_id': user_id, 'venue_id': venue_id})
+            .del();
+        console.log('bookmark ->' , info);
+        return info;
+    } catch (e) {
+        return e.message;
+    }
+}
+
+const createRating = async function(ratingDto) {
+    let { user_id, venue_id, rating } = ratingDto;
+    try {
+        const info = await db('ratings')
+            .insert({
+                user_id: user_id,
+                venue_id: venue_id,
+                rating: rating
+            });
+        const id = info[0];
+        console.log('rating inserted  ->' , id);
+        return id;
+    } catch (e) {
+        return e.message;
+    }
+}
+
+const getRatingsByUserId = async function(user_id) {
+    try {
+        const info = await db('ratings')
+            .select('venue_id', 'rating')
+            .where('user_id', user_id);
+        console.log('ratings ->' , info);
+        return info;
+    } catch (e) {
+        return e.message;
+    }
+}
+
+const getPastReservedVenuesByUserId = async function(user_id) {
+    try {
+        const info = await db('reservations')
+            .select('venue_id')
+            .where({'user_id': user_id})
+            .andWhere('date', '<', new Date());
+        console.log('past reserved venues ->' , info);
+        return info;
+    } catch (e) {
+        return e.message;
+    }
+}
+
+const getRatingsByUserIdAndVenueId = async function(user_id, venue_id) {
+    try {
+        const info = await db('ratings')
+            .select('rating')
+            .where({'user_id': user_id, 'venue_id': venue_id});
+        console.log('rating ->' , info);
+        return info;
+    } catch (e) {
+        return e.message;
+    }
+}
+
+const getUpcomingReservedVenuesByUserId = async function(user_id) {
+    try {
+        const info = await db('reservations')
+            .select('venue_id')
+            .where({'user_id': user_id})
+            .andWhere('date', '>', new Date());
+        console.log('upcoming reserved venues ->' , info);
+        return info;
+    } catch (e) {
+        return e.message;
+    }
+}
+
+const getAvgRating = async function() {
+    try {
+        const info = await db('ratings')
+            .select('venue_id')
+            .avg('rating as avg_rating')
+            .groupBy('venue_id');
+        console.log('avg rating ->' , info);
+        return info;
+    } catch (e) {
+        return e.message;
+    }
+}
+module.exports = { createVenue , updateVenue, deleteVenue
+    , createVenueImages, getVenueImages, getVenuesBySearch, getVenuesMetadata,
+    getVenueById, getVenuesByUserId, createBookmarks, getBookmarks, deleteBookmark,
+    createRating, getRatingsByUserId, getPastReservedVenuesByUserId, getRatingsByUserIdAndVenueId,
+    getUpcomingReservedVenuesByUserId, getAvgRating };
