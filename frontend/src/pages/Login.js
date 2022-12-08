@@ -47,6 +47,9 @@ let checkIfUserIsLoggedIn = async (e) => {
   });
   let jsonResponse = await response.json();
   if (jsonResponse.status) {
+    if (u_name === 'blah154') sessionStorage.setItem('role', 'USER');
+    else if (u_name === 'blah606') sessionStorage.setItem('role', 'HOST');
+    sessionStorage.setItem('user_name', jsonResponse.data.data.user_name);
     window.location.href = jsonResponse.data.data.url;
   } else {
     alert("Please check your credentials and try again");

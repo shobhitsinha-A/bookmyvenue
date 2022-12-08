@@ -12,7 +12,7 @@ import {
 
 export default function Chat() {
     return (
-        <MDBContainer fluid className="py-5" style={{ backgroundColor: "#CDC4F9" }}>
+        <MDBContainer fluid className="py-5">
             <MDBRow>
                 <MDBCol md="12">
                     <MDBCard id="chat3" style={{ borderRadius: "15px" }}>
@@ -40,27 +40,9 @@ export default function Chat() {
                                                     className="d-flex justify-content-between"
                                                 >
                                                     <div className="d-flex flex-row">
-                                                        <div>
-                                                            <img
-                                                                src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
-                                                                alt="avatar"
-                                                                className="d-flex align-self-center me-3"
-                                                                width="60"
-                                                            />
-                                                            <span className="badge bg-success badge-dot"></span>
-                                                        </div>
                                                         <div className="pt-1">
                                                             <p className="fw-bold mb-0">Marie Horwitz</p>
-                                                            <p className="small text-muted">
-                                                                Hello, Are you there?
-                                                            </p>
                                                         </div>
-                                                    </div>
-                                                    <div className="pt-1">
-                                                        <p className="small text-muted mb-1">Just now</p>
-                                                        <span className="badge bg-danger rounded-pill float-end">
-                                3
-                              </span>
                                                     </div>
                                                 </a>
                                             </li>
@@ -70,29 +52,9 @@ export default function Chat() {
                                                     className="d-flex justify-content-between"
                                                 >
                                                     <div className="d-flex flex-row">
-                                                        <div>
-                                                            <img
-                                                                src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava2-bg.webp"
-                                                                alt="avatar"
-                                                                className="d-flex align-self-center me-3"
-                                                                width="60"
-                                                            />
-                                                            <span className="badge bg-warning badge-dot"></span>
-                                                        </div>
                                                         <div className="pt-1">
                                                             <p className="fw-bold mb-0">Alexa Chung</p>
-                                                            <p className="small text-muted">
-                                                                Lorem ipsum dolor sit.
-                                                            </p>
                                                         </div>
-                                                    </div>
-                                                    <div className="pt-1">
-                                                        <p className="small text-muted mb-1">
-                                                            5 mins ago
-                                                        </p>
-                                                        <span className="badge bg-danger rounded-pill float-end">
-                                2
-                              </span>
                                                     </div>
                                                 </a>
                                             </li>
@@ -102,24 +64,9 @@ export default function Chat() {
                                                     className="d-flex justify-content-between"
                                                 >
                                                     <div className="d-flex flex-row">
-                                                        <div>
-                                                            <img
-                                                                src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3-bg.webp"
-                                                                alt="avatar"
-                                                                className="d-flex align-self-center me-3"
-                                                                width="60"
-                                                            />
-                                                            <span className="badge bg-success badge-dot"></span>
-                                                        </div>
                                                         <div className="pt-1">
                                                             <p className="fw-bold mb-0">Danny McChain</p>
-                                                            <p className="small text-muted">
-                                                                Lorem ipsum dolor sit.
-                                                            </p>
                                                         </div>
-                                                    </div>
-                                                    <div className="pt-1">
-                                                        <p className="small text-muted mb-1">Yesterday</p>
                                                     </div>
                                                 </a>
                                             </li>
@@ -129,24 +76,9 @@ export default function Chat() {
                                                     className="d-flex justify-content-between"
                                                 >
                                                     <div className="d-flex flex-row">
-                                                        <div>
-                                                            <img
-                                                                src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava4-bg.webp"
-                                                                alt="avatar"
-                                                                className="d-flex align-self-center me-3"
-                                                                width="60"
-                                                            />
-                                                            <span className="badge bg-danger badge-dot"></span>
-                                                        </div>
                                                         <div className="pt-1">
                                                             <p className="fw-bold mb-0">Ashley Olsen</p>
-                                                            <p className="small text-muted">
-                                                                Lorem ipsum dolor sit.
-                                                            </p>
                                                         </div>
-                                                    </div>
-                                                    <div className="pt-1">
-                                                        <p className="small text-muted mb-1">Yesterday</p>
                                                     </div>
                                                 </a>
                                             </li>
@@ -156,24 +88,9 @@ export default function Chat() {
                                                     className="d-flex justify-content-between"
                                                 >
                                                     <div className="d-flex flex-row">
-                                                        <div>
-                                                            <img
-                                                                src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava5-bg.webp"
-                                                                alt="avatar"
-                                                                className="d-flex align-self-center me-3"
-                                                                width="60"
-                                                            />
-                                                            <span className="badge bg-warning badge-dot"></span>
-                                                        </div>
                                                         <div className="pt-1">
                                                             <p className="fw-bold mb-0">Kate Moss</p>
-                                                            <p className="small text-muted">
-                                                                Lorem ipsum dolor sit.
-                                                            </p>
                                                         </div>
-                                                    </div>
-                                                    <div className="pt-1">
-                                                        <p className="small text-muted mb-1">Yesterday</p>
                                                     </div>
                                                 </a>
                                             </li>
@@ -183,38 +100,17 @@ export default function Chat() {
                                                     className="d-flex justify-content-between"
                                                 >
                                                     <div className="d-flex flex-row">
-                                                        <div>
-                                                            <img
-                                                                src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava6-bg.webp"
-                                                                alt="avatar"
-                                                                className="d-flex align-self-center me-3"
-                                                                width="60"
-                                                            />
-                                                            <span className="badge bg-success badge-dot"></span>
-                                                        </div>
                                                         <div className="pt-1">
                                                             <p className="fw-bold mb-0">Ben Smith</p>
-                                                            <p className="small text-muted">
-                                                                Lorem ipsum dolor sit.
-                                                            </p>
                                                         </div>
-                                                    </div>
-                                                    <div className="pt-1">
-                                                        <p className="small text-muted mb-1">Yesterday</p>
                                                     </div>
                                                 </a>
                                             </li>
                                         </MDBTypography>
-
                                     </div>
                                 </MDBCol>
                                 <MDBCol md="6" lg="7" xl="8">
                                     <div className="d-flex flex-row justify-content-start">
-                                        <img
-                                            src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava6-bg.webp"
-                                            alt="avatar 1"
-                                            style={{ width: "45px", height: "100%" }}
-                                        />
                                         <div>
                                             <p
                                                 className="small p-2 ms-3 mb-1 rounded-3"
@@ -241,19 +137,11 @@ export default function Chat() {
                                                 12:00 PM | Aug 13
                                             </p>
                                         </div>
-                                        <img
-                                            src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
-                                            alt="avatar 1"
-                                            style={{ width: "45px", height: "100%" }}
-                                        />
+
                                     </div>
 
                                     <div className="d-flex flex-row justify-content-start">
-                                        <img
-                                            src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava6-bg.webp"
-                                            alt="avatar 1"
-                                            style={{ width: "45px", height: "100%" }}
-                                        />
+
                                         <div>
                                             <p
                                                 className="small p-2 ms-3 mb-1 rounded-3"
@@ -279,19 +167,11 @@ export default function Chat() {
                                                 12:00 PM | Aug 13
                                             </p>
                                         </div>
-                                        <img
-                                            src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
-                                            alt="avatar 1"
-                                            style={{ width: "45px", height: "100%" }}
-                                        />
+
                                     </div>
 
                                     <div className="d-flex flex-row justify-content-start">
-                                        <img
-                                            src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava6-bg.webp"
-                                            alt="avatar 1"
-                                            style={{ width: "45px", height: "100%" }}
-                                        />
+
                                         <div>
                                             <p
                                                 className="small p-2 ms-3 mb-1 rounded-3"
@@ -321,19 +201,11 @@ export default function Chat() {
                                                 12:00 PM | Aug 13
                                             </p>
                                         </div>
-                                        <img
-                                            src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
-                                            alt="avatar 1"
-                                            style={{ width: "45px", height: "100%" }}
-                                        />
+
                                     </div>
 
                                     <div className="d-flex flex-row justify-content-start">
-                                        <img
-                                            src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava6-bg.webp"
-                                            alt="avatar 1"
-                                            style={{ width: "45px", height: "100%" }}
-                                        />
+
                                         <div>
                                             <p
                                                 className="small p-2 ms-3 mb-1 rounded-3"
@@ -361,19 +233,11 @@ export default function Chat() {
                                                 12:00 PM | Aug 13
                                             </p>
                                         </div>
-                                        <img
-                                            src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
-                                            alt="avatar 1"
-                                            style={{ width: "45px", height: "100%" }}
-                                        />
+
                                     </div>
 
                                     <div className="text-muted d-flex justify-content-start align-items-center pe-3 pt-3 mt-2">
-                                        <img
-                                            src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava6-bg.webp"
-                                            alt="avatar 3"
-                                            style={{ width: "40px", height: "100%" }}
-                                        />
+
                                         <input
                                             type="text"
                                             className="form-control form-control-lg"

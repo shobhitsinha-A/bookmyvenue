@@ -41,7 +41,10 @@ export default ({roundedHeaderButton = false, logoLink, links, className, collap
     <NavLinks key={1}>
       <NavLink href="/#">About</NavLink>
       <NavLink href="/#">Contact Us</NavLink>
-      <PrimaryLink css={roundedHeaderButton && tw`rounded-full`} href="/login">Login</PrimaryLink>
+      {sessionStorage.getItem('user_name') ?
+          <PrimaryLink css={roundedHeaderButton && tw`rounded-full`} href="/logout">Logout</PrimaryLink> :
+          <PrimaryLink css={roundedHeaderButton && tw`rounded-full`} href="/login">Login</PrimaryLink>
+      }
     </NavLinks>
   ];
 

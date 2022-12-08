@@ -1,9 +1,13 @@
 import React from 'react';
 
 export default () => {
-    return (
-        <div>
+    if (sessionStorage.getItem('user_name')) {
+        return (
+            <div>
 
-        </div>
-    );
+            </div>
+        );
+    } else {
+        window.location.href = '/login';
+    }
 }

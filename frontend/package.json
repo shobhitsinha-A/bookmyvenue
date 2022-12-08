@@ -36,7 +36,8 @@
     "@mui/icons-material": "^5.10.14",
     "@mui/x-date-pickers": "^5.0.8",
     "moment": "^2.29.4",
-    "mdb-react-ui-kit": "^5.0.0"
+    "mdb-react-ui-kit": "^5.0.0",
+    "react-timeline-scribble": "^1.0.14"
   },
   "scripts": {
     "start": "react-scripts start",

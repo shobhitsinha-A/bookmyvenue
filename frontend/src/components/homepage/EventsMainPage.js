@@ -27,7 +27,7 @@ const Container = styled.div`
 
 const OpacityOverlay = tw.div`z-10 absolute inset-0 bg-black opacity-75`;
 
-const ContentContainer = tw.div`z-20 relative px-6 sm:px-8 mx-auto h-full flex flex-col`;
+const ContentContainer = tw.div`z-20 relative p-6 sm:p-8 mx-auto h-full flex flex-col`;
 const Content = tw.div`px-4 flex flex-1 flex-col justify-center items-center`;
 
 const Heading = styled.h1`

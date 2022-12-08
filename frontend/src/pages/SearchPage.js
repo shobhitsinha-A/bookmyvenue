@@ -9,10 +9,12 @@ import {Container, ContentWithPadding} from "../components/layouts/Layouts";
 import { SectionHeading } from "../components/content/Headings";
 import { PrimaryButton as PrimaryButtonBase } from "../components/content/Buttons";
 import { ReactComponent as StarIcon } from "../images/star-icon.svg";
-import Filter from "../components/filter/Filter";
+import Header, {PrimaryLink} from "../components/headers/BaseHeader";
+
+import "../css/SearchPage.css";
 
 const HeaderRow = tw.div`flex justify-between items-center flex-col xl:flex-row`;
-const Header = tw(SectionHeading)``;
+const Heading = tw(SectionHeading)``;
 const TabsControl = tw.div`flex flex-wrap bg-gray-200 px-2 py-2 rounded leading-none mt-12 xl:mt-0`;
 const TabControl = styled.div`
   ${tw`cursor-pointer px-6 py-3 mt-2 sm:mt-0 sm:mr-2 last:mr-0 text-gray-600 font-medium rounded-sm transition duration-300 text-sm sm:text-base w-1/2 sm:w-auto text-center`}
@@ -35,6 +37,13 @@ const CardRating = styled.div`
   ${tw`mr-1 text-sm font-bold flex items-end`}
   svg {
     ${tw`w-4 h-4 fill-current text-orange-400 mr-1`}
+  }
+`;
+
+const StyledHeader = styled(Header)`
+  ${tw`pt-8 max-w-none w-full`}
+  ${PrimaryLink} {
+    ${tw`text-gray-100 hover:border-gray-300 hover:text-gray-300`}
   }
 `;
 
@@ -62,7 +71,7 @@ export default ({
 
     const [results, setResults] = useState({});
     const tabsKeys = Object.keys(results);
-    const [activeTab, setActiveTab] = useState(tabsKeys[0]);
+    const [activeTab, setActiveTab] = useState('weddings');
 
 
     useEffect(() => {
@@ -83,13 +92,11 @@ export default ({
 
     return (
         <AnimatedContainer>
-            <Container>
-                <Filter/>
-            </Container>
+            <StyledHeader />
             <Container>
                 <ContentWithPadding>
                     <HeaderRow>
-                        <Header>{heading}</Header>
+                        <Heading>{heading}</Heading>
                         <TabsControl>
                             {Object.keys(results).map((tabName, index) => (
                                 <TabControl key={index} active={activeTab === tabName} onClick={() => setActiveTab(tabName)}>
