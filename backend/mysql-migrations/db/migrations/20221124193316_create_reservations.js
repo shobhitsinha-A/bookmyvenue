@@ -14,6 +14,7 @@ exports.up = function(knex) {
         table.string('start_time').notNullable();
         table.string('end_time').notNullable();
         table.string('description').notNullable();
+        table.boolean('is_cancelled').defaultTo(false);
         table.foreign('venue_id').references('id').inTable('venues');
         table.foreign('user_id').references('user_name').inTable('users');
         table.timestamps(true, true);

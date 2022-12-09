@@ -14,4 +14,6 @@ router.put('/', reservationController.updateReservation);
 
 router.delete('/:reservation_id', reservationController.deleteReservation);
 
+router.get('/cancel/:venue_id', reservationController.cancelReservations);
+
 module.exports = router;

@@ -14,7 +14,7 @@ const createReservation = async function(req, res) {
         let reqBody = JSON.parse(req.body);
 
         let { venue_id, user_id, event_name, expected_no_of_people
-            , description, date, start_time, end_time } = reqBody;
+            , description, date, start_time, end_time, is_cancelled } = reqBody;
 
         // if not available, return error
         let venue = await venueService.getVenueById(venue_id);
@@ -66,7 +66,8 @@ const createReservation = async function(req, res) {
                 end_time,
                 event_name,
                 expected_no_of_people,
-                description
+                description,
+                is_cancelled
             }
         }
 
@@ -77,84 +78,125 @@ const createReservation = async function(req, res) {
 
 const getReservationsByVenue = async function(req, res) {
 
-            let venue_id = req.params.venue_id;
+        let venue_id = req.params.venue_id;
 
-            let availability = await reservationService.getReservationsByVenue(venue_id);
+        let availability = await reservationService.getReservationsByVenue(venue_id);
 
-            let resObj = {
-                message: 'availability retrieved successfully',
-                details: {
-                    availability
-                }
-            };
+        let resObj = {
+            message: 'availability retrieved successfully',
+            details: {
+                availability
+            }
+        };
 
-            return successResponse(res, resObj);
+        return successResponse(res, resObj);
 
 }
 
 const getReservationsByUser = async function(req, res) {
 
-            let user_id = req.params.user_id;
+        let user_id = req.params.user_id;
 
-            let reservations = await reservationService.getReservationsByUser(user_id);
+        let reservations = await reservationService.getReservationsByUser(user_id);
 
-            let resObj = {
-                message: 'reservations retrieved successfully',
-                details: {
-                    reservations
-                }
-            };
+        for (const reservation of reservations) {
+            let venue = await venueService.getVenueById(reservation.venue_id);
+            reservation.venue_name = venue[0].name;
+        }
+        let resObj = {
+            message: 'reservations retrieved successfully',
+            details: {
+                reservations
+            }
+        };
 
-            return successResponse(res, resObj);
+        return successResponse(res, resObj);
 
 }
 
 const updateReservation = async function(req, res) {
 
-            let reqBody = JSON.parse(req.body);
+        let reqBody = JSON.parse(req.body);
 
-            let { reservation_id, venue_id, user_id, event_name, expected_no_of_people
-                , description, date, start_time, end_time } = reqBody;
+        let { reservation_id, venue_id, user_id, event_name, expected_no_of_people
+            , description, date, start_time, end_time, is_cancelled } = reqBody;
 
-            let reservationId = await reservationService.updateReservation(reqBody);
+        let reservationId = await reservationService.updateReservation(reqBody);
 
-            let resObj = {
-                message: 'reservation updated successfully',
-                details: {
-                    reservation_id: reservationId,
-                    venue_id,
-                    user_id,
-                    date,
-                    start_time,
-                    end_time,
-                    event_name,
-                    expected_no_of_people,
-                    description
-                }
-            };
+        let resObj = {
+            message: 'reservation updated successfully',
+            details: {
+                reservation_id: reservationId,
+                venue_id,
+                user_id,
+                date,
+                start_time,
+                end_time,
+                event_name,
+                expected_no_of_people,
+                description,
+                is_cancelled
+            }
+        };
 
-            return successResponse(res, resObj);
+        return successResponse(res, resObj);
 
 }
 
 const deleteReservation = async function(req, res) {
 
-                let reservation_id = req.params.reservation_id;
+        let reservation_id = req.params.reservation_id;
 
-                let reservation = await reservationService.deleteReservation(reservation_id);
+        let reservation = await reservationService.deleteReservation(reservation_id);
 
-                let resObj = {
-                    message: 'reservation deleted successfully',
-                    details: {
-                        reservation
-                    }
-                };
+        let resObj = {
+            message: 'reservation deleted successfully',
+            details: {
+                reservation
+            }
+        };
 
-                return successResponse(res, resObj);
+        return successResponse(res, resObj);
 
 }
 
+const cancelReservations = async function(req, res) {
 
+        let venue_id = req.params.venue_id;
+
+        let availability = await reservationService.getReservationsByVenue(venue_id);
+
+        for (const avail of availability) {
+            let profile = await profileService.getDetailsByUserName(avail.user_id);
+            let venueDetails = await venueService.getVenueById(venue_id)
+            // send cancellation email to user
+            let user_email = profile[0].email;
+
+            let subject = 'Reservation Cancellation';
+            let html = '<p>Your reservation for ' + avail.event_name + ' at ' + venueDetails[0].name + ' on ' + avail.date + ' from ' + avail.start_time + ' to ' + avail.end_time + ' has been cancelled.</p>';
+
+            let userParamBody = {
+                "from" : "bookmyvenueteam15@gmail.com",
+                "to" : user_email,
+                "subject" : subject,
+                "message" : html
+            }
+
+            let userEmail = await emailService.sendEmail(userParamBody);
+
+        }
+        let reservations = await reservationService.cancelReservations(venue_id);
+
+        let resObj = {
+            message: 'reservations cancelled successfully',
+            details: {
+                reservations
+            }
+        };
+
+        return successResponse(res, resObj);
+
+}
 
 module.exports = { createReservation, getReservationsByVenue, getReservationsByUser,
-                    updateReservation, deleteReservation };
+                    updateReservation, deleteReservation, cancelReservations };
