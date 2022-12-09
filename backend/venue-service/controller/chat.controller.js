@@ -58,4 +58,25 @@ const getChatUsers = async function(req, res) {
     return successResponse(res, resObj);
 }
 
-module.exports = { createChat , getChats, getChatUsers };
+const updateChatStatus = async function(req, res) {
+
+        let reqBody = JSON.parse(req.body);
+
+        let { from_user, to_user, status } = reqBody;
+
+        let chatUpdatedId = await chatService.updateChatStatus(reqBody);
+
+        let resObj = {
+            message: 'chat status updated successfully',
+            details: {
+                chat_updated_id: chatUpdatedId,
+                from_user,
+                to_user,
+                status
+            }
+        };
+
+        return successResponse(res, resObj);
+}
+
+module.exports = { createChat , getChats, getChatUsers, updateChatStatus };

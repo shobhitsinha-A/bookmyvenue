@@ -30,11 +30,11 @@ const registerUser = async function(userDto) {
 };
 
 const loginUser = async function(credDto) {
-    const { user_name, password, role } = credDto;
+    const { user_name, password } = credDto;
 
     // check for role , if role is not satisfied then
     let hash = await db('users')
-        .select('e_pass')
+        .select('e_pass', 'role_id')
         .where({
             user_name: user_name
         });
@@ -43,4 +43,13 @@ const loginUser = async function(credDto) {
 
 }
 
-module.exports = { registerUser, loginUser };
+const getRole = async function(role_id) {
+    const role = await db('roles')
+        .select('role_name')
+        .where({ role_id: role_id });
+
+    return role[0].role_name;
+
+}
+
+module.exports = { registerUser, loginUser, getRole };

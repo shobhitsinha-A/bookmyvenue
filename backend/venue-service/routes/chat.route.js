@@ -10,4 +10,6 @@ router.get('/:from_user', chatController.getChatUsers);
 
 router.get('/:from_user/:to_user', chatController.getChats);
 
+router.put('/status', chatController.updateChatStatus);
+
 module.exports = router;

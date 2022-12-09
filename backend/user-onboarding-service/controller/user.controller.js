@@ -101,8 +101,11 @@ const getUserDetails = async function (req, res) {
 const loginUser = async function (req, res) {
     try {
         let reqBody = JSON.parse(req.body);
-        let { user_name, password, role} = reqBody;
+        let { user_name, password} = reqBody;
         let hash = await userService.loginUser(reqBody);
+        let role_id = hash.role_id;
+        let role = await userService.getRole(role_id);
+
         await duoClient.healthCheck();
         let resObj = {};
         // Load hash from your password DB.

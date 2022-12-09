@@ -48,4 +48,19 @@ const getChatUsers = async (from_user) => {
     }
 }
 
-module.exports = { createChat, getChats, getChatUsers };
+const updateChatStatus = async (chatDto) => {
+    try {
+        const info = await db('chats')
+            .where({
+                'from_user': chatDto.from_user,
+                'to_user': chatDto.to_user
+            })
+            .update({status: chatDto.status});
+        console.log('chat status updated ->', info);
+        return info;
+    } catch (e) {
+        return e.message;
+    }
+}
+
+module.exports = { createChat, getChats, getChatUsers , updateChatStatus};
