@@ -198,5 +198,21 @@ const cancelReservations = async function(req, res) {
 
 }
 
+const getReservationById = async function(req, res) {
+
+        let reservation_id = req.params.reservation_id;
+
+        let reservation = await reservationService.getReservationById(reservation_id);
+
+        let resObj = {
+            message: 'reservation retrieved successfully',
+            details: {
+                reservation
+            }
+        }
+
+        return successResponse(res, resObj);
+}
+
 module.exports = { createReservation, getReservationsByVenue, getReservationsByUser,
-                    updateReservation, deleteReservation, cancelReservations };
+                    updateReservation, deleteReservation, cancelReservations, getReservationById };
