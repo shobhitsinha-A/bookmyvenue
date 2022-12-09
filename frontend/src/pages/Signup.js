@@ -57,7 +57,7 @@ let validateAndRegister = async (e) => {
     }
   }
   if (pass === c_pass) {
-    let response = await fetch('http://localhost:5000/user/register', {
+    let response = await fetch('http://bookmyvenue.live:5000/user/register', {
       method: 'POST',
       body: JSON.stringify({
         "first_name" : f_name,
@@ -144,9 +144,6 @@ export default () => {
                     <p>Select role:</p>
                     <input type="radio" id="user" name="role" value="USER"/>
                     <label htmlFor="user">User</label>
-                    <br />
-                    <input type="radio" id="vendor" name="role" value="VENDOR"/>
-                    <label htmlFor="vendor">Vendor</label>
                     <br />
                     <input type="radio" id="host" name="role" value="HOST"/>
                     <label htmlFor="host">Host</label>

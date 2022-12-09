@@ -82,83 +82,89 @@ const tabsKeys = Object.keys(tabs);
 
 
 export default () => {
-    const [activeTab, setActiveTab] = useState(tabsKeys[0]);
-    return(
-        <div className="bg-blueGray-600">
-            <AnimatedContainer>
-                <Sidebar role="USER"/>
-                <div style={{paddingLeft: '16rem'}}>
-                    <div className="flex flex-wrap md:min-w-full bg-white h-screen">
-                        <Container>
-                            <HeaderRow>
-                                <TabsControl>
-                                    {Object.keys(tabs).map((tabName, index) => (
-                                        <TabControl key={index} active={activeTab === tabName} onClick={() => setActiveTab(tabName)}>
-                                            {tabName}
-                                        </TabControl>
-                                    ))}
-                                </TabsControl>
-                            </HeaderRow>
-                            {tabsKeys.map((tabKey, index) => (
-                                <TabContent
-                                    key={index}
-                                    variants={{
-                                        current: {
-                                            opacity: 1,
-                                            scale: 1,
-                                            display: "flex",
-                                        },
-                                        hidden: {
-                                            opacity: 0,
-                                            scale: 0.8,
-                                            display: "none",
-                                        }
-                                    }}
-                                    transition={{ duration: 0.4 }}
-                                    initial={activeTab === tabKey ? "current" : "hidden"}
-                                    animate={activeTab === tabKey ? "current" : "hidden"}
-                                >
-                                    {tabs[tabKey].map((card, index) => (
-                                        <CardContainer key={index}>
-                                            <Card className="group" href={card.url} initial="rest" whileHover="hover" animate="rest">
-                                                <CardImageContainer imageSrc={card.imageSrc}>
-                                                    <CardRatingContainer>
-                                                        <CardRating>
-                                                            <StarIcon />
-                                                            {card.rating}
-                                                        </CardRating>
-                                                        <CardReview>({card.reviews})</CardReview>
-                                                    </CardRatingContainer>
-                                                    <CardHoverOverlay
-                                                        variants={{
-                                                            hover: {
-                                                                opacity: 1,
-                                                                height: "auto"
-                                                            },
-                                                            rest: {
-                                                                opacity: 0,
-                                                                height: 0
-                                                            }
-                                                        }}
-                                                        transition={{ duration: 0.3 }}
-                                                    >
-                                                        <CardButton>Reserve Now</CardButton>
-                                                    </CardHoverOverlay>
-                                                </CardImageContainer>
-                                                <CardText>
-                                                    <CardTitle>{card.title}</CardTitle>
-                                                    <CardContent>{card.content}</CardContent>
-                                                    <CardPrice>{card.price}</CardPrice>
-                                                </CardText>
-                                            </Card>
-                                        </CardContainer>
-                                    ))}
-                                </TabContent>
-                            ))}
-                        </Container>
+    const [activeTab, setActiveTab] = useState('weddings');
+    if (sessionStorage.getItem('user_name')) {
+        return (
+            <div className="bg-blueGray-600">
+                <AnimatedContainer>
+                    <Sidebar role={sessionStorage.getItem('role')}/>
+                    <div style={{paddingLeft: '16rem'}}>
+                        <div className="flex flex-wrap md:min-w-full bg-white h-screen">
+                            <Container>
+                                <HeaderRow>
+                                    <TabsControl>
+                                        {Object.keys(tabs).map((tabName, index) => (
+                                            <TabControl key={index} active={activeTab === tabName}
+                                                        onClick={() => setActiveTab(tabName)}>
+                                                {tabName}
+                                            </TabControl>
+                                        ))}
+                                    </TabsControl>
+                                </HeaderRow>
+                                {tabsKeys.map((tabKey, index) => (
+                                    <TabContent
+                                        key={index}
+                                        variants={{
+                                            current: {
+                                                opacity: 1,
+                                                scale: 1,
+                                                display: "flex",
+                                            },
+                                            hidden: {
+                                                opacity: 0,
+                                                scale: 0.8,
+                                                display: "none",
+                                            }
+                                        }}
+                                        transition={{duration: 0.4}}
+                                        initial={activeTab === tabKey ? "current" : "hidden"}
+                                        animate={activeTab === tabKey ? "current" : "hidden"}
+                                    >
+                                        {tabs[tabKey].map((card, index) => (
+                                            <CardContainer key={index}>
+                                                <Card className="group" href={card.url} initial="rest"
+                                                      whileHover="hover" animate="rest">
+                                                    <CardImageContainer imageSrc={card.imageSrc}>
+                                                        <CardRatingContainer>
+                                                            <CardRating>
+                                                                <StarIcon/>
+                                                                {card.rating}
+                                                            </CardRating>
+                                                            <CardReview>({card.reviews})</CardReview>
+                                                        </CardRatingContainer>
+                                                        <CardHoverOverlay
+                                                            variants={{
+                                                                hover: {
+                                                                    opacity: 1,
+                                                                    height: "auto"
+                                                                },
+                                                                rest: {
+                                                                    opacity: 0,
+                                                                    height: 0
+                                                                }
+                                                            }}
+                                                            transition={{duration: 0.3}}
+                                                        >
+                                                            <CardButton>Reserve Now</CardButton>
+                                                        </CardHoverOverlay>
+                                                    </CardImageContainer>
+                                                    <CardText>
+                                                        <CardTitle>{card.title}</CardTitle>
+                                                        <CardContent>{card.content}</CardContent>
+                                                        <CardPrice>{card.price}</CardPrice>
+                                                    </CardText>
+                                                </Card>
+                                            </CardContainer>
+                                        ))}
+                                    </TabContent>
+                                ))}
+                            </Container>
+                        </div>
                     </div>
-                </div>
-            </AnimatedContainer>
-        </div>
-    );
+                </AnimatedContainer>
+            </div>
+        );
+    } else {
+        window.location.href = '/login';
+    }
 }

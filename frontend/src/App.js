@@ -9,10 +9,14 @@ import ForgotPassword from "./pages/ForgotPassword";
 import NewPassword from "./pages/NewPassword";
 import VenueDetails from "./pages/VenueDetails";
 import OAuthSignUp from "./pages/OAuthSignUp";
-import AddVenue from "./pages/AddVenue";
+import AddVenue from "./pages/AddVenuePage";
 import MyVenues from "./pages/MyVenues";
 import FavoriteVenues from "./pages/FavoriteVenues";
 import VenueReservation from "./pages/VenueReservation";
+import ReservationHistory from "./pages/ReservationHistory";
+import Chat from "./pages/ChatPage";
+import Logout from "./pages/Logout";
+import EditVenue from "./pages/EditVenuePage";
 
 export default () => (
     <Router>
@@ -30,6 +34,10 @@ export default () => (
             <Route path="/myvenues" element={<MyVenues />} />
             <Route path="/favorites" element={<FavoriteVenues />} />
             <Route path="/reserve" element={<VenueReservation />} />
+            <Route path="/reservations" element={<ReservationHistory />} />
+            <Route path="/chat" element={<Chat />} />
+            <Route path="/logout" element={<Logout />} />
+            <Route path="/editvenue" element={<EditVenue />} />
         </Routes>
     </Router>
 )

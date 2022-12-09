@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import AnimatedContainer from "../helpers/AnimatedContainer";
 import Sidebar from "../components/sidebar/Sidebar";
 
@@ -42,133 +42,116 @@ const CardHoverOverlay = styled(motion.div)`
 `;
 const CardButton = tw(PrimaryButtonBase)`text-sm`;
 
-const CardReview = tw.div`font-medium text-xs text-gray-600`;
-
 const CardText = tw.div`p-4 text-gray-900`;
 const CardTitle = tw.h5`text-lg font-semibold group-hover:text-primary-500`;
 const CardContent = tw.p`mt-1 text-sm font-medium text-gray-600`;
 const CardPrice = tw.p`mt-4 text-xl font-bold`;
 
-const tabs = {
-    Weddings: [
-        {
-            imageSrc:
-                "https://cdn0.weddingwire.com/vendor/005959/original/960/jpg/1514743289-434172d9012c01a0-1507470329026-image2.webp",
-            title: "Whippoorwill Hill",
-            content: "Bloomington, IN",
-            price: "$3,000/100 guests",
-            rating: "5.0",
-            reviews: "80",
-            url: "#"
-        },
-        {
-            imageSrc:
-                "https://cdn0.weddingwire.com/vendor/466506/original/960/jpg/1480766089-a5d8a8db471d01ac-SycamoreFarm2016-002__1_.webp",
-            title: "Sycamore Farm",
-            content: "Bloomington, IN",
-            price: "Contact for pricing",
-            rating: "4.9",
-            reviews: "53",
-            url: "#"
-        }
-    ],
-    Meetings: [
-        {
-            imageSrc:
-                "https://assets.simpleviewinc.com/simpleview/image/upload/crm/bloomington/image0020-d0cfbf5f5056a36_d0cfc0b1-5056-a36a-0678b1f75686158a.jpg",
-            title: "Indiana Memorial Union - Biddle Hotel & Conference Center",
-            content: "Bloomington, IN",
-            price: "Contact for pricing",
-            rating: "5.0",
-            reviews: "470",
-            url: "/addvenue"
-        }
-    ],
-    Celebrations: []
-};
-
-
-const tabsKeys = Object.keys(tabs);
-
-
 export default () => {
-    const [activeTab, setActiveTab] = useState(tabsKeys[0]);
-    return(
-        <div className="bg-blueGray-600">
-            <AnimatedContainer>
-                <Sidebar role="HOST"/>
-                <div style={{paddingLeft: '16rem'}}>
-                    <div className="flex flex-wrap md:min-w-full bg-white h-screen">
-                        <Container>
-                            <HeaderRow>
-                                <TabsControl>
-                                    {Object.keys(tabs).map((tabName, index) => (
-                                        <TabControl key={index} active={activeTab === tabName} onClick={() => setActiveTab(tabName)}>
-                                            {tabName}
-                                        </TabControl>
-                                    ))}
-                                </TabsControl>
-                            </HeaderRow>
-                            {tabsKeys.map((tabKey, index) => (
-                                <TabContent
-                                    key={index}
-                                    variants={{
-                                        current: {
-                                            opacity: 1,
-                                            scale: 1,
-                                            display: "flex",
-                                        },
-                                        hidden: {
-                                            opacity: 0,
-                                            scale: 0.8,
-                                            display: "none",
-                                        }
-                                    }}
-                                    transition={{ duration: 0.4 }}
-                                    initial={activeTab === tabKey ? "current" : "hidden"}
-                                    animate={activeTab === tabKey ? "current" : "hidden"}
-                                >
-                                    {tabs[tabKey].map((card, index) => (
-                                        <CardContainer key={index}>
-                                            <Card className="group" href={card.url} initial="rest" whileHover="hover" animate="rest">
-                                                <CardImageContainer imageSrc={card.imageSrc}>
-                                                    <CardRatingContainer>
-                                                        <CardRating>
-                                                            <StarIcon />
-                                                            {card.rating}
-                                                        </CardRating>
-                                                        <CardReview>({card.reviews})</CardReview>
-                                                    </CardRatingContainer>
-                                                    <CardHoverOverlay
-                                                        variants={{
-                                                            hover: {
-                                                                opacity: 1,
-                                                                height: "auto"
-                                                            },
-                                                            rest: {
-                                                                opacity: 0,
-                                                                height: 0
-                                                            }
-                                                        }}
-                                                        transition={{ duration: 0.3 }}
-                                                    >
-                                                        <CardButton>Edit</CardButton>
-                                                    </CardHoverOverlay>
-                                                </CardImageContainer>
-                                                <CardText>
-                                                    <CardTitle>{card.title}</CardTitle>
-                                                    <CardContent>{card.content}</CardContent>
-                                                    <CardPrice>{card.price}</CardPrice>
-                                                </CardText>
-                                            </Card>
-                                        </CardContainer>
-                                    ))}
-                                </TabContent>
-                            ))}
-                        </Container>
+    function getImageFromResults(id, images) {
+        if (images.length > 0) {
+            return 'http://bookmyvenue.live:6969/images/' + id + '/' + images[0]['image_name'];
+        }
+        else return '';
+    }
+    const [results, setResults] = useState({});
+    const tabsKeys = Object.keys(results);
+    useEffect(() => {
+        async function getSearchResults() {
+            let response = await fetch('http://bookmyvenue.live:6969/venues/created_by/' + sessionStorage.getItem('user_name'), {
+                method: 'GET'
+            });
+            let jsonResponse = await response.json();
+            if (jsonResponse.status) {
+                setResults(jsonResponse.data.details);
+            }
+        }
+        getSearchResults().catch(console.error);
+    }, []);
+    const [activeTab, setActiveTab] = useState('weddings');
+    if (sessionStorage.getItem('user_name')) {
+        return (
+            <div className="bg-blueGray-600">
+                <AnimatedContainer>
+                    <Sidebar role={sessionStorage.getItem('role')}/>
+                    <div style={{paddingLeft: '16rem'}}>
+                        <div className="flex flex-wrap md:min-w-full bg-white h-screen">
+                            <Container>
+                                <HeaderRow>
+                                    <TabsControl>
+                                        {Object.keys(results).map((tabName, index) => (
+                                            <TabControl key={index} active={activeTab === tabName}
+                                                        onClick={() => setActiveTab(tabName)}>
+                                                {tabName}
+                                            </TabControl>
+                                        ))}
+                                    </TabsControl>
+                                </HeaderRow>
+                                {tabsKeys.map((tabKey, index) => (
+                                    <TabContent
+                                        key={index}
+                                        variants={{
+                                            current: {
+                                                opacity: 1,
+                                                scale: 1,
+                                                display: "flex",
+                                            },
+                                            hidden: {
+                                                opacity: 0,
+                                                scale: 0.8,
+                                                display: "none",
+                                            }
+                                        }}
+                                        transition={{duration: 0.4}}
+                                        initial={activeTab === tabKey ? "current" : "hidden"}
+                                        animate={activeTab === tabKey ? "current" : "hidden"}
+                                    >
+                                        {results[tabKey].map((card, index) => (
+                                            <CardContainer key={index}>
+                                                <Card className="group" href="/editvenue" initial="rest"
+                                                      whileHover="hover" animate="rest">
+                                                    <CardImageContainer
+                                                        imageSrc={getImageFromResults(card.id, card.venue_images)}>
+                                                        <CardRatingContainer>
+                                                            <CardRating>
+                                                                <StarIcon/>
+                                                                {card.rating}
+                                                            </CardRating>
+                                                        </CardRatingContainer>
+                                                        <CardHoverOverlay
+                                                            variants={{
+                                                                hover: {
+                                                                    opacity: 1,
+                                                                    height: "auto"
+                                                                },
+                                                                rest: {
+                                                                    opacity: 0,
+                                                                    height: 0
+                                                                }
+                                                            }}
+                                                            transition={{duration: 0.3}}
+                                                        >
+                                                            <CardButton
+                                                                onClick={() => sessionStorage.setItem('editVenueId', card.id)}>Edit</CardButton>
+                                                        </CardHoverOverlay>
+                                                    </CardImageContainer>
+                                                    <CardText>
+                                                        <CardTitle>{card.name}</CardTitle>
+                                                        <CardContent>{card.city + ', ' + card.state}</CardContent>
+                                                        <CardPrice>{card.price}</CardPrice>
+                                                    </CardText>
+                                                </Card>
+                                            </CardContainer>
+                                        ))}
+                                    </TabContent>
+                                ))}
+                            </Container>
+                        </div>
                     </div>
-                </div>
-            </AnimatedContainer>
-        </div>
-    );
+                </AnimatedContainer>
+            </div>
+        );
+    } else {
+        window.location.href = '/login';
+    }
 }

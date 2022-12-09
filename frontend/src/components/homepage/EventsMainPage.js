@@ -1,6 +1,7 @@
 import React from "react";
 import tw from "twin.macro";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
 import Header, {
     NavLink,
@@ -27,7 +28,7 @@ const Container = styled.div`
 
 const OpacityOverlay = tw.div`z-10 absolute inset-0 bg-black opacity-75`;
 
-const ContentContainer = tw.div`z-20 relative px-6 sm:px-8 mx-auto h-full flex flex-col`;
+const ContentContainer = tw.div`z-20 relative p-6 sm:p-8 mx-auto h-full flex flex-col`;
 const Content = tw.div`px-4 flex flex-1 flex-col justify-center items-center`;
 
 const Heading = styled.h1`
@@ -39,11 +40,8 @@ const Heading = styled.h1`
 
 const PrimaryAction = tw.button`rounded-full px-8 py-3 mt-10 text-sm sm:text-base sm:mt-16 sm:px-8 sm:py-4 bg-gray-100 font-bold shadow transition duration-300 bg-primary-500 text-gray-100 hocus:bg-primary-700 hocus:text-gray-200 focus:outline-none focus:shadow-outline`;
 
-function redirectToSearchPage() {
-    window.location.href = "/search";
-}
-
 export default () => {
+    const navigate = useNavigate();
     return (
         <Container>
             <OpacityOverlay/>
@@ -57,7 +55,7 @@ export default () => {
                         <br/>
                         gain some revenue
                     </Heading>
-                    <PrimaryAction onClick={redirectToSearchPage}>Search</PrimaryAction>
+                    <PrimaryAction onClick={() => navigate('/search')}>Search</PrimaryAction>
                 </Content>
             </ContentContainer>
         </Container>

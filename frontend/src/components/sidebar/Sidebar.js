@@ -16,13 +16,9 @@ export default (props) => {
 
                         <div
                             className={
-                                "md:flex md:flex-col md:items-stretch md:opacity-100 md:relative md:mt-4 md:shadow-none shadow absolute top-0 left-0 right-0 z-40 overflow-y-auto overflow-x-hidden h-auto items-center flex-1 rounded "
+                                "md:flex md:flex-col md:items-stretch md:opacity-100 md:relative md:mt-4 absolute top-0 left-0 right-0 z-40 overflow-y-auto overflow-x-hidden h-auto items-center flex-1 rounded "
                             }
                         >
-                            <hr className="my-4 md:min-w-full" />
-                            <h6 className="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
-                                Pages
-                            </h6>
                             <ul className="md:flex-col md:min-w-full flex flex-col list-none">
                                 <li className="items-center">
                                     <Link
@@ -57,6 +53,28 @@ export default (props) => {
                                         My Venues
                                     </Link>
                                 </li>
+                                <li className="items-center">
+                                    <Link
+                                        className={"text-xs uppercase py-3 font-bold block text-blueGray-700 hover:text-lightBlue-600"}
+                                        to="/chat"
+                                    >
+                                        <i
+                                            className={"fas fa-comments mr-2 text-sm opacity-75"}
+                                        ></i>{" "}
+                                        Inbox
+                                    </Link>
+                                </li>
+                                <li className="items-center">
+                                    <Link
+                                        className={"text-xs uppercase py-3 font-bold block text-blueGray-700 hover:text-lightBlue-600"}
+                                        to="/logout"
+                                    >
+                                        <i
+                                            className={"fas fa-power-off mr-2 text-sm opacity-75"}
+                                        ></i>{" "}
+                                        Logout
+                                    </Link>
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -75,13 +93,9 @@ export default (props) => {
 
                         <div
                             className={
-                                "md:flex md:flex-col md:items-stretch md:opacity-100 md:relative md:mt-4 md:shadow-none shadow absolute top-0 left-0 right-0 z-40 overflow-y-auto overflow-x-hidden h-auto items-center flex-1 rounded "
+                                "md:flex md:flex-col md:items-stretch md:opacity-100 md:relative md:mt-4 absolute top-0 left-0 right-0 z-40 overflow-y-auto overflow-x-hidden h-auto items-center flex-1 rounded "
                             }
                         >
-                            <hr className="my-4 md:min-w-full" />
-                            <h6 className="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
-                                Pages
-                            </h6>
                             <ul className="md:flex-col md:min-w-full flex flex-col list-none">
                                 <li className="items-center">
                                     <Link
@@ -103,6 +117,39 @@ export default (props) => {
                                             className={"fas fa-bookmark mr-2 text-sm opacity-75"}
                                         ></i>{" "}
                                         Favorites
+                                    </Link>
+                                </li>
+                                <li className="items-center">
+                                    <Link
+                                        className={"text-xs uppercase py-3 font-bold block text-blueGray-700 hover:text-lightBlue-600"}
+                                        to="/reservations"
+                                    >
+                                        <i
+                                            className={"fas fa-hotel mr-2 text-sm opacity-75"}
+                                        ></i>{" "}
+                                        Reservations
+                                    </Link>
+                                </li>
+                                <li className="items-center">
+                                    <Link
+                                        className={"text-xs uppercase py-3 font-bold block text-blueGray-700 hover:text-lightBlue-600"}
+                                        to="/chat"
+                                    >
+                                        <i
+                                            className={"fas fa-comments mr-2 text-sm opacity-75"}
+                                        ></i>{" "}
+                                        Inbox
+                                    </Link>
+                                </li>
+                                <li className="items-center">
+                                    <Link
+                                        className={"text-xs uppercase py-3 font-bold block text-blueGray-700 hover:text-lightBlue-600"}
+                                        to="/logout"
+                                    >
+                                        <i
+                                            className={"fas fa-power-off mr-2 text-sm opacity-75"}
+                                        ></i>{" "}
+                                        Logout
                                     </Link>
                                 </li>
                             </ul>

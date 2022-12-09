@@ -9,7 +9,6 @@ export default () => {
         <FormContainer>
             <Form>
                 <p>Location</p>
-                <input type="checkbox"/><span>&nbsp;Bloomington, IN</span>
             </Form>
         </FormContainer>
     )
