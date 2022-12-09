@@ -2,6 +2,16 @@ import React, {useEffect, useState} from "react";
 import Footer from "../components/footers/Footer";
 import Map from "../components/map/Map";
 
+let getImageFromResults = (id, images) => {
+    if (images) {
+        if (images.length > 0) {
+            return 'http://bookmyvenue.live:6969/images/' + id + '/' + images[0]['image_name'];
+        }
+        else return '';
+    }
+    else return '';
+}
+
 export default () => {
     const [venue, setVenue] = useState({});
     useEffect(() => {
@@ -61,7 +71,7 @@ export default () => {
                                         <div className="relative">
                                             <img
                                                 alt="..."
-                                                src={"https://assets.simpleviewinc.com/simpleview/image/upload/crm/bloomington/image0020-d0cfbf5f5056a36_d0cfc0b1-5056-a36a-0678b1f75686158a.jpg"}
+                                                src={getImageFromResults(venue.id, venue.venue_images)}
                                                 className="shadow-xl rounded-full h-auto align-middle border-none absolute -m-16 -ml-20 lg:-ml-16 max-w-150-px"
                                             />
                                         </div>
@@ -89,7 +99,7 @@ export default () => {
 
                                             <div className="mr-4 p-3 text-center">
                         <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-600">
-                          5.0
+                          {venue.rating}
                         </span>
                                                 <span className="text-sm text-blueGray-400">
                           Rating
@@ -97,7 +107,7 @@ export default () => {
                                             </div>
                                             <div className="mr-4 p-3 text-center">
                         <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-600">
-                          1,000
+                          {venue.capacity}
                         </span>
                                                 <span className="text-sm text-blueGray-400">
                           Capacity

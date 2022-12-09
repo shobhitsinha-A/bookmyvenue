@@ -48,6 +48,12 @@ const CardContent = tw.p`mt-1 text-sm font-medium text-gray-600`;
 const CardPrice = tw.p`mt-4 text-xl font-bold`;
 
 export default () => {
+    function getImageFromResults(id, images) {
+        if (images.length > 0) {
+            return 'http://bookmyvenue.live:6969/images/' + id + '/' + images[0]['image_name'];
+        }
+        else return '';
+    }
     const [results, setResults] = useState({});
     const tabsKeys = Object.keys(results);
     useEffect(() => {
@@ -105,7 +111,7 @@ export default () => {
                                                 <Card className="group" href="/editvenue" initial="rest"
                                                       whileHover="hover" animate="rest">
                                                     <CardImageContainer
-                                                        imageSrc={''}>
+                                                        imageSrc={getImageFromResults(card.id, card.venue_images)}>
                                                         <CardRatingContainer>
                                                             <CardRating>
                                                                 <StarIcon/>

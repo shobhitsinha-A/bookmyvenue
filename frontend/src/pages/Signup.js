@@ -145,9 +145,6 @@ export default () => {
                     <input type="radio" id="user" name="role" value="USER"/>
                     <label htmlFor="user">User</label>
                     <br />
-                    <input type="radio" id="vendor" name="role" value="VENDOR"/>
-                    <label htmlFor="vendor">Vendor</label>
-                    <br />
                     <input type="radio" id="host" name="role" value="HOST"/>
                     <label htmlFor="host">Host</label>
                     <SubmitButton type="submit">
