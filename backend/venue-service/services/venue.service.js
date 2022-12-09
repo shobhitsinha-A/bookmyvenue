@@ -181,7 +181,7 @@ const getVenueById = async function(venue_id) {
 const getVenuesByUserId = async function(user_id) {
     try {
         const info = await db('venues')
-            .select('id', 'name', 'price', 'capacity', 'address', 'city', 'state', 'zipcode', 'phone_number', 'description', 'category', 'rating')
+            .select('*')
             .where('created_by', user_id);
         console.log('venue ->' , info);
         return info;
