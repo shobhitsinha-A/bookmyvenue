@@ -120,9 +120,20 @@ const getReservationById = async function(reservation_id) {
     }
 }
 
-const getReservationsByHost =  async function(host_id) {
-
+const cancelReservation = async function(reservation_id) {
+    try {
+        const info = await db('reservations')
+            .where('id', reservation_id)
+            .update({
+                is_cancelled: true
+            });
+        console.log('reservation cancelled ->' , info);
+        return info;
+    } catch (e) {
+        return e.message;
+    }
 }
 
 module.exports = { createReservation, getReservationsByVenue, getReservationsByUser,
-                    updateReservation , deleteReservation, cancelReservations, getReservationById};
+                    updateReservation , deleteReservation, cancelReservations, getReservationById,
+                    cancelReservation };

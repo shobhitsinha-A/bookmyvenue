@@ -238,6 +238,56 @@ const getReservationsByHost = async function(req, res) {
     return successResponse(res, resObj);
 }
 
+const cancelReservation = async function(req, res) {
+
+    let reservation_id = req.params.reservation_id;
+
+    let reservation = await reservationService.getReservationById(reservation_id);
+    let venueDetails = await venueService.getVenueById(reservation[0].venue_id)
+    let profile = await profileService.getDetailsByUserName(reservation[0].user_id);
+    // send cancellation email to user
+    let user_email = profile[0].email;
+
+    let subject = 'Reservation Cancellation';
+    let html = '<p>Your reservation for ' + reservation[0].event_name + ' at ' + venueDetails[0].name + ' on ' + reservation[0].date + ' from ' + reservation[0].start_time + ' to ' + reservation[0].end_time + ' has been cancelled.</p>';
+
+    let userParamBody = {
+        "from" : "bookmyvenueteam15@gmail.com",
+        "to" : user_email,
+        "subject" : subject,
+        "message" : html
+    }
+
+    let userEmail = await emailService.sendEmail(userParamBody);
+
+    let reservationId = await reservationService.cancelReservation(reservation_id);
+
+    let venueOwnerProfile = await profileService.getDetailsByUserName(venueDetails[0].created_by)
+    // send cancellation email to venue owner
+    let venueOwner_email = venueOwnerProfile[0].email;
+
+    let subject1 = 'Reservation Cancellation';
+    let html1 = '<p> Your venue ' + venueDetails[0].name + ' that has a reservation for ' + reservation[0].event_name + ' on ' + reservation[0].date + ' from ' + reservation[0].start_time + ' to ' + reservation[0].end_time + ' has been cancelled by user ' + reservation[0].user_id + ' </p>';
+    let venueOwnerParamBody = {
+        "from" : "bookmyvenueteam15@gmail.com",
+        "to" : venueOwner_email,
+        "subject" : subject1,
+        "message" : html1
+    }
+
+    let venueOwnerEmail = await emailService.sendEmail(venueOwnerParamBody);
+
+    let resObj = {
+        message: 'reservation cancelled successfully',
+        details: {
+            reservationId
+        }
+    }
+
+    return successResponse(res, resObj);
+
+
+}
 module.exports = { createReservation, getReservationsByVenue, getReservationsByUser,
                     updateReservation, deleteReservation, cancelReservations, getReservationById ,
-                    getReservationsByHost };
+                    getReservationsByHost, cancelReservation };

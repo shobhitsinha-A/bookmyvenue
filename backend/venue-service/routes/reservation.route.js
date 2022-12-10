@@ -20,4 +20,6 @@ router.get('/cancel/:venue_id', reservationController.cancelReservations);
 
 router.get('/availability/venues/host/:host_id', reservationController.getReservationsByHost);
 
+router.get('/reservation/cancel/:reservation_id', reservationController.cancelReservation);
+
 module.exports = router;
