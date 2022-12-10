@@ -120,5 +120,9 @@ const getReservationById = async function(reservation_id) {
     }
 }
 
+const getReservationsByHost =  async function(host_id) {
+
+}
+
 module.exports = { createReservation, getReservationsByVenue, getReservationsByUser,
                     updateReservation , deleteReservation, cancelReservations, getReservationById};

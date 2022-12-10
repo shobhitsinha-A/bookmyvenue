@@ -214,5 +214,30 @@ const getReservationById = async function(req, res) {
         return successResponse(res, resObj);
 }
 
+const getReservationsByHost = async function(req, res) {
+
+    let host_id = req.params.host_id;
+
+    let venues = await venueService.getVenuesByUserId(host_id);
+
+    let reservations = [];
+    for (const venue of venues) {
+        let reservation = await reservationService.getReservationsByVenue(venue.id);
+        if (reservation.length > 0) {
+            reservations.push(reservation[0]);
+        }
+     }
+
+    let resObj = {
+        message: 'reservations retrieved successfully',
+        details: {
+            reservations
+        }
+    };
+
+    return successResponse(res, resObj);
+}
+
 module.exports = { createReservation, getReservationsByVenue, getReservationsByUser,
-                    updateReservation, deleteReservation, cancelReservations, getReservationById };
+                    updateReservation, deleteReservation, cancelReservations, getReservationById ,
+                    getReservationsByHost };
