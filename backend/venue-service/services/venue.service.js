@@ -169,7 +169,7 @@ const getVenuesMetadata = async function(filterDto) {
 const getVenueById = async function(venue_id) {
     try {
         const info = await db('venues')
-            .select('id', 'name', 'price', 'capacity', 'address', 'created_by', 'city', 'state', 'zipcode', 'phone_number', 'description', 'category', 'rating', 'is_available')
+            .select('*')
             .where('id', venue_id);
         console.log('venue ->' , info);
         return info;
