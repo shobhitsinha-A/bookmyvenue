@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, { useState } from "react";
 import Footer from "../components/footers/Footer";
 import moment from "moment";
 import TextField from '@mui/material/TextField';
@@ -6,6 +6,7 @@ import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
 import { TimePicker } from "@mui/x-date-pickers";
+import {useEffect} from "@types/react";
 
 const isBooked = (date) => {
     const day = date.day();
@@ -38,19 +39,21 @@ export default () => {
         }
         else return '';
     }
-    let validateAndReserveVenue = async () => {
+    let validateAndUpdateReservation = async () => {
         const event_name = document.getElementById("event_name").value;
         const expected_no_of_people = document.getElementById("expected_no_of_people").value;
         const description = document.getElementById("description").value;
         const user_id = sessionStorage.getItem("user_name");
         const venue_id = sessionStorage.getItem("venueId");
+        const reservation_id = sessionStorage.getItem("editReservationId");
         const is_cancelled = '0';
         const start_time = moment(startTime).format('hh:mm a');
         const end_time = moment(endTime).format('hh:mm a');
         const event_date = moment(date).format('YYYY-MM-DD');
         let response = await fetch('http://bookmyvenue.live:6969/reservations', {
-            method: 'POST',
+            method: 'PUT',
             body: JSON.stringify({
+                "reservation_id": reservation_id,
                 "venue_id": venue_id,
                 "user_id": user_id,
                 "event_name": event_name,
@@ -65,10 +68,10 @@ export default () => {
         let jsonResponse = await response.json();
         if (jsonResponse.status) {
             console.log(jsonResponse.data.details);
-            alert("Venue reserved successfully");
+            alert("Reservation edited successfully");
             window.location.href = "/reservations";
         } else {
-            alert("There was an error when reserving the venue");
+            alert("There was an error when editing the reservation");
         }
     }
     if (sessionStorage.getItem('user_name')) {
@@ -128,15 +131,14 @@ export default () => {
                                                 <button
                                                     className="bg-purple-500 active:bg-lightBlue-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1 ease-linear transition-all duration-150"
                                                     type="button"
-                                                    onClick={validateAndReserveVenue}
+                                                    onClick={validateAndUpdateReservation}
                                                 >
-                                                    Submit
+                                                    Update
                                                 </button>
                                             </div>
                                         </div>
                                         <div className="w-full lg:w-4/12 px-4 lg:order-1">
                                             <div className="flex justify-center py-4 lg:pt-4 pt-8">
-
                                                 <div className="mr-4 p-3 text-center">
                         <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-600">
                           {venue.rating}

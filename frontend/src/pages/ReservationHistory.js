@@ -4,6 +4,7 @@ import { Timeline, Event } from "react-timeline-scribble";
 import Sidebar from "../components/sidebar/Sidebar";
 import AnimatedContainer from "../helpers/AnimatedContainer";
 import moment from "moment";
+import '../css/ReservationHistory.css';
 
 export default () => {
     const [reservations, setReservations] = useState([]);
@@ -39,7 +40,33 @@ export default () => {
                                             {reservations.map(reservation => (
                                                 <Event interval={moment(reservation.date).format('MMMM Do YYYY')} title={reservation.event_name}
                                                        subtitle={'From ' + reservation.start_time + ' to ' + reservation.end_time}>
-                                                    {reservation.description}
+                                                    <div className="flex flex-row">
+                                                        <div className="flex flex-col">
+                                                            <p>at {reservation.venue_name}</p>
+                                                            <p>{reservation.description}</p>
+                                                        </div>
+                                                        <div className="flex flex-row ml-auto reservation-controls">
+                                                            <div className="mx-2">
+                                                                <button
+                                                                    className="bg-purple-500 text-white active:bg-purple-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
+                                                                    type="button"
+                                                                    onClick={() => {
+                                                                        sessionStorage.setItem('editReservationId', reservation.id);
+                                                                    }}
+                                                                >
+                                                                    Edit
+                                                                </button>
+                                                            </div>
+                                                            <div className="mx-2">
+                                                                <button
+                                                                    className="bg-purple-500 text-white active:bg-purple-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
+                                                                    type="button"
+                                                                >
+                                                                    Cancel
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </Event>
                                             ))}
                                         </Timeline>

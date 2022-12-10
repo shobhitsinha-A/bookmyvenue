@@ -41,15 +41,14 @@ let checkIfUserIsLoggedIn = async (e) => {
     method: 'POST',
     body: JSON.stringify({
       "user_name" : u_name,
-      "password" : password,
-      "role" : "USER"
+      "password" : password
     })
   });
   let jsonResponse = await response.json();
   if (jsonResponse.status) {
     sessionStorage.setItem('user_name', jsonResponse.data.data.user_name);
     sessionStorage.setItem('role', jsonResponse.data.data.role);
-    window.location.href = jsonResponse.data.data.url;
+    window.location.href = '/profile';
   } else {
     alert("Please check your credentials and try again");
   }
