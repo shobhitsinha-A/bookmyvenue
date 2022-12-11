@@ -27,6 +27,12 @@ const getChats = async (from_user, to_user) => {
             .select('*')
             .where('from_user', from_user)
             .andWhere('to_user', to_user)
+            .unionAll([
+                db('chats')
+                    .select('*')
+                    .where('from_user', to_user)
+                    .andWhere('to_user', from_user)
+            ])
             .orderBy('time', 'asc');
 
         console.log('chats ->' , info);
