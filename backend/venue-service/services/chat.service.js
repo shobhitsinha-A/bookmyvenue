@@ -26,7 +26,8 @@ const getChats = async (from_user, to_user) => {
         const info = await db('chats')
             .select('*')
             .where('from_user', from_user)
-            .andWhere('to_user', to_user);
+            .andWhere('to_user', to_user)
+            .orderBy('time', 'asc');
 
         console.log('chats ->' , info);
         return info;
