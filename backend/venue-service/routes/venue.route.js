@@ -26,6 +26,8 @@ router.post('/venues/bookmarks', venueController.createBookmarks);
 
 router.get('/venues/bookmarks/:user_id', venueController.getBookmarks);
 
+router.get('/venues/bookmarks/:user_id/:venue_id', venueController.isVenueBookmarked);
+
 router.delete('/venues/bookmarks/:user_id/:venue_id', venueController.deleteBookmark);
 
 router.post('/venues/ratings', venueController.createRating);
