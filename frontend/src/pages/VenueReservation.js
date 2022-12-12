@@ -6,6 +6,7 @@ import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
 import { TimePicker } from "@mui/x-date-pickers";
+import Navbar from "../components/navbar/Navbar";
 
 const isBooked = (date) => {
     const day = date.day();
@@ -17,6 +18,40 @@ export default () => {
     const [startTime, setStartTime] = useState();
     const [endTime, setEndTime] = useState();
     const [venue, setVenue] = useState({});
+    const [bookmarked, setBookmarked] = useState(false);
+    async function getBookmark(venueId) {
+        let response = await fetch('http://bookmyvenue.live:6969/venues/bookmarks/' + sessionStorage.getItem('user_name') + '/' + venueId, {
+            method: 'GET'
+        });
+        let jsonResponse = await response.json();
+        if (jsonResponse.status) {
+            setBookmarked(jsonResponse.data.is_bookmarked);
+        }
+    }
+    async function createBookmark(userId, venueId) {
+        let response = await fetch('http://bookmyvenue.live:6969/venues/bookmarks', {
+            method: 'POST',
+            body: JSON.stringify({
+                user_id: userId,
+                venue_id: venueId
+            })
+        });
+        let jsonResponse = await response.json();
+        if (jsonResponse.data.details) {
+            alert('Bookmark created successfully');
+            setBookmarked(true);
+        }
+    }
+    async function deleteBookmark(userId, venueId) {
+        let response = await fetch('http://bookmyvenue.live:6969/venues/bookmarks/' + userId + '/' + venueId, {
+            method: 'DELETE'
+        });
+        let jsonResponse = await response.json();
+        if (jsonResponse.data.details === 1) {
+            alert('Bookmark deleted successfully');
+            setBookmarked(false);
+        }
+    }
     useEffect(() => {
         async function getVenueDetails() {
             let response = await fetch('http://bookmyvenue.live:6969/venues/'.concat(sessionStorage.getItem('venueId')), {
@@ -25,6 +60,7 @@ export default () => {
             let jsonResponse = await response.json();
             if (jsonResponse.status) {
                 setVenue(jsonResponse.data.details[0]);
+                getBookmark(jsonResponse.data.details[0].id).catch(console.error);
             }
         }
         getVenueDetails().catch(console.error);
@@ -75,6 +111,7 @@ export default () => {
         return (
             <div>
                 <main className="profile-page">
+                    <Navbar />
                     <section className="relative block h-500-px">
                         <div
                             className="absolute top-0 w-full h-full bg-center bg-cover"
@@ -153,16 +190,28 @@ export default () => {
                           Capacity
                         </span>
                                                 </div>
-                                                <div className="mr-4 p-3 text-center">
+                                                {bookmarked ?
+                                                    <div className="mr-4 p-3 text-center" onClick={() => deleteBookmark(sessionStorage.getItem('user_name'), venue.id)}>
                         <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-600">
                           <i
                               className={"fas fa-bookmark mr-2 text-sm opacity-75"}
                           ></i>
                         </span>
-                                                    <span className="text-sm text-blueGray-400">
+                                                        <span className="text-sm text-blueGray-400">
                           Favorite
                         </span>
-                                                </div>
+                                                    </div>:
+                                                    <div className="mr-4 p-3 text-center" onClick={() => createBookmark(sessionStorage.getItem('user_name'), venue.id)}>
+                        <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-600">
+                          <i
+                              className={"far fa-bookmark mr-2 text-sm opacity-75"}
+                          ></i>
+                        </span>
+                                                        <span className="text-sm text-blueGray-400">
+                          Favorite
+                        </span>
+                                                    </div>
+                                                }
                                             </div>
                                         </div>
                                     </div>

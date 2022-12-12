@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import AnimatedContainer from "../helpers/AnimatedContainer";
 import Sidebar from "../components/sidebar/Sidebar";
 
@@ -18,7 +18,7 @@ const TabControl = styled.div`
     ${tw`bg-gray-300 text-gray-700`}
   }
   ${props => props.active && tw`bg-primary-500! text-gray-100!`}
-  }
+}
 `;
 
 const TabContent = tw(motion.div)`mt-6 flex flex-wrap sm:-mr-10 md:-mr-6 lg:-mr-12`;
@@ -42,47 +42,33 @@ const CardHoverOverlay = styled(motion.div)`
 `;
 const CardButton = tw(PrimaryButtonBase)`text-sm`;
 
-const CardReview = tw.div`font-medium text-xs text-gray-600`;
-
 const CardText = tw.div`p-4 text-gray-900`;
 const CardTitle = tw.h5`text-lg font-semibold group-hover:text-primary-500`;
 const CardContent = tw.p`mt-1 text-sm font-medium text-gray-600`;
 const CardPrice = tw.p`mt-4 text-xl font-bold`;
 
-const tabs = {
-    Weddings: [
-        {
-            imageSrc:
-                "https://cdn0.weddingwire.com/vendor/005959/original/960/jpg/1514743289-434172d9012c01a0-1507470329026-image2.webp",
-            title: "Whippoorwill Hill",
-            content: "Bloomington, IN",
-            price: "$3,000/100 guests",
-            rating: "5.0",
-            reviews: "80",
-            url: "#"
-        }
-    ],
-    Meetings: [
-        {
-            imageSrc:
-                "https://assets.simpleviewinc.com/simpleview/image/upload/crm/bloomington/image0020-d0cfbf5f5056a36_d0cfc0b1-5056-a36a-0678b1f75686158a.jpg",
-            title: "Indiana Memorial Union - Biddle Hotel & Conference Center",
-            content: "Bloomington, IN",
-            price: "Contact for pricing",
-            rating: "5.0",
-            reviews: "470",
-            url: "/venue"
-        }
-    ],
-    Celebrations: []
-};
-
-
-const tabsKeys = Object.keys(tabs);
-
-
 export default () => {
-    const [activeTab, setActiveTab] = useState('weddings');
+    function getImageFromResults(id, images) {
+        if (images.length > 0) {
+            return 'http://bookmyvenue.live:6969/images/' + id + '/' + images[0]['image_name'];
+        }
+        else return '';
+    }
+    const [results, setResults] = useState({});
+    const tabsKeys = Object.keys(results);
+    useEffect(() => {
+        async function getSearchResults() {
+            let response = await fetch('http://bookmyvenue.live:6969/venues/bookmarks/' + sessionStorage.getItem('user_name'), {
+                method: 'GET'
+            });
+            let jsonResponse = await response.json();
+            if (jsonResponse.status) {
+                setResults(jsonResponse.data.details);
+            }
+        }
+        getSearchResults().catch(console.error);
+    }, []);
+    const [activeTab, setActiveTab] = useState('Weddings');
     if (sessionStorage.getItem('user_name')) {
         return (
             <div className="bg-blueGray-600">
@@ -93,7 +79,7 @@ export default () => {
                             <Container>
                                 <HeaderRow>
                                     <TabsControl>
-                                        {Object.keys(tabs).map((tabName, index) => (
+                                        {Object.keys(results).map((tabName, index) => (
                                             <TabControl key={index} active={activeTab === tabName}
                                                         onClick={() => setActiveTab(tabName)}>
                                                 {tabName}
@@ -120,17 +106,17 @@ export default () => {
                                         initial={activeTab === tabKey ? "current" : "hidden"}
                                         animate={activeTab === tabKey ? "current" : "hidden"}
                                     >
-                                        {tabs[tabKey].map((card, index) => (
+                                        {results[tabKey].map((card, index) => (
                                             <CardContainer key={index}>
-                                                <Card className="group" href={card.url} initial="rest"
+                                                <Card className="group" href="/venue" initial="rest"
                                                       whileHover="hover" animate="rest">
-                                                    <CardImageContainer imageSrc={card.imageSrc}>
+                                                    <CardImageContainer
+                                                        imageSrc={getImageFromResults(card.id, card.venue_images)}>
                                                         <CardRatingContainer>
                                                             <CardRating>
                                                                 <StarIcon/>
                                                                 {card.rating}
                                                             </CardRating>
-                                                            <CardReview>({card.reviews})</CardReview>
                                                         </CardRatingContainer>
                                                         <CardHoverOverlay
                                                             variants={{
@@ -145,12 +131,13 @@ export default () => {
                                                             }}
                                                             transition={{duration: 0.3}}
                                                         >
-                                                            <CardButton>Reserve Now</CardButton>
+                                                            <CardButton
+                                                                onClick={() => sessionStorage.setItem('venueId', card.id)}>Details</CardButton>
                                                         </CardHoverOverlay>
                                                     </CardImageContainer>
                                                     <CardText>
-                                                        <CardTitle>{card.title}</CardTitle>
-                                                        <CardContent>{card.content}</CardContent>
+                                                        <CardTitle>{card.name}</CardTitle>
+                                                        <CardContent>{card.city + ', ' + card.state}</CardContent>
                                                         <CardPrice>{card.price}</CardPrice>
                                                     </CardText>
                                                 </Card>

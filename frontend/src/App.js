@@ -18,6 +18,8 @@ import Chat from "./pages/ChatPage";
 import Logout from "./pages/Logout";
 import EditVenue from "./pages/EditVenuePage";
 import RatingsPage from "./pages/RatingsPage";
+import BookingsPage from "./pages/Bookings";
+import EditVenueReservation from "./pages/EditVenueReservation";
 
 export default () => (
     <Router>
@@ -40,6 +42,8 @@ export default () => (
             <Route path="/logout" element={<Logout />} />
             <Route path="/editvenue" element={<EditVenue />} />
             <Route path="/ratings" element={<RatingsPage />} />
+            <Route path="/bookings" element={<BookingsPage />} />
+            <Route path="/editreservation" element={<EditVenueReservation />} />
         </Routes>
     </Router>
 )

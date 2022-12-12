@@ -72,7 +72,7 @@ export default ({
 
     const [results, setResults] = useState({});
     const tabsKeys = Object.keys(results);
-    const [activeTab, setActiveTab] = useState('weddings');
+    const [activeTab, setActiveTab] = useState('Weddings');
 
 
 

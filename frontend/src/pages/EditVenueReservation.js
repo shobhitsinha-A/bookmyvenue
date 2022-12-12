@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import Footer from "../components/footers/Footer";
 import moment from "moment";
 import TextField from '@mui/material/TextField';
@@ -6,7 +6,7 @@ import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
 import { TimePicker } from "@mui/x-date-pickers";
-import {useEffect} from "@types/react";
+import Navbar from "../components/navbar/Navbar";
 
 const isBooked = (date) => {
     const day = date.day();
@@ -18,6 +18,50 @@ export default () => {
     const [startTime, setStartTime] = useState();
     const [endTime, setEndTime] = useState();
     const [venue, setVenue] = useState({});
+    const [reservation, setReservation] = useState({});
+    const [bookmarked, setBookmarked] = useState(false);
+    async function getBookmark(venueId) {
+        let response = await fetch('http://bookmyvenue.live:6969/venues/bookmarks/' + sessionStorage.getItem('user_name') + '/' + venueId, {
+            method: 'GET'
+        });
+        let jsonResponse = await response.json();
+        if (jsonResponse.status) {
+            setBookmarked(jsonResponse.data.is_bookmarked);
+        }
+    }
+    async function createBookmark(userId, venueId) {
+        let response = await fetch('http://bookmyvenue.live:6969/venues/bookmarks', {
+            method: 'POST',
+            body: JSON.stringify({
+                user_id: userId,
+                venue_id: venueId
+            })
+        });
+        let jsonResponse = await response.json();
+        if (jsonResponse.data.details) {
+            alert('Bookmark created successfully');
+            setBookmarked(true);
+        }
+    }
+    async function deleteBookmark(userId, venueId) {
+        let response = await fetch('http://bookmyvenue.live:6969/venues/bookmarks/' + userId + '/' + venueId, {
+            method: 'DELETE'
+        });
+        let jsonResponse = await response.json();
+        if (jsonResponse.data.details === 1) {
+            alert('Bookmark deleted successfully');
+            setBookmarked(false);
+        }
+    }
+    async function getReservationDetails() {
+        let response = await fetch('http://bookmyvenue.live:6969/reservations/'.concat(sessionStorage.getItem('editReservationId')), {
+            method: 'GET'
+        });
+        let jsonResponse = await response.json();
+        if (jsonResponse.status) {
+            setReservation(jsonResponse.data.details.reservation[0]);
+        }
+    }
     useEffect(() => {
         async function getVenueDetails() {
             let response = await fetch('http://bookmyvenue.live:6969/venues/'.concat(sessionStorage.getItem('venueId')), {
@@ -26,6 +70,8 @@ export default () => {
             let jsonResponse = await response.json();
             if (jsonResponse.status) {
                 setVenue(jsonResponse.data.details[0]);
+                getReservationDetails().catch(console.error);
+                getBookmark(jsonResponse.data.details[0].id).catch(console.error);
             }
         }
         getVenueDetails().catch(console.error);
@@ -45,7 +91,6 @@ export default () => {
         const description = document.getElementById("description").value;
         const user_id = sessionStorage.getItem("user_name");
         const venue_id = sessionStorage.getItem("venueId");
-        const reservation_id = sessionStorage.getItem("editReservationId");
         const is_cancelled = '0';
         const start_time = moment(startTime).format('hh:mm a');
         const end_time = moment(endTime).format('hh:mm a');
@@ -53,7 +98,7 @@ export default () => {
         let response = await fetch('http://bookmyvenue.live:6969/reservations', {
             method: 'PUT',
             body: JSON.stringify({
-                "reservation_id": reservation_id,
+                "reservation_id": sessionStorage.getItem('editReservationId'),
                 "venue_id": venue_id,
                 "user_id": user_id,
                 "event_name": event_name,
@@ -67,7 +112,6 @@ export default () => {
         });
         let jsonResponse = await response.json();
         if (jsonResponse.status) {
-            console.log(jsonResponse.data.details);
             alert("Reservation edited successfully");
             window.location.href = "/reservations";
         } else {
@@ -78,6 +122,7 @@ export default () => {
         return (
             <div>
                 <main className="profile-page">
+                    <Navbar />
                     <section className="relative block h-500-px">
                         <div
                             className="absolute top-0 w-full h-full bg-center bg-cover"
@@ -133,12 +178,13 @@ export default () => {
                                                     type="button"
                                                     onClick={validateAndUpdateReservation}
                                                 >
-                                                    Update
+                                                    Submit
                                                 </button>
                                             </div>
                                         </div>
                                         <div className="w-full lg:w-4/12 px-4 lg:order-1">
                                             <div className="flex justify-center py-4 lg:pt-4 pt-8">
+
                                                 <div className="mr-4 p-3 text-center">
                         <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-600">
                           {venue.rating}
@@ -155,16 +201,28 @@ export default () => {
                           Capacity
                         </span>
                                                 </div>
-                                                <div className="mr-4 p-3 text-center">
+                                                {bookmarked ?
+                                                    <div className="mr-4 p-3 text-center" onClick={() => deleteBookmark(sessionStorage.getItem('user_name'), venue.id)}>
                         <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-600">
                           <i
                               className={"fas fa-bookmark mr-2 text-sm opacity-75"}
                           ></i>
                         </span>
-                                                    <span className="text-sm text-blueGray-400">
+                                                        <span className="text-sm text-blueGray-400">
                           Favorite
                         </span>
-                                                </div>
+                                                    </div>:
+                                                    <div className="mr-4 p-3 text-center" onClick={() => createBookmark(sessionStorage.getItem('user_name'), venue.id)}>
+                        <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-600">
+                          <i
+                              className={"far fa-bookmark mr-2 text-sm opacity-75"}
+                          ></i>
+                        </span>
+                                                        <span className="text-sm text-blueGray-400">
+                          Favorite
+                        </span>
+                                                    </div>
+                                                }
                                             </div>
                                         </div>
                                     </div>
@@ -221,6 +279,7 @@ export default () => {
                                                                         id="event_name"
                                                                         type="text"
                                                                         className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                                                                        defaultValue={reservation.event_name}
                                                                     />
                                                                 </div>
                                                             </div>
@@ -236,6 +295,7 @@ export default () => {
                                                                         id="expected_no_of_people"
                                                                         type="number"
                                                                         className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                                                                        defaultValue={reservation.expected_no_of_people}
                                                                     />
                                                                 </div>
                                                             </div>
@@ -293,6 +353,7 @@ export default () => {
                                                         id="description"
                                                         className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                                                         rows="4"
+                                                        defaultValue={reservation.description}
                                                     ></textarea>
                                                                 </div>
                                                             </div>

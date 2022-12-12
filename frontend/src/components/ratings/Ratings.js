@@ -18,11 +18,11 @@ export default () => {
     }, []);
     return (
         <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 650 }}>
+            <Table align="center" sx={{ minWidth: 650, marginLeft: 'auto', marginRight: 'auto' }}>
                 <TableHead>
                     <TableRow>
                         <TableCell>Venue</TableCell>
-                        <TableCell align="right">Rating</TableCell>
+                        <TableCell>Rating</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
