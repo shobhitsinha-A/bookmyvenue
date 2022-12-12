@@ -9,7 +9,7 @@ import '../css/ReservationHistory.css';
 export default () => {
     const [reservations, setReservations] = useState([]);
     async function getUpcomingReservations() {
-        let response = await fetch('http://bookmyvenue.live:6969/reservations/user/' + sessionStorage.getItem('user_name'), {
+        let response = await fetch('http://bookmyvenue.live:6969/reservations/availability/venues/host/' + sessionStorage.getItem('user_name'), {
             method: 'GET'
         });
         let jsonResponse = await response.json();
@@ -42,7 +42,7 @@ export default () => {
                                 <div className="relative flex flex-col min-w-0 break-words w-full my-6 shadow-lg rounded-lg bg-blueGray-100 border-0">
                                     <div className="rounded-t bg-white mb-0 px-6 py-6">
                                         <div className="text-center flex justify-between">
-                                            <h6 className="text-blueGray-700 text-xl font-bold">Upcoming Reservations</h6>
+                                            <h6 className="text-blueGray-700 text-xl font-bold">Upcoming Bookings</h6>
                                         </div>
                                     </div>
                                     <div>
@@ -52,22 +52,10 @@ export default () => {
                                                        subtitle={'From ' + reservation.start_time + ' to ' + reservation.end_time}>
                                                     <div className="flex flex-row">
                                                         <div className="flex flex-col">
-                                                            <p>at {reservation.venue_name}</p>
+                                                            <p>at {reservation.venue_name} by {reservation.user_id}</p>
                                                             <p>{reservation.description}</p>
                                                         </div>
                                                         <div className="flex flex-row ml-auto reservation-controls">
-                                                            <div className="mx-2">
-                                                                <button
-                                                                    className="bg-purple-500 text-white active:bg-purple-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
-                                                                    type="button"
-                                                                    onClick={() => {
-                                                                        sessionStorage.setItem('editReservationId', reservation.id);
-                                                                        window.location.href = '/editreservation';
-                                                                    }}
-                                                                >
-                                                                    Edit
-                                                                </button>
-                                                            </div>
                                                             <div className="mx-2">
                                                                 <button
                                                                     className="bg-purple-500 text-white active:bg-purple-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"

@@ -18,6 +18,7 @@ export default () => {
     const [startTime, setStartTime] = useState();
     const [endTime, setEndTime] = useState();
     const [venue, setVenue] = useState({});
+    const [reservation, setReservation] = useState({});
     const [bookmarked, setBookmarked] = useState(false);
     async function getBookmark(venueId) {
         let response = await fetch('http://bookmyvenue.live:6969/venues/bookmarks/' + sessionStorage.getItem('user_name') + '/' + venueId, {
@@ -52,6 +53,15 @@ export default () => {
             setBookmarked(false);
         }
     }
+    async function getReservationDetails() {
+        let response = await fetch('http://bookmyvenue.live:6969/reservations/'.concat(sessionStorage.getItem('editReservationId')), {
+            method: 'GET'
+        });
+        let jsonResponse = await response.json();
+        if (jsonResponse.status) {
+            setReservation(jsonResponse.data.details.reservation[0]);
+        }
+    }
     useEffect(() => {
         async function getVenueDetails() {
             let response = await fetch('http://bookmyvenue.live:6969/venues/'.concat(sessionStorage.getItem('venueId')), {
@@ -60,6 +70,7 @@ export default () => {
             let jsonResponse = await response.json();
             if (jsonResponse.status) {
                 setVenue(jsonResponse.data.details[0]);
+                getReservationDetails().catch(console.error);
                 getBookmark(jsonResponse.data.details[0].id).catch(console.error);
             }
         }
@@ -74,7 +85,7 @@ export default () => {
         }
         else return '';
     }
-    let validateAndReserveVenue = async () => {
+    let validateAndUpdateReservation = async () => {
         const event_name = document.getElementById("event_name").value;
         const expected_no_of_people = document.getElementById("expected_no_of_people").value;
         const description = document.getElementById("description").value;
@@ -85,8 +96,9 @@ export default () => {
         const end_time = moment(endTime).format('hh:mm a');
         const event_date = moment(date).format('YYYY-MM-DD');
         let response = await fetch('http://bookmyvenue.live:6969/reservations', {
-            method: 'POST',
+            method: 'PUT',
             body: JSON.stringify({
+                "reservation_id": sessionStorage.getItem('editReservationId'),
                 "venue_id": venue_id,
                 "user_id": user_id,
                 "event_name": event_name,
@@ -100,11 +112,10 @@ export default () => {
         });
         let jsonResponse = await response.json();
         if (jsonResponse.status) {
-            console.log(jsonResponse.data.details);
-            alert("Venue reserved successfully");
+            alert("Reservation edited successfully");
             window.location.href = "/reservations";
         } else {
-            alert("There was an error when reserving the venue");
+            alert("There was an error when editing the reservation");
         }
     }
     if (sessionStorage.getItem('user_name')) {
@@ -165,7 +176,7 @@ export default () => {
                                                 <button
                                                     className="bg-purple-500 active:bg-lightBlue-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1 ease-linear transition-all duration-150"
                                                     type="button"
-                                                    onClick={validateAndReserveVenue}
+                                                    onClick={validateAndUpdateReservation}
                                                 >
                                                     Submit
                                                 </button>
@@ -268,6 +279,7 @@ export default () => {
                                                                         id="event_name"
                                                                         type="text"
                                                                         className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                                                                        defaultValue={reservation.event_name}
                                                                     />
                                                                 </div>
                                                             </div>
@@ -283,6 +295,7 @@ export default () => {
                                                                         id="expected_no_of_people"
                                                                         type="number"
                                                                         className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                                                                        defaultValue={reservation.expected_no_of_people}
                                                                     />
                                                                 </div>
                                                             </div>
@@ -340,6 +353,7 @@ export default () => {
                                                         id="description"
                                                         className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                                                         rows="4"
+                                                        defaultValue={reservation.description}
                                                     ></textarea>
                                                                 </div>
                                                             </div>

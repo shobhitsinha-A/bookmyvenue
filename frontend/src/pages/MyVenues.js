@@ -68,7 +68,7 @@ export default () => {
         }
         getSearchResults().catch(console.error);
     }, []);
-    const [activeTab, setActiveTab] = useState('weddings');
+    const [activeTab, setActiveTab] = useState('Weddings');
     if (sessionStorage.getItem('user_name')) {
         return (
             <div className="bg-blueGray-600">

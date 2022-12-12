@@ -12,6 +12,7 @@ import { ReactComponent as StarIcon } from "../images/star-icon.svg";
 import Header, {PrimaryLink} from "../components/headers/BaseHeader";
 
 import "../css/SearchPage.css";
+import Filter from "../components/filter/Filter";
 
 const HeaderRow = tw.div`flex justify-between items-center flex-col xl:flex-row`;
 const Heading = tw(SectionHeading)``;
@@ -71,7 +72,8 @@ export default ({
 
     const [results, setResults] = useState({});
     const tabsKeys = Object.keys(results);
-    const [activeTab, setActiveTab] = useState('weddings');
+    const [activeTab, setActiveTab] = useState('Weddings');
+
 
 
     useEffect(() => {
@@ -86,8 +88,23 @@ export default ({
             }
         }
         getSearchResults().catch(console.error);
+        sessionStorage.setItem('filterParams', '{}');
     }, []);
 
+    async function getUpdatedSearchResults() {
+        console.log(JSON.parse(sessionStorage.getItem('filterParams')));
+        async function getUpdatedSearchResults() {
+            let response = await fetch('http://bookmyvenue.live:6969/venues/search', {
+                method: 'POST',
+                body: sessionStorage.getItem('filterParams')
+            });
+            let jsonResponse = await response.json();
+            if (jsonResponse.status) {
+                setResults(jsonResponse.data.details);
+            }
+        }
+        getUpdatedSearchResults().catch(console.error);
+    }
 
 
     return (
@@ -95,6 +112,7 @@ export default ({
             <StyledHeader />
             <Container>
                 <ContentWithPadding>
+                    <Filter search={getUpdatedSearchResults} />
                     <HeaderRow>
                         <Heading>{heading}</Heading>
                         <TabsControl>

@@ -6,8 +6,8 @@ import MenuItem from "@mui/material/MenuItem";
 
 export default () => {
     const [venue, setVenue] = useState({});
-    const [category, setCategory] = useState('weddings');
-    const [avail, setAvail] = useState('1');
+    const [category, setCategory] = useState('');
+    const [avail, setAvail] = useState('');
     const handleCategoryChange = (event) => {
         setCategory(event.target.value);
     };
@@ -22,6 +22,8 @@ export default () => {
             let jsonResponse = await response.json();
             if (jsonResponse.status) {
                 setVenue(jsonResponse.data.details[0]);
+                setCategory(jsonResponse.data.details[0].category);
+                setAvail(jsonResponse.data.details[0].is_available);
             }
         }
         getVenueDetails().catch(console.error);
@@ -42,8 +44,9 @@ export default () => {
         const rating = '0';
         const availability = avail;
         let response = await fetch('http://bookmyvenue.live:6969/venues', {
-            method: 'POST',
+            method: 'PUT',
             body: JSON.stringify({
+                "id": sessionStorage.getItem('editVenueId'),
                 "name" : title,
                 "price" : price,
                 "capacity" : capacity,
@@ -100,11 +103,11 @@ export default () => {
                                                     <div className="relative w-full mb-3">
                                                         <label
                                                             className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                                                            htmlFor="grid-password"
                                                         >
                                                             Name
                                                         </label>
                                                         <input
+                                                            id="title"
                                                             type="text"
                                                             className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                                                             defaultValue={venue.name}
@@ -115,11 +118,11 @@ export default () => {
                                                     <div className="relative w-full mb-3">
                                                         <label
                                                             className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                                                            htmlFor="grid-password"
                                                         >
                                                             Price
                                                         </label>
                                                         <input
+                                                            id="price"
                                                             type="number"
                                                             className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                                                             defaultValue={venue.price}
@@ -135,6 +138,7 @@ export default () => {
                                                             Capacity
                                                         </label>
                                                         <input
+                                                            id="capacity"
                                                             type="number"
                                                             className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                                                             defaultValue={venue.capacity}
@@ -197,6 +201,7 @@ export default () => {
                                                             Address
                                                         </label>
                                                         <input
+                                                            id="address"
                                                             type="text"
                                                             className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                                                             defaultValue={venue.address}
@@ -212,6 +217,7 @@ export default () => {
                                                             City
                                                         </label>
                                                         <input
+                                                            id="city"
                                                             type="text"
                                                             className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                                                             defaultValue={venue.city}
@@ -227,6 +233,7 @@ export default () => {
                                                             State
                                                         </label>
                                                         <input
+                                                            id="state"
                                                             type="text"
                                                             className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                                                             defaultValue={venue.state}
@@ -242,6 +249,7 @@ export default () => {
                                                             Zip Code
                                                         </label>
                                                         <input
+                                                            id="zipcode"
                                                             type="text"
                                                             className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                                                             defaultValue={venue.zipcode}
@@ -257,6 +265,7 @@ export default () => {
                                                             Phone Number
                                                         </label>
                                                         <input
+                                                            id="phone_number"
                                                             type="text"
                                                             className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                                                             defaultValue={venue.phone_number}
@@ -274,7 +283,7 @@ export default () => {
                                                 <div className="w-full lg:w-12/12 px-4">
                                                     <div className="relative w-full mb-3">
                                                     <textarea
-                                                        type="text"
+                                                        id="description"
                                                         className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                                                         defaultValue={venue.description}
                                                         rows="4"
@@ -292,6 +301,7 @@ export default () => {
                                                 <div className="w-full lg:w-12/12 px-4">
                                                     <div className="relative w-full mb-3">
                                                         <input
+                                                            name=""
                                                             className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                                                             type="file"/>
                                                         <p className="mt-1 text-sm text-gray-500 dark:text-gray-300"
