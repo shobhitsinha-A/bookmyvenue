@@ -133,13 +133,19 @@ const getVenuesBySearch = async function(req, res) {
         }
 
         let responseObj = {
-            "weddings" : [],
-            "celebrations": [],
-            "meetings": []
+            "Weddings" : [],
+            "Celebrations": [],
+            "Meetings": []
         }
 
         for (let venue of venues) {
-            responseObj[venue.category].push(venue);
+            const firstLetter = venue.category.charAt(0)
+            const firstLetterCap = firstLetter.toUpperCase()
+            const remainingLetters = venue.category.slice(1)
+
+            const capitalizedWord = firstLetterCap + remainingLetters
+
+            responseObj[capitalizedWord].push(venue);
         }
 
         let resObj = {
@@ -218,14 +224,20 @@ const getVenuesByUserId = async function(req, res) {
         }
 
         let responseObj = {
-            "weddings" : [],
-            "celebrations": [],
-            "meetings": []
+            "Weddings" : [],
+            "Celebrations": [],
+            "Meetings": []
         }
 
         for (let venue of venues) {
-            responseObj[venue.category].push(venue);
+            const firstLetter = venue.category.charAt(0)
+            const firstLetterCap = firstLetter.toUpperCase()
+            const remainingLetters = venue.category.slice(1)
+
+            const capitalizedWord = firstLetterCap + remainingLetters
+            responseObj[capitalizedWord].push(venue);
         }
+
         let resObj = {
             message: 'venues fetched successfully',
             details: responseObj
@@ -292,9 +304,25 @@ const getBookmarks = async function(req, res) {
                 bookmarked_venues[i].rating = "0";
             }
         }
+
+        let responseObj = {
+            "Weddings" : [],
+            "Celebrations": [],
+            "Meetings": []
+        }
+
+        for (let venue of bookmarked_venues) {
+            const firstLetter = venue.category.charAt(0)
+            const firstLetterCap = firstLetter.toUpperCase()
+            const remainingLetters = venue.category.slice(1)
+
+            const capitalizedWord = firstLetterCap + remainingLetters
+            responseObj[capitalizedWord].push(venue);
+        }
+
         let resObj = {
             message: 'bookmarks fetched successfully',
-            details: bookmarked_venues
+            details: responseObj
         };
 
         return successResponse(res, resObj);
