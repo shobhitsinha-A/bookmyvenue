@@ -45,8 +45,13 @@ const getChats = async (from_user, to_user) => {
 const getChatUsers = async (from_user) => {
     try {
         const info = await db('chats')
-            .distinct('to_user')
-            .where('from_user', from_user);
+            .distinct('to_user as user')
+            .where('from_user', from_user)
+            .union([
+                db('chats')
+                    .distinct('from_user as user')
+                    .where('to_user', from_user)
+            ]);
 
         console.log('chat users ->' , info);
         return info;
