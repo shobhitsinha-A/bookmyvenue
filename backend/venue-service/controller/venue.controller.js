@@ -246,6 +246,20 @@ const getBookmarks = async function(req, res) {
     return successResponse(res, resObj);
 }
 
+const isVenueBookmarked = async function(req, res) {
+
+        let user_id = req.params.user_id;
+        let venue_id = req.params.venue_id;
+
+        let isBookmarked = await venueService.isVenueBookmarked(user_id, venue_id);
+
+        let resObj = {
+                    message: 'bookmark fetched successfully',
+                    is_bookmarked: isBookmarked
+        };
+
+        return successResponse(res, resObj);
+}
 const deleteBookmark = async function(req, res) {
 
         let bookmark = await venueService.deleteBookmark(req.params.user_id, req.params.venue_id);
@@ -356,5 +370,5 @@ const getAvgRating = async function(req, res) {
 }
 module.exports = { createVenue, updateVenue, deleteVenue,  uploadImages, createVenueImages, getVenueImages,
                     getVenuesBySearch, getVenuesMetadata, getVenueById, getVenuesByUserId,
-                    createBookmarks, getBookmarks, deleteBookmark, createRating, getRatingsByUserId,
+                    createBookmarks, getBookmarks, isVenueBookmarked, deleteBookmark, createRating, getRatingsByUserId,
                     getPastReservedVenuesByUserId , getUpcomingReservedVenuesByUserId, getAvgRating };

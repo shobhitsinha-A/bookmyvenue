@@ -218,6 +218,19 @@ const getBookmarks = async function(user_id) {
     }
 }
 
+const isVenueBookmarked = async function(user_id, venue_id) {
+    try {
+        const info = await db('bookmarks')
+            .select('venue_id')
+            .where('user_id', user_id)
+            .andWhere('venue_id', venue_id);
+        console.log('bookmarks ->' , info);
+
+        return info.length > 0;
+    } catch (e) {
+        return e.message;
+    }
+}
 const deleteBookmark = async function(user_id, venue_id) {
     try {
         const info = await db('bookmarks')
@@ -311,6 +324,6 @@ const getAvgRating = async function() {
 }
 module.exports = { createVenue , updateVenue, deleteVenue
     , createVenueImages, getVenueImages, getVenuesBySearch, getVenuesMetadata,
-    getVenueById, getVenuesByUserId, createBookmarks, getBookmarks, deleteBookmark,
+    getVenueById, getVenuesByUserId, createBookmarks, getBookmarks, isVenueBookmarked, deleteBookmark,
     createRating, getRatingsByUserId, getPastReservedVenuesByUserId, getRatingsByUserIdAndVenueId,
     getUpcomingReservedVenuesByUserId, getAvgRating };
