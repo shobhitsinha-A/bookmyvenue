@@ -18,4 +18,7 @@ router.put('/profile/details', userController.updateUserDetails);
 // forgot password
 router.post('/forgotpassword', userController.forgotPassword);
 
+// update status
+router.put('/status', userController.updateUserStatus);
+
 module.exports = router;

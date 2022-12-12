@@ -52,4 +52,14 @@ const getRole = async function(role_id) {
 
 }
 
-module.exports = { registerUser, loginUser, getRole };
+const updateUserStatus = async function(user_name, status) {
+    const user_status = await db('users')
+        .where({ user_name: user_name })
+        .update({ is_online: status });
+
+    console.log('update user status returned ->' + user_status);
+
+    return user_status;
+}
+
+module.exports = { registerUser, loginUser, getRole, updateUserStatus };

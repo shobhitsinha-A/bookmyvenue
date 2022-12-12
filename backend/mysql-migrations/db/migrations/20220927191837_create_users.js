@@ -7,6 +7,7 @@ exports.up = function(knex) {
     table.string('user_name').primary();
     table.string('e_pass').notNullable();
     table.integer('role_id').notNullable();
+    table.boolean('is_online').defaultTo(false);
     table.foreign('role_id').references('role_id').inTable('roles');
     table.timestamps(true, true);
   });
