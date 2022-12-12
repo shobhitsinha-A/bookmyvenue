@@ -322,8 +322,22 @@ const getAvgRating = async function() {
         return e.message;
     }
 }
+
+const getAvgRatingByVenueId = async function(venue_id) {
+    try {
+        const info = await db('ratings')
+            .select('venue_id')
+            .avg('rating as avg_rating')
+            .where('venue_id', venue_id)
+            .groupBy('venue_id');
+        console.log('avg rating ->' , info);
+        return info;
+    } catch (e) {
+        return e.message;
+    }
+}
 module.exports = { createVenue , updateVenue, deleteVenue
     , createVenueImages, getVenueImages, getVenuesBySearch, getVenuesMetadata,
     getVenueById, getVenuesByUserId, createBookmarks, getBookmarks, isVenueBookmarked, deleteBookmark,
     createRating, getRatingsByUserId, getPastReservedVenuesByUserId, getRatingsByUserIdAndVenueId,
-    getUpcomingReservedVenuesByUserId, getAvgRating };
+    getUpcomingReservedVenuesByUserId, getAvgRating, getAvgRatingByVenueId };

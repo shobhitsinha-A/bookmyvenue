@@ -11,6 +11,7 @@ const { successResponse, errorResponse } = require('../commons/response.util');
 
 const createReservation = async function(req, res) {
 
+    try {
         let reqBody = JSON.parse(req.body);
 
         let { venue_id, user_id, event_name, expected_no_of_people
@@ -28,7 +29,7 @@ const createReservation = async function(req, res) {
         let profile = await profileService.getDetailsByUserName(user_id);
         let venueDetails = await venueService.getVenueById(venue_id)
         let venueOwnerProfile = await profileService.getDetailsByUserName(venueDetails[0].created_by)
-       // send email to user
+        // send email to user
         let user_email = profile[0].email;
 
         let host_email = venueOwnerProfile[0].email;
@@ -73,6 +74,11 @@ const createReservation = async function(req, res) {
 
 
         return successResponse(res, resObj);
+
+    } catch (error) {
+        console.log(error);
+        return errorResponse(res, 500, 'Internal Server Error');
+    }
 
 }
 

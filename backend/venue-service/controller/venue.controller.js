@@ -112,31 +112,47 @@ const getVenueImages = async function(req, res) {
 
 const getVenuesBySearch = async function(req, res) {
 
-    let reqBody = JSON.parse(req.body);
-    let venues = await venueService.getVenuesBySearch(reqBody);
+    try {
+        let reqBody = JSON.parse(req.body);
+        let venues = await venueService.getVenuesBySearch(reqBody);
 
-    // add images to each venue
-    for (let i = 0; i < venues.length; i++) {
-        let venue_images = await venueService.getVenueImages(venues[i].id);
-        venues[i].venue_images = venue_images;
+        // add images to each venue
+        for (let i = 0; i < venues.length; i++) {
+            let venue_images = await venueService.getVenueImages(venues[i].id);
+            venues[i].venue_images = venue_images;
+        }
+
+        // add the aggregated rating
+        for (let i = 0; i < venues.length; i++) {
+            let venue_rating = await venueService.getAvgRatingByVenueId(venues[i].id);
+            if (venue_rating.length > 0) {
+                venues[i].rating = venue_rating[0].avg_rating;
+            } else {
+                venues[i].rating = 0;
+            }
+        }
+
+        let responseObj = {
+            "weddings" : [],
+            "celebrations": [],
+            "meetings": []
+        }
+
+        for (let venue of venues) {
+            responseObj[venue.category].push(venue);
+        }
+
+        let resObj = {
+            message: 'venues fetched successfully',
+            details: responseObj
+        };
+
+        return successResponse(res, resObj);
     }
-
-    let responseObj = {
-        "weddings" : [],
-        "celebrations": [],
-        "meetings": []
+    catch (err) {
+        console.log(err);
+        return errorResponse(res, err);
     }
-
-    for (let venue of venues) {
-        responseObj[venue.category].push(venue);
-    }
-
-    let resObj = {
-                message: 'venues fetched successfully',
-                details: responseObj
-    };
-
-    return successResponse(res, resObj);
 };
 
 const getVenuesMetadata = async function(req, res) {
@@ -153,45 +169,74 @@ const getVenuesMetadata = async function(req, res) {
 
 const getVenueById = async function(req, res) {
 
-    let venue = await venueService.getVenueById(req.params.venue_id);
+    try {
+        let venue = await venueService.getVenueById(req.params.venue_id);
 
-    // add images to venue
-    let venue_images = await venueService.getVenueImages(venue[0].id);
-    venue[0].venue_images = venue_images;
+        // add images to venue
+        let venue_images = await venueService.getVenueImages(venue[0].id);
+        venue[0].venue_images = venue_images;
 
-    let resObj = {
-                message: 'venue fetched successfully',
-                details: venue
-    };
+        // add the aggregated rating
+        let venue_rating = await venueService.getAvgRatingByVenueId(venue[0].id);
+        if (venue_rating.length > 0) {
+            venue[0].rating = venue_rating[0].avg_rating;
+        } else {
+            venue[0].rating = "0";
+        }
+        let resObj = {
+            message: 'venue fetched successfully',
+            details: venue
+        };
 
-    return successResponse(res, resObj);
+        return successResponse(res, resObj);
+    } catch (err) {
+        console.log(err);
+        return errorResponse(res, err);
+    }
+
 };
 
 const getVenuesByUserId = async function(req, res) {
 
-    let venues = await venueService.getVenuesByUserId(req.params.user_id);
+    try {
+        let venues = await venueService.getVenuesByUserId(req.params.user_id);
 
-    // add images to each venue
-    for (let i = 0; i < venues.length; i++) {
-        let venue_images = await venueService.getVenueImages(venues[i].id);
-        venues[i].venue_images = venue_images;
-    }
+        // add images to each venue
+        for (let i = 0; i < venues.length; i++) {
+            let venue_images = await venueService.getVenueImages(venues[i].id);
+            venues[i].venue_images = venue_images;
+        }
 
-    let responseObj = {
-        "weddings" : [],
-        "celebrations": [],
-        "meetings": []
-    }
+        // add the aggregated rating
+        for (let i = 0; i < venues.length; i++) {
+            let venue_rating = await venueService.getAvgRatingByVenueId(venues[i].id);
+            if (venue_rating.length > 0) {
+                venues[i].rating = venue_rating[0].avg_rating;
+            } else {
+                venues[i].rating = "0";
+            }
+        }
 
-    for (let venue of venues) {
-        responseObj[venue.category].push(venue);
-    }
+        let responseObj = {
+            "weddings" : [],
+            "celebrations": [],
+            "meetings": []
+        }
+
+        for (let venue of venues) {
+            responseObj[venue.category].push(venue);
+        }
         let resObj = {
-                    message: 'venues fetched successfully',
-                    details: responseObj
+            message: 'venues fetched successfully',
+            details: responseObj
         };
 
         return successResponse(res, resObj);
+    } catch (e) {
+        console.log(e);
+        return errorResponse(res, e);
+    }
+
 }
 
 const deleteVenue = async function(req, res) {
@@ -226,24 +271,38 @@ const createBookmarks = async function(req, res) {
 };
 
 const getBookmarks = async function(req, res) {
+    try {
+        let bookmarks = await venueService.getBookmarks(req.params.user_id);
 
-    let bookmarks = await venueService.getBookmarks(req.params.user_id);
+        let bookmarked_venues = [];
+        for (let bookmark of bookmarks) {
+            let venue = await venueService.getVenueById(bookmark.venue_id);
+            let venue_images = await venueService.getVenueImages(bookmark.venue_id);
+            venue[0].venue_images = venue_images;
 
-    let bookmarked_venues = [];
-    for (let bookmark of bookmarks) {
-        let venue = await venueService.getVenueById(bookmark.venue_id);
-        let venue_images = await venueService.getVenueImages(bookmark.venue_id);
-        venue[0].venue_images = venue_images;
+            bookmarked_venues.push(venue[0]);
+        }
 
-        bookmarked_venues.push(venue[0]);
+        // add the aggregated rating
+        for (let i = 0; i < bookmarked_venues.length; i++) {
+            let venue_rating = await venueService.getAvgRatingByVenueId(bookmarked_venues[i].id);
+            if (venue_rating.length > 0) {
+                bookmarked_venues[i].rating = venue_rating[0].avg_rating;
+            } else {
+                bookmarked_venues[i].rating = "0";
+            }
+        }
+        let resObj = {
+            message: 'bookmarks fetched successfully',
+            details: bookmarked_venues
+        };
+
+        return successResponse(res, resObj);
+    } catch (e) {
+        console.log(e);
+        return errorResponse(res, e);
     }
 
-    let resObj = {
-                message: 'bookmarks fetched successfully',
-                details: bookmarked_venues
-    };
-
-    return successResponse(res, resObj);
 }
 
 const isVenueBookmarked = async function(req, res) {
@@ -317,27 +376,39 @@ const getRatingsByUserId = async function(req, res) {
 
 const getPastReservedVenuesByUserId = async function(req, res) {
 
+    try {
         let reservations = await venueService.getPastReservedVenuesByUserId(req.params.user_id);
 
         let reserved_venues = [];
+
         for (let reservation of reservations) {
             let venue = await venueService.getVenueById(reservation.venue_id);
             let ratings = await venueService.getRatingsByUserIdAndVenueId(req.params.user_id, venue[0].id);
-            venue[0].rating = ratings[0].rating;
+            if (ratings.length > 0) {
+                venue[0].rating = ratings[0].rating;
+            } else {
+                venue[0].rating = 0;
+            }
             reserved_venues.push(venue[0]);
         }
 
 
         let resObj = {
-                    message: 'past reserved venues fetched successfully',
-                    details: reserved_venues
+            message: 'past reserved venues fetched successfully',
+            details: reserved_venues
         };
 
         return successResponse(res, resObj);
+    } catch (e) {
+        console.log('error -> ', e);
+        return errorResponse(res, e);
+    }
+
 }
 
 const getUpcomingReservedVenuesByUserId = async function(req, res) {
 
+    try {
         let reservations = await venueService.getUpcomingReservedVenuesByUserId(req.params.user_id);
 
         let reserved_venues = [];
@@ -345,7 +416,12 @@ const getUpcomingReservedVenuesByUserId = async function(req, res) {
         for (let reservation of reservations) {
             let venue = await venueService.getVenueById(reservation.venue_id);
             let ratings = await venueService.getRatingsByUserIdAndVenueId(req.params.user_id, venue[0].id);
-            venue[0].rating = ratings[0].rating;
+
+            if (ratings.length > 0) {
+                venue[0].rating = ratings[0].rating;
+            } else {
+                venue[0].rating = 0;
+            }
             reserved_venues.push(venue[0]);
         }
 
@@ -355,6 +431,10 @@ const getUpcomingReservedVenuesByUserId = async function(req, res) {
         };
 
         return successResponse(res, resObj);
+    } catch (e) {
+        console.log('error -> ', e);
+        return errorResponse(res, e);
+    }
 }
 
 const getAvgRating = async function(req, res) {
