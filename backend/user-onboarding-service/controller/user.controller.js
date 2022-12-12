@@ -109,7 +109,6 @@ const loginUser = async function (req, res) {
         await duoClient.healthCheck();
         let resObj = {};
         // Load hash from your password DB.
-
         bcrypt.compare(password, hash.e_pass).then((response) => {
             if (response === true) {
                 try {
@@ -117,6 +116,10 @@ const loginUser = async function (req, res) {
                     const url = duoClient.createAuthUrl(user_name, state);
                     resObj["status"] = true;
                     resObj["data"] = {"user_name": user_name, "role": role, "url": url};
+
+                    let user_status =  userService.updateUserStatus(user_name, true);
+                    console.log("user status updated..." , user_status);
+
                     return successResponse(res, resObj);
                 } catch (err) {
                     console.error(err);
@@ -125,6 +128,7 @@ const loginUser = async function (req, res) {
                 return errorResponse(res, 400, "Error");
             }
         });
+
 
     } catch (e) {
         return errorResponse(res, 400, e.message);
@@ -153,5 +157,15 @@ const forgotPassword = async function (req, res) {
     }
 };
 
+const updateUserStatus = async function (req, res) {
+    try {
+        let reqBody = JSON.parse(req.body);
+        let { user_name, is_online} = reqBody;
+        let result = await userService.updateUserStatus(user_name, is_online);
+        return successResponse(res, result);
+    } catch (e) {
+        return errorResponse(res, 400, e.message);
+    }
+}
 module.exports = { registerUser, loginUser, getUserDetails,
-                    updateUserDetails, deleteUser, forgotPassword };
+                    updateUserDetails, deleteUser, forgotPassword, updateUserStatus };

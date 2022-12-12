@@ -124,6 +124,7 @@ const getVenuesBySearch = async function(searchDto) {
         if (searchDto.rating) {
             query = query.whereBetween('rating', [searchDto.rating.low, searchDto.rating.high]);
         }
+        console.log('searchDto ->' , searchDto);
 
         const info = await query;
         console.log('venues ->' , info);
