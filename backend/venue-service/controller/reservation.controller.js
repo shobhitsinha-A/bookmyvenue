@@ -230,6 +230,7 @@ const getReservationsByHost = async function(req, res) {
     for (const venue of venues) {
         let reservation = await reservationService.getReservationsByVenue(venue.id);
         if (reservation.length > 0) {
+            reservation[0].venue_name = venue.name;
             reservations.push(reservation[0]);
         }
      }
