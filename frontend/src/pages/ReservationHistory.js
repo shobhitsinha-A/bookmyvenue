@@ -8,18 +8,28 @@ import '../css/ReservationHistory.css';
 
 export default () => {
     const [reservations, setReservations] = useState([]);
-    useEffect(() => {
-        async function getUpcomingReservations() {
-            let response = await fetch('http://bookmyvenue.live:6969/reservations/user/' + sessionStorage.getItem('user_name'), {
-                method: 'GET'
-            });
-            let jsonResponse = await response.json();
-            if (jsonResponse.status) {
-                setReservations(jsonResponse.data.details.reservations);
-            }
+    async function getUpcomingReservations() {
+        let response = await fetch('http://bookmyvenue.live:6969/reservations/user/' + sessionStorage.getItem('user_name'), {
+            method: 'GET'
+        });
+        let jsonResponse = await response.json();
+        if (jsonResponse.status) {
+            setReservations(jsonResponse.data.details.reservations);
         }
+    }
+    useEffect(() => {
         getUpcomingReservations().catch(console.error);
     }, []);
+    async function cancelReservation(reservation_id) {
+        let response = await fetch('http://bookmyvenue.live:6969/reservations/reservation/cancel/' + reservation_id, {
+            method: 'GET'
+        });
+        let jsonResponse = await response.json();
+        if (jsonResponse.status) {
+            alert('Reservation cancelled successfully');
+            getUpcomingReservations().catch(console.error);
+        }
+    }
     const navigate = useNavigate();
     if (sessionStorage.getItem('user_name')) {
         return (
@@ -52,6 +62,7 @@ export default () => {
                                                                     type="button"
                                                                     onClick={() => {
                                                                         sessionStorage.setItem('editReservationId', reservation.id);
+                                                                        window.location.href = '/editreservation';
                                                                     }}
                                                                 >
                                                                     Edit
@@ -61,6 +72,7 @@ export default () => {
                                                                 <button
                                                                     className="bg-purple-500 text-white active:bg-purple-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
                                                                     type="button"
+                                                                    onClick={cancelReservation(reservation.id)}
                                                                 >
                                                                     Cancel
                                                                 </button>

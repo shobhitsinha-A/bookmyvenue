@@ -1,8 +1,7 @@
 import React, {useState} from "react";
 import AnimatedContainer from "../helpers/AnimatedContainer";
 import Sidebar from "../components/sidebar/Sidebar";
-import Select from "@mui/material/Select";
-import MenuItem from '@mui/material/MenuItem';
+import {Select, MenuItem, FormControl}from "@mui/material";
 
 
 export default () => {
@@ -147,16 +146,18 @@ export default () => {
                                                         >
                                                             Category
                                                         </label>
-                                                        <Select
-                                                            id="category-select"
-                                                            value={category}
-                                                            label="Category"
-                                                            onChange={handleCategoryChange}
-                                                        >
-                                                            <MenuItem value={'weddings'}>Weddings</MenuItem>
-                                                            <MenuItem value={'meetings'}>Meetings</MenuItem>
-                                                            <MenuItem value={'celebrations'}>Celebrations</MenuItem>
-                                                        </Select>
+                                                        <FormControl variant="standard" sx={{ m: 1, minWidth: 128 }}>
+                                                            <Select
+                                                                id="category-select"
+                                                                value={category}
+                                                                label="Category"
+                                                                onChange={handleCategoryChange}
+                                                            >
+                                                                <MenuItem value={'weddings'}>Weddings</MenuItem>
+                                                                <MenuItem value={'meetings'}>Meetings</MenuItem>
+                                                                <MenuItem value={'celebrations'}>Celebrations</MenuItem>
+                                                            </Select>
+                                                        </FormControl>
                                                     </div>
                                                 </div>
                                                 <div className="w-full lg:w-6/12 px-4">
@@ -167,15 +168,17 @@ export default () => {
                                                         >
                                                             Availability
                                                         </label>
-                                                        <Select
-                                                            id="avail-select"
-                                                            value={avail}
-                                                            label="Category"
-                                                            onChange={handleAvailChange}
-                                                        >
-                                                            <MenuItem value={'1'}>Available</MenuItem>
-                                                            <MenuItem value={'0'}>Not Available</MenuItem>
-                                                        </Select>
+                                                        <FormControl variant="standard" sx={{ m: 1, minWidth: 128 }}>
+                                                            <Select
+                                                                id="avail-select"
+                                                                value={avail}
+                                                                label="Category"
+                                                                onChange={handleAvailChange}
+                                                            >
+                                                                <MenuItem value={'1'}>Available</MenuItem>
+                                                                <MenuItem value={'0'}>Not Available</MenuItem>
+                                                            </Select>
+                                                        </FormControl>
                                                     </div>
                                                 </div>
                                             </div>

@@ -46,6 +46,7 @@ export default () => {
         let response = await fetch('http://bookmyvenue.live:6969/venues', {
             method: 'PUT',
             body: JSON.stringify({
+                "id": sessionStorage.getItem('editVenueId'),
                 "name" : title,
                 "price" : price,
                 "capacity" : capacity,
