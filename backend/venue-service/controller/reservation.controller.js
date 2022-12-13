@@ -72,7 +72,6 @@ const createReservation = async function(req, res) {
             }
         }
 
-
         return successResponse(res, resObj);
 
     } catch (error) {
