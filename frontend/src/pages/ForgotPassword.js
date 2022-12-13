@@ -37,7 +37,7 @@ let checkIfUserExists = async (e) => {
     e.preventDefault();
     let u_name = document.getElementById("u_name").value;
     let email = document.getElementById("email").value;
-    let response = await fetch('http://bookmyvenue.live:5000/user/profile/details/'.concat(u_name), {
+    let response = await fetch('https://bookmyvenue.live:5000/user/profile/details/'.concat(u_name), {
         method: 'GET'
     });
     let jsonResponse = await response.json();

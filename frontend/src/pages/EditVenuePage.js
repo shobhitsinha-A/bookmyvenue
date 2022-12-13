@@ -16,7 +16,7 @@ export default () => {
     };
     useEffect(() => {
         async function getVenueDetails() {
-            let response = await fetch('http://bookmyvenue.live:6969/venues/' + sessionStorage.getItem('editVenueId'), {
+            let response = await fetch('https://bookmyvenue.live:6969/venues/' + sessionStorage.getItem('editVenueId'), {
                 method: 'GET'
             });
             let jsonResponse = await response.json();
@@ -28,7 +28,16 @@ export default () => {
         }
         getVenueDetails().catch(console.error);
     }, []);
-
+    let deleteVenue = async () => {
+        let response = await fetch('https://bookmyvenue.live:6969/venues/' + sessionStorage.getItem('editVenueId'), {
+            method: 'DELETE'
+        });
+        let jsonResponse = await response.json();
+        if (jsonResponse.status) {
+            alert('Venue deleted successfully');
+            window.location.href = "/myvenues";
+        }
+    }
     let validateAndUpdateVenue = async () => {
         const title = document.getElementById("title").value;
         const price = document.getElementById("price").value;
@@ -43,7 +52,7 @@ export default () => {
         const venue_category = category;
         const rating = '0';
         const availability = avail;
-        let response = await fetch('http://bookmyvenue.live:6969/venues', {
+        let response = await fetch('https://bookmyvenue.live:6969/venues', {
             method: 'PUT',
             body: JSON.stringify({
                 "id": sessionStorage.getItem('editVenueId'),
@@ -84,6 +93,13 @@ export default () => {
                                     <div className="rounded-t bg-white mb-0 px-6 py-6">
                                         <div className="text-center flex justify-between">
                                             <h6 className="text-blueGray-700 text-xl font-bold">Edit Venue</h6>
+                                            <button
+                                                className="bg-purple-500 text-white active:bg-purple-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
+                                                type="button"
+                                                onClick={deleteVenue}
+                                            >
+                                                Delete
+                                            </button>
                                             <button
                                                 className="bg-purple-500 text-white active:bg-purple-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
                                                 type="button"

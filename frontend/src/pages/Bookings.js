@@ -9,7 +9,7 @@ import '../css/ReservationHistory.css';
 export default () => {
     const [reservations, setReservations] = useState([]);
     async function getUpcomingReservations() {
-        let response = await fetch('http://bookmyvenue.live:6969/reservations/availability/venues/host/' + sessionStorage.getItem('user_name'), {
+        let response = await fetch('https://bookmyvenue.live:6969/reservations/availability/venues/host/' + sessionStorage.getItem('user_name'), {
             method: 'GET'
         });
         let jsonResponse = await response.json();
@@ -21,7 +21,7 @@ export default () => {
         getUpcomingReservations().catch(console.error);
     }, []);
     async function cancelReservation(reservation_id) {
-        let response = await fetch('http://bookmyvenue.live:6969/reservations/reservation/cancel/' + reservation_id, {
+        let response = await fetch('https://bookmyvenue.live:6969/reservations/reservation/cancel/' + reservation_id, {
             method: 'GET'
         });
         let jsonResponse = await response.json();

@@ -50,7 +50,7 @@ const CardPrice = tw.p`mt-4 text-xl font-bold`;
 export default () => {
     function getImageFromResults(id, images) {
         if (images.length > 0) {
-            return 'http://bookmyvenue.live:6969/images/' + id + '/' + images[0]['image_name'];
+            return 'https://bookmyvenue.live:6969/images/' + id + '/' + images[0]['image_name'];
         }
         else return '';
     }
@@ -58,7 +58,7 @@ export default () => {
     const tabsKeys = Object.keys(results);
     useEffect(() => {
         async function getSearchResults() {
-            let response = await fetch('http://bookmyvenue.live:6969/venues/bookmarks/' + sessionStorage.getItem('user_name'), {
+            let response = await fetch('https://bookmyvenue.live:6969/venues/bookmarks/' + sessionStorage.getItem('user_name'), {
                 method: 'GET'
             });
             let jsonResponse = await response.json();

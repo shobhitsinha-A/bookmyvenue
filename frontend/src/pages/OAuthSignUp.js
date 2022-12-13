@@ -50,7 +50,7 @@ let validateAndRegister = async (e) => {
         }
     }
     if (pass === c_pass) {
-        let response = await fetch('http://bookmyvenue.live:5000/user/register', {
+        let response = await fetch('https://bookmyvenue.live:5000/user/register', {
             method: 'POST',
             body: JSON.stringify({
                 "first_name" : f_name,

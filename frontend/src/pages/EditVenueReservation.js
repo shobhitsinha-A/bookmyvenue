@@ -21,7 +21,7 @@ export default () => {
     const [reservation, setReservation] = useState({});
     const [bookmarked, setBookmarked] = useState(false);
     async function getBookmark(venueId) {
-        let response = await fetch('http://bookmyvenue.live:6969/venues/bookmarks/' + sessionStorage.getItem('user_name') + '/' + venueId, {
+        let response = await fetch('https://bookmyvenue.live:6969/venues/bookmarks/' + sessionStorage.getItem('user_name') + '/' + venueId, {
             method: 'GET'
         });
         let jsonResponse = await response.json();
@@ -30,7 +30,7 @@ export default () => {
         }
     }
     async function createBookmark(userId, venueId) {
-        let response = await fetch('http://bookmyvenue.live:6969/venues/bookmarks', {
+        let response = await fetch('https://bookmyvenue.live:6969/venues/bookmarks', {
             method: 'POST',
             body: JSON.stringify({
                 user_id: userId,
@@ -44,7 +44,7 @@ export default () => {
         }
     }
     async function deleteBookmark(userId, venueId) {
-        let response = await fetch('http://bookmyvenue.live:6969/venues/bookmarks/' + userId + '/' + venueId, {
+        let response = await fetch('https://bookmyvenue.live:6969/venues/bookmarks/' + userId + '/' + venueId, {
             method: 'DELETE'
         });
         let jsonResponse = await response.json();
@@ -54,7 +54,7 @@ export default () => {
         }
     }
     async function getReservationDetails() {
-        let response = await fetch('http://bookmyvenue.live:6969/reservations/'.concat(sessionStorage.getItem('editReservationId')), {
+        let response = await fetch('https://bookmyvenue.live:6969/reservations/'.concat(sessionStorage.getItem('editReservationId')), {
             method: 'GET'
         });
         let jsonResponse = await response.json();
@@ -64,7 +64,7 @@ export default () => {
     }
     useEffect(() => {
         async function getVenueDetails() {
-            let response = await fetch('http://bookmyvenue.live:6969/venues/'.concat(sessionStorage.getItem('venueId')), {
+            let response = await fetch('https://bookmyvenue.live:6969/venues/'.concat(sessionStorage.getItem('venueId')), {
                 method: 'GET'
             });
             let jsonResponse = await response.json();
@@ -79,7 +79,7 @@ export default () => {
     let getImageFromResults = (id, images) => {
         if (images) {
             if (images.length > 0) {
-                return 'http://bookmyvenue.live:6969/images/' + id + '/' + images[0]['image_name'];
+                return 'https://bookmyvenue.live:6969/images/' + id + '/' + images[0]['image_name'];
             }
             else return '';
         }
@@ -95,7 +95,7 @@ export default () => {
         const start_time = moment(startTime).format('hh:mm a');
         const end_time = moment(endTime).format('hh:mm a');
         const event_date = moment(date).format('YYYY-MM-DD');
-        let response = await fetch('http://bookmyvenue.live:6969/reservations', {
+        let response = await fetch('https://bookmyvenue.live:6969/reservations', {
             method: 'PUT',
             body: JSON.stringify({
                 "reservation_id": sessionStorage.getItem('editReservationId'),

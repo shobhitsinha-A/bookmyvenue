@@ -6,7 +6,7 @@ export default () => {
     const [ratings, setRatings] = useState([]);
     useEffect(() => {
         async function getRatingsDetails() {
-            let response = await fetch('http://bookmyvenue.live:6969/venues/past/reserved/'.concat(sessionStorage.getItem('user_name')), {
+            let response = await fetch('https://bookmyvenue.live:6969/venues/past/reserved/'.concat(sessionStorage.getItem('user_name')), {
                 method: 'GET'
             });
             let jsonResponse = await response.json();

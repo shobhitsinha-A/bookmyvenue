@@ -28,7 +28,7 @@ export default () => {
         const venue_category = category;
         const rating = '0';
         const availability = avail;
-        let response = await fetch('http://bookmyvenue.live:6969/venues', {
+        let response = await fetch('https://bookmyvenue.live:6969/venues', {
             method: 'POST',
             body: JSON.stringify({
                 "name" : title,
@@ -51,7 +51,7 @@ export default () => {
             let body = new FormData();
             let venue_image = document.forms['image-form']['venue-image'].files[0];
             body.append('image', venue_image)
-            let imageResponse = await fetch('http://bookmyvenue.live:6969/venues/' + jsonResponse.data.details.venue_id + '/images', {
+            let imageResponse = await fetch('https://bookmyvenue.live:6969/venues/' + jsonResponse.data.details.venue_id + '/images', {
                 method: 'POST',
                 body: body
             })

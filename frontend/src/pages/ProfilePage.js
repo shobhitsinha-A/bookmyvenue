@@ -6,7 +6,7 @@ export default () => {
     const [profile, setProfile] = useState({});
     useEffect(() => {
         async function getProfile() {
-            let response = await fetch('http://bookmyvenue.live:5000/user/profile/details/' + sessionStorage.getItem('user_name'), {
+            let response = await fetch('https://bookmyvenue.live:5000/user/profile/details/' + sessionStorage.getItem('user_name'), {
                 method: 'GET'
             });
             let jsonResponse = await response.json();
