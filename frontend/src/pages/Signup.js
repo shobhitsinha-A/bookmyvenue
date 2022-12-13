@@ -99,7 +99,7 @@ export default () => {
         l_name: res.profileObj.familyName,
         f_name: res.profileObj.givenName,
         pass: res.profileObj.googleId,
-        uname: res.profileObj.name,
+        u_name: res.profileObj.name,
       },
     });
   };
@@ -146,7 +146,7 @@ export default () => {
                     <label htmlFor="user">User</label>
                     <br />
                     <input type="radio" id="host" name="role" value="HOST"/>
-                    <label htmlFor="host">Host</label>
+                    <label htmlFor="host">Venue Owner</label>
                     <SubmitButton type="submit">
                       <SubmitButtonIcon className="icon"/>
                       <span className="text">{submitButtonText}</span>
