@@ -94,7 +94,7 @@ export default () => {
                                         <div className="text-center flex justify-between">
                                             <h6 className="text-blueGray-700 text-xl font-bold">Edit Venue</h6>
                                             <button
-                                                className="bg-purple-500 text-white active:bg-purple-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
+                                                className="ml-auto bg-purple-500 text-white active:bg-purple-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
                                                 type="button"
                                                 onClick={deleteVenue}
                                             >
