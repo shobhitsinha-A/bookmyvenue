@@ -1,4 +1,5 @@
 import React from "react";
+import {useLocation} from "react-router-dom";
 import AnimatedContainer from "../helpers/AnimatedContainer.js";
 import {Container as ContainerBase} from "../components/layouts/Layouts";
 import tw from "twin.macro";
@@ -33,107 +34,106 @@ const IllustrationImage = styled.div`
   ${tw`m-12 xl:m-16 w-full max-w-lg bg-contain bg-center bg-no-repeat`}
 `;
 
-let validateAndRegister = async (e) => {
-    e.preventDefault();
-    const f_name = document.getElementById("f_name").value;
-    const l_name = document.getElementById("l_name").value;
-    const email = document.getElementById("email").value;
-    const m_number = document.getElementById("m_number").value;
-    const u_name = document.getElementById("u_name").value;
-    const pass = document.getElementById("pass").value;
-    const c_pass = document.getElementById("c_pass").value;
-    const roles = document.getElementsByName("role");
-    let role = "USER"
-    for (let i = 0; i < roles.length; i++) {
-        if (roles[i].checked) {
-            role = roles[i].value;
+export default () => {
+    const headingText = "Sign Up";
+    const signupPageBgSrc = signupPageBg;
+    const submitButtonText = "Sign Up";
+    const SubmitButtonIcon = SignUpIcon;
+    const tosUrl = "#";
+    const privacyPolicyUrl = "#";
+    const  signInUrl = "/login";
+    const { state } = useLocation();
+    let validateAndRegister = async (e) => {
+        e.preventDefault();
+        const f_name = state.f_name;
+        const l_name = state.l_name;
+        const email = state.email;
+        const m_number = document.getElementById("m_number").value;
+        const u_name = state.u_name;
+        const pass = document.getElementById("pass").value;
+        const c_pass = document.getElementById("c_pass").value;
+        const roles = document.getElementsByName("role");
+        let role = "USER"
+        for (let i = 0; i < roles.length; i++) {
+            if (roles[i].checked) {
+                role = roles[i].value;
+            }
         }
-    }
-    if (pass === c_pass) {
-        let response = await fetch('https://bookmyvenue.live:5000/user/register', {
-            method: 'POST',
-            body: JSON.stringify({
-                "first_name" : f_name,
-                "last_name" : l_name,
-                "email" : email,
-                "phone_no" : m_number,
-                "user_name" : u_name,
-                "password" : pass,
-                "role" : role
-            })
-        });
-        let jsonResponse = await response.json();
-        if (jsonResponse.status) {
-            alert("User registered successfully");
-            window.location.href = "/login";
+        if (pass === c_pass) {
+            let response = await fetch('https://bookmyvenue.live:5000/user/register', {
+                method: 'POST',
+                body: JSON.stringify({
+                    "first_name" : f_name,
+                    "last_name" : l_name,
+                    "email" : email,
+                    "phone_no" : m_number,
+                    "user_name" : u_name,
+                    "password" : pass,
+                    "role" : role
+                })
+            });
+            let jsonResponse = await response.json();
+            if (jsonResponse.status) {
+                alert("User registered successfully");
+                window.location.href = "/login";
+            } else {
+                alert("There was an error when creating your account");
+            }
         } else {
-            alert("There was an error when creating your account");
+            alert("Passwords don't match");
         }
-    } else {
-        alert("Passwords don't match");
     }
+    return (
+        <AnimatedContainer>
+            <Container>
+                <Content>
+                    <MainContainer>
+                        <MainContent>
+                            <Heading>{headingText}</Heading>
+                            <FormContainer>
+                                <Form onSubmit={validateAndRegister}>
+                                    <Input id="m_number" type="text" placeholder="Mobile Number"/>
+                                    <Input id="pass" type="password" placeholder="Password"/>
+                                    <Input id="c_pass" type="password" placeholder="Retype password"/>
+                                    <p>Select role:</p>
+                                    <input type="radio" id="user" name="role" value="USER"/>
+                                    <label for="user">User</label>
+                                    <br/>
+                                    <input type="radio" id="host" name="role" value="HOST"/>
+                                    <label htmlFor="host">Venue Owner</label>
+                                    <SubmitButton type="submit">
+                                        <SubmitButtonIcon className="icon"/>
+                                        <span className="text">{submitButtonText}</span>
+                                    </SubmitButton>
+                                    <br/>
+                                    <ReCAPTCHA sitekey="6Le4eVQiAAAAAN0T8QckutpehO_OhUpwM9IRnICW"/>
+                                    <br/>
+                                    <p tw="mt-6 text-xs text-gray-600 text-center">
+                                        I agree to abide by BookMyVenue's{" "}
+                                        <a href={tosUrl} tw="border-b border-gray-500 border-dotted">
+                                            Terms of Service
+                                        </a>{" "}
+                                        and its{" "}
+                                        <a href={privacyPolicyUrl} tw="border-b border-gray-500 border-dotted">
+                                            Privacy Policy
+                                        </a>
+                                    </p>
+                                    <br/>
+                                    <p tw="mt-8 text-sm text-gray-600 text-center">
+                                        Already have an account?{" "}
+                                        <a href={signInUrl} tw="border-b border-gray-500 border-dotted">
+                                            Sign In
+                                        </a>
+                                    </p>
+                                </Form>
+                            </FormContainer>
+                        </MainContent>
+                    </MainContainer>
+                    <IllustrationContainer>
+                        <IllustrationImage imageSrc={signupPageBgSrc}/>
+                    </IllustrationContainer>
+                </Content>
+            </Container>
+        </AnimatedContainer>
+    );
 }
-
-export default ({
-                    headingText = "Sign Up",
-                    signupPageBgSrc = signupPageBg,
-                    submitButtonText = "Sign Up",
-                    SubmitButtonIcon = SignUpIcon,
-                    tosUrl = "#",
-                    privacyPolicyUrl = "#",
-                    signInUrl = "/login"
-                }) => (
-    <AnimatedContainer>
-        <Container>
-            <Content>
-                <MainContainer>
-                    <MainContent>
-                        <Heading>{headingText}</Heading>
-                        <FormContainer>
-                            <Form onSubmit={validateAndRegister}>
-                                <Input id="pass" type="password" placeholder="Password"/>
-                                <Input id="c_pass" type="password" placeholder="Retype password"/>
-                                <p>Select role:</p>
-                                <input type="radio" id="user" name="role" value="USER"/>
-                                <label for="user">User</label>
-                                <br />
-                                <input type="radio" id="vendor" name="role" value="VENDOR"/>
-                                <label for="vendor">Vendor</label>
-                                <br />
-                                <input type="radio" id="host" name="role" value="HOST"/>
-                                <label htmlFor="host">Host</label>
-                                <SubmitButton type="submit">
-                                    <SubmitButtonIcon className="icon"/>
-                                    <span className="text">{submitButtonText}</span>
-                                </SubmitButton>
-                                <br />
-                                <ReCAPTCHA sitekey="6Le4eVQiAAAAAN0T8QckutpehO_OhUpwM9IRnICW" />
-                                <br />
-                                <p tw="mt-6 text-xs text-gray-600 text-center">
-                                    I agree to abide by BookMyVenue's{" "}
-                                    <a href={tosUrl} tw="border-b border-gray-500 border-dotted">
-                                        Terms of Service
-                                    </a>{" "}
-                                    and its{" "}
-                                    <a href={privacyPolicyUrl} tw="border-b border-gray-500 border-dotted">
-                                        Privacy Policy
-                                    </a>
-                                </p>
-                                <br />
-                                <p tw="mt-8 text-sm text-gray-600 text-center">
-                                    Already have an account?{" "}
-                                    <a href={signInUrl} tw="border-b border-gray-500 border-dotted">
-                                        Sign In
-                                    </a>
-                                </p>
-                            </Form>
-                        </FormContainer>
-                    </MainContent>
-                </MainContainer>
-                <IllustrationContainer>
-                    <IllustrationImage imageSrc={signupPageBgSrc} />
-                </IllustrationContainer>
-            </Content>
-        </Container>
-    </AnimatedContainer>
-);
