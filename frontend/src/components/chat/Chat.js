@@ -16,7 +16,7 @@ export default function Chat() {
     const [toUser, setToUser] = useState();
     useEffect(() => {
         async function getChatUsers() {
-            let response = await fetch('http://bookmyvenue.live:6969/chats/' + sessionStorage.getItem('user_name'), {
+            let response = await fetch('https://bookmyvenue.live:6969/chats/' + sessionStorage.getItem('user_name'), {
                 method: 'GET'
             });
             let jsonResponse = await response.json();
@@ -52,7 +52,7 @@ export default function Chat() {
                                             {users.map(user => {
                                                 if (users.indexOf(user) !== users.length - 1) {
                                                     return(
-                                                        <div onClick={() => setToUser(user.to_user)}>
+                                                        <div onClick={() => setToUser(user.user)}>
                                                             <li className="p-2 border-bottom">
                                                                 <a
                                                                     href="#"
@@ -60,7 +60,7 @@ export default function Chat() {
                                                                 >
                                                                     <div className="d-flex flex-row">
                                                                         <div className="pt-1">
-                                                                            <p className="fw-bold mb-0">{user.to_user}</p>
+                                                                            <p className="fw-bold mb-0">{user.user}</p>
                                                                         </div>
                                                                     </div>
                                                                 </a>
@@ -69,7 +69,7 @@ export default function Chat() {
                                                     );
                                                 } else {
                                                     return(
-                                                        <div onClick={() => setToUser(user.to_user)}>
+                                                        <div onClick={() => setToUser(user.user)}>
                                                             <li className="p-2">
                                                                 <a
                                                                     href="#"
@@ -77,7 +77,7 @@ export default function Chat() {
                                                                 >
                                                                     <div className="d-flex flex-row">
                                                                         <div className="pt-1">
-                                                                            <p className="fw-bold mb-0">{user.to_user}</p>
+                                                                            <p className="fw-bold mb-0">{user.user}</p>
                                                                         </div>
                                                                     </div>
                                                                 </a>

@@ -37,7 +37,7 @@ let checkIfUserIsLoggedIn = async (e) => {
   e.preventDefault();
   let u_name = document.getElementById("u_name").value;
   let password = document.getElementById("password").value;
-  let response = await fetch('http://bookmyvenue.live:5000/user/login', {
+  let response = await fetch('https://bookmyvenue.live:5000/user/login', {
     method: 'POST',
     body: JSON.stringify({
       "user_name" : u_name,
@@ -48,7 +48,7 @@ let checkIfUserIsLoggedIn = async (e) => {
   if (jsonResponse.status) {
     sessionStorage.setItem('user_name', jsonResponse.data.data.user_name);
     sessionStorage.setItem('role', jsonResponse.data.data.role);
-    window.location.href = '/profile';
+    window.location.href = jsonResponse.data.data.url;
   } else {
     alert("Please check your credentials and try again");
   }

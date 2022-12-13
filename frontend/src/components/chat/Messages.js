@@ -5,7 +5,7 @@ import moment from "moment";
 export default (props) => {
     const [chats, setChats] = useState([]);
     async function getChatsBetweenUsers(fromUser, toUser) {
-        let response = await fetch('http://bookmyvenue.live:6969/chats/' + fromUser + '/' + toUser, {
+        let response = await fetch('https://bookmyvenue.live:6969/chats/' + fromUser + '/' + toUser, {
             method: 'GET'
         });
         let jsonResponse = await response.json();
@@ -14,7 +14,7 @@ export default (props) => {
         }
     }
     const updateChatStatus = useCallback(async (fromUser, toUser) => {
-        let response = await fetch('http://bookmyvenue.live:6969/chats/status', {
+        let response = await fetch('https://bookmyvenue.live:6969/chats/status', {
             method: 'PUT',
             body: JSON.stringify({
                 from_user: fromUser,
@@ -33,7 +33,7 @@ export default (props) => {
         //getChatsBetweenUsers(props.fromUser, props.toUser).catch(console.error);
     }, [updateChatStatus, props.fromUser, props.toUser]);
     async function sendChat(fromUser, toUser, message) {
-        let response = await fetch('http://bookmyvenue.live:6969/chats', {
+        let response = await fetch('https://bookmyvenue.live:6969/chats', {
             method: 'POST',
             body: JSON.stringify({
                 from_user: fromUser,

@@ -18,7 +18,7 @@ export default (props) => {
     });
     useEffect(() => {
         async function getFilterMetadata() {
-            let response = await fetch('http://bookmyvenue.live:6969/venues/filter', {
+            let response = await fetch('https://bookmyvenue.live:6969/venues/filter', {
                 method: 'GET'
             });
             let jsonResponse = await response.json();

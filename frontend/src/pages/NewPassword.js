@@ -38,7 +38,7 @@ let checkIfUserExists = async (e) => {
     let pass = document.getElementById("pass").value;
     let c_pass = document.getElementById("c_pass").value;
     if (pass === c_pass) {
-        let response = await fetch('http://bookmyvenue.live/user/forgotpassword', {
+        let response = await fetch('https://bookmyvenue.live:5000/user/forgotpassword', {
             method: 'POST',
             body: JSON.stringify({
                 "user_name": sessionStorage.getItem("user_name"),
