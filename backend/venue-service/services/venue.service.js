@@ -100,6 +100,17 @@ const getVenueImages = async function(venue_id) {
   }
 };
 
+const deleteImageByVenueId = async function(venue_id) {
+    try {
+        const info = await db('venue_images')
+            .where('venue_id', venue_id)
+            .del();
+        console.log('venue ->' , info);
+        return info;
+    } catch (e) {
+        return e.message;
+    }
+}
 const getVenuesBySearch = async function(searchDto) {
     try {
 
@@ -243,6 +254,18 @@ const deleteBookmark = async function(user_id, venue_id) {
     }
 }
 
+const deleteBookmarksByVenueId = async function(venue_id) {
+    try {
+        const info = await db('bookmarks')
+            .where('venue_id', venue_id)
+            .del();
+        console.log('bookmark ->' , info);
+        return info;
+    } catch (e) {
+        return e.message;
+    }
+}
+
 const createRating = async function(ratingDto) {
     let { user_id, venue_id, rating } = ratingDto;
     try {
@@ -310,6 +333,18 @@ const getUpcomingReservedVenuesByUserId = async function(user_id) {
     }
 }
 
+const deleteRatingsByVenueId = async function(venue_id) {
+    try {
+        const info = await db('ratings')
+            .where({'venue_id':
+                    venue_id})
+            .del();
+        console.log('ratings ->' , info);
+        return info;
+    } catch (e) {
+        return e.message;
+    }
+}
 const getAvgRating = async function() {
     try {
         const info = await db('ratings')
@@ -340,4 +375,5 @@ module.exports = { createVenue , updateVenue, deleteVenue
     , createVenueImages, getVenueImages, getVenuesBySearch, getVenuesMetadata,
     getVenueById, getVenuesByUserId, createBookmarks, getBookmarks, isVenueBookmarked, deleteBookmark,
     createRating, getRatingsByUserId, getPastReservedVenuesByUserId, getRatingsByUserIdAndVenueId,
-    getUpcomingReservedVenuesByUserId, getAvgRating, getAvgRatingByVenueId };
+    getUpcomingReservedVenuesByUserId, getAvgRating, getAvgRatingByVenueId, deleteImageByVenueId,
+    deleteRatingsByVenueId, deleteBookmarksByVenueId };

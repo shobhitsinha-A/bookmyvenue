@@ -41,6 +41,19 @@ const getReservationsByVenue = async function(venue_id) {
     }
 }
 
+const getReservationsByVenueId = async function(venue_id) {
+    try {
+        const info = await db('reservations')
+            .select('*')
+            .where('venue_id', venue_id)
+            // .andWhere('date', '>=', new Date())
+            // .andWhere('is_cancelled', false);
+        console.log('reservations ->' , info);
+        return info;
+    } catch (e) {
+        return e.message;
+    }
+}
 const getReservationsByUser = async function(user_id) {
     try {
         const info = await db('reservations')
@@ -136,4 +149,4 @@ const cancelReservation = async function(reservation_id) {
 
 module.exports = { createReservation, getReservationsByVenue, getReservationsByUser,
                     updateReservation , deleteReservation, cancelReservations, getReservationById,
-                    cancelReservation };
+                    cancelReservation, getReservationsByVenueId };

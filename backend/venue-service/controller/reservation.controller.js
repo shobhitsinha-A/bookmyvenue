@@ -167,6 +167,7 @@ const deleteReservation = async function(req, res) {
 
 const cancelReservations = async function(req, res) {
 
+    try {
         let venue_id = req.params.venue_id;
 
         let availability = await reservationService.getReservationsByVenue(venue_id);
@@ -200,6 +201,11 @@ const cancelReservations = async function(req, res) {
         };
 
         return successResponse(res, resObj);
+    } catch (error) {
+        console.log(error);
+        //return errorResponse(res, 500, 'Internal Server Error');
+    }
+
 
 }
 
