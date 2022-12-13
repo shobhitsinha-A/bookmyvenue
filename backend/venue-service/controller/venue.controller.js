@@ -1,4 +1,7 @@
 const venueService = require('../services/venue.service');
+const reservationService = require('../services/reservation.service');
+
+const reservationController = require('../controller/reservation.controller');
 
 const { successResponse, errorResponse } = require('../commons/response.util');
 
@@ -252,15 +255,36 @@ const getVenuesByUserId = async function(req, res) {
 }
 
 const deleteVenue = async function(req, res) {
+    // cancel the reservations
+    let canceledReservations =  await reservationController.cancelReservations(req, null);
+    console.log('canceledReservations -> ', canceledReservations);
 
-        let venue = await venueService.deleteVenue(req.params.venue_id);
+    let reservations = await reservationService.getReservationsByVenueId(req.params.venue_id);
+    // delete the reservations
+    for (let i = 0; i < reservations.length; i++) {
+       let deletedReservation =  await reservationService.deleteReservation(reservations[i].id);
+       console.log('deletedReservation -> ', deletedReservation);
+    }
 
-        let resObj = {
-                    message: 'venue deleted successfully',
-                    details: venue
-        };
+    // delete the venue images
+    let venue_images =  venueService.deleteImageByVenueId(req.params.venue_id);
+    console.log('deleted venue_images -> ', venue_images);
+    // delete the ratings
+   let deletedRatings =  venueService.deleteRatingsByVenueId(req.params.venue_id);
+    console.log('deletedRatings -> ', deletedRatings);
+    // delete the bookmarks
+    let deletedBookmarks =  venueService.deleteBookmarksByVenueId(req.params.venue_id);
+    console.log('deletedBookmarks -> ', deletedBookmarks);
+    // delete the venue
 
-        return successResponse(res, resObj);
+    let venue =  venueService.deleteVenue(req.params.venue_id);
+
+    let resObj = {
+                message: 'venue deleted successfully',
+                details: venue
+    };
+
+    return successResponse(res, resObj);
 }
 const createBookmarks = async function(req, res) {
 
