@@ -85,7 +85,7 @@ export default () => {
   let navigate = useNavigate();
   useEffect(() => {
     const initClient = () => {
-      gapi.client.init({
+      gapi.auth2.init({
         clientId: clientId,
         scope: "",
       });
@@ -98,13 +98,12 @@ export default () => {
         email: res.profileObj.email,
         l_name: res.profileObj.familyName,
         f_name: res.profileObj.givenName,
-        pass: res.profileObj.googleId,
-        u_name: res.profileObj.name,
+        u_name: res.profileObj.email,
       },
     });
   };
   const onFailure = (res) => {
-    console.log("Failed to sign up with Google");
+    alert("Failed to sign up with Google");
   };
   const headingText = "Sign Up",
       signupPageBgSrc = signupPageBg,
